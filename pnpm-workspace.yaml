@@ -1,0 +1,30 @@
+# pnpm 12 reads its settings from here, not from `package.json#pnpm` (removed in
+# v11) and not from `.npmrc` (which now only supplies auth/registry settings).
+
+# Enforce the Node range in package.json#engines (>=24).
+engineStrict: true
+
+# Keep the 24h supply-chain quarantine on every dependency, and exempt only the
+# three exact versions this project was specced against (open-decisions.md),
+# which all happened to publish on 2026-11-10/11. Remove an entry once it has
+# aged past the cutoff; never relax `minimumReleaseAge` itself.
+minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+  - vite@8.3.8
+  - '@inlang/paraglide-js@3.2.2'
+  - '@lucide/svelte@1.72.0'
+
+# Dependency install scripts are denied by default and must be reviewed. All
+# three below are declined deliberately — none is needed for this project:
+#   @firebase/util  reads FIREBASE_WEBAPP_CONFIG to auto-inject config for
+#                   Firebase App Hosting. We use classic Hosting and never set
+#                   that variable, so the script is a no-op.
+#   protobufjs      prints a version-scheme warning for dependents. Diagnostics
+#                   only.
+#   re2             optionalDependency of superstatic (the Hosting emulator's
+#                   static server), which falls back to JS regex. Building it
+#                   would require MSVC build tools.
+allowBuilds:
+  '@firebase/util': false
+  protobufjs: false
+  re2: false

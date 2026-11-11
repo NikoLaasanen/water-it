@@ -1,0 +1,14 @@
+# Package Managers
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+bun.lock
+bun.lockb
+
+# Miscellaneous
+/static/
+
+# Design docs are hand-written prose and reference material. The mockups use a
+# custom templating syntax ({{hole}}, <sc-for>, <sc-if>) that Prettier would
+# reformat into something no longer matching the canvas sources.
+/docs/

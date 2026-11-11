@@ -1,0 +1,12 @@
+# Normalise to LF in the repository and in the working tree, on every platform.
+# Without `eol=lf`, Git on Windows (core.autocrlf=true) checks these files out
+# with CRLF, and `pnpm lint` then fails because Prettier's endOfLine defaults to
+# "lf". Keeping the working tree at LF means the same checkout passes on a
+# laptop and in CI.
+* text=auto eol=lf
+
+# Lockfiles are generated; keep them out of diffs and merge noise.
+pnpm-lock.yaml -diff linguist-generated
+
+# The design-canvas mockups are reference sources, not app code.
+docs/mockups/*.dc.html linguist-documentation
