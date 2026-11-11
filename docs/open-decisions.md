@@ -1,0 +1,59 @@
+# Plant Care App: Open Technical Decisions
+
+Companion to `design.md` (v0.6). The design doc settles the platform (installed iOS PWA), the framework (Svelte 5 + SvelteKit static SPA) and the infrastructure (Firebase Hosting, Auth and Firestore, with Storage, Functions and Messaging later). This list covers what it leaves open. Versions were checked against the npm registry and vendor docs on 2026-11-11.
+
+**Decided 2026-11-11:** Firestore in `europe-north1`; toolchain pnpm + Node 24 + SvelteKit 3 + ESLint/Prettier; shadcn-svelte + Tailwind v4; English + Finnish via Paraglide; due dates as `YYYY-MM-DD`, timestamps as Firestore `Timestamp`. App name **Water.it**; project ID `water-it` or `waterit-app`, whichever is free.
+
+**Legend.** ⚠️ **Irreversible / costly to change.** When: **Before M1** = before the first `firebase init` or the first commit; **During M1** = while building the shell; **Later** = can wait for M2 or later.
+
+## A. Firebase setup (decide these in the console, before writing code)
+
+| Decision | Options | Recommendation | When |
+|---|---|---|---|
+| ⚠️ **Firestore location** | `europe-north1` (Finland, single region); `eur3` (Belgium + Netherlands, witness in Finland, higher SLA, about 2× price); `nam5` and others | **`europe-north1`**: closest to Helsinki and cheapest, and multi-region redundancy is overkill for houseplant data. **The location can't be changed after the database is created.** Moving later means a new database plus a data migration. | Before M1 |
+| ⚠️ **Cloud Storage bucket location** (M3) | Same EU region as Firestore, or a US region | New projects get `*.firebasestorage.app` buckets, which don't depend on the Firestore location. The no-cost Storage tier has historically covered only some US regions, so **check the current terms when M3 arrives**. EU storage for a few hundred photos costs cents. A bucket's location is fixed once it's created. | Later (M3) |
+| ⚠️ **Projects: one or two** | One prod project, with emulators for development; or separate `plants-dev` and `plants-prod` projects | **One project plus the emulators.** A handful of users don't justify a second project. Use Hosting preview channels for testing on the phone. The project ID shows up in the default URLs and can't be renamed, so pick it with care. | Before M1 |
+| **Domain** | `<id>.web.app` / `<id>.firebaseapp.com`, or a custom domain (about €10–15 a year) | **Start on the default domain**, with `authDomain` set to it as in 7.4. ⚠️ Moving later changes the origin, which signs everyone out, empties the offline cache and orphans the home-screen installs, so mum would have to reinstall. If a custom domain is likely, set it up before onboarding anyone else (M4). | Before onboarding mum |
+| **Invite-only enforcement** | (a) Turn off sign-up in Auth settings and create accounts by hand in the console; (b) an email allowlist checked in security rules (accounts can exist but can't touch data); (c) a blocking Auth function (needs Blaze) | **(b) plus manual creation**: put an `allowlist/{email}` doc check in the rules and create email+password accounts in the console. Turning sign-up off entirely also blocks a user's first Google sign-in, so test Google with (b). | During M1 |
+| **Budget alert and App Check** | None / budget alert / App Check (reCAPTCHA Enterprise or DeviceCheck-style) | **Budget alert when you upgrade to Blaze (M3)**. Add App Check before plant-sitting links go out (M4), since that is when anonymous writes appear. | Later |
+
+## B. Toolchain
+
+| Decision | Options | Recommendation | When |
+|---|---|---|---|
+| **Package manager** | npm, pnpm, Bun | **pnpm** (or plain npm). firebase-tools 15.x is a Node CLI (`node >=20`), and its Java-based emulators now need **Java 21+**. Bun works as an installer, but running the CLI under Bun has open bugs: a Firestore-emulator HTTP/2 exception (#8226) and a Functions-discovery problem with Bun shims (#11386, Oct 2026). Install `firebase-tools` as a devDependency so CI and the laptop use the same version. Changing later is cheap: swap the lockfile. | Before M1 |
+| **Node and SvelteKit major** | SvelteKit 2.x or **3.x** (3.0 stable since 2026-10-01; needs Node ≥22.17, Vite 8, TS 6) | **SvelteKit 3 on Node 24 LTS.** It's a new project, so start on the current major. `adapter-static` 4.x and `@vite-pwa/sveltekit` 2.x both support Kit 3. Pin Node with `.nvmrc` or `engines`. | Before M1 |
+| **Lint and format** | ESLint 10 + `eslint-plugin-svelte` 3.x + Prettier + `prettier-plugin-svelte`; or Biome 2.6 | **ESLint + Prettier.** Biome's Svelte support (since 2.3) is still marked **experimental** for parsing, formatting and linting, needs opt-in flags, and can give false positives on unused-variable rules in `.svelte` files. Revisit when it's stable. Cheap to switch. | Before M1 |
+| **Testing** | Vitest 5 (unit), `@firebase/rules-unit-testing` 6 + Firestore emulator (rules), Playwright 1.65 (end to end, with WebKit to approximate iOS) | **Vitest for the scheduling logic and rules tests from day one**, since rules are the security boundary. Playwright is optional: a couple of smoke tests on WebKit in M2. Real-iPhone checks stay manual. | During M1 |
+| **Local dev with emulators** | Always use emulators in dev; or dev against prod | **Emulators by default** (`connectAuthEmulator` / `connectFirestoreEmulator` when `import.meta.env.DEV`), with seed data exported via `--export-on-exit`. Point at prod only behind an explicit flag. | During M1 |
+| **Repo and CI/CD** | Manual `firebase deploy`; or GitHub Actions (`FirebaseExtended/action-hosting-deploy`) | **Private GitHub repo + Actions**: lint, test and rules tests on every PR, an auto **preview channel** per PR (gives a URL to open on the iPhone), and deploy to live on merge to `main`. Use Workload Identity Federation or a scoped service account, not a long-lived token. Also deploy `firestore.rules` and `firestore.indexes.json` from the repo, never edit them in the console. | During M1 |
+
+## C. UI and app code
+
+| Decision | Options | Recommendation | When |
+|---|---|---|---|
+| **Styling** | Tailwind v4 (4.3); plain CSS with Svelte scoped styles + CSS custom properties | **Follows the UI-kit choice.** With shadcn-svelte, use Tailwind v4. With plain CSS, scoped styles plus a small `tokens.css` (colors, spacing, dark mode through `prefers-color-scheme`) is enough for 7 screens. Costly to switch once there are many components. | Before M1 |
+| **UI kit / components** | **shadcn-svelte** 1.8 (copy-in components on Bits UI, Tailwind v4); **Bits UI** 2.21 (headless only); **Melt UI** (`melt` 0.44, the Svelte 5 builder rewrite, still pre-1.0); **Skeleton** 5.x (Svelte 5, Tailwind v4); **Flowbite-Svelte** 1.33 (Tailwind v4; less active since April 2026); none | **shadcn-svelte.** It's Svelte 5-native and actively released (Nov 2026). You own the copied code, so it's easy to restyle for large tap targets. Bits UI underneath handles dialogs, sheets and selects accessibly, which covers the 9.x accessibility goals. Alternative if you'd rather avoid Tailwind: Bits UI with plain CSS. | Before M1 |
+| **Icons** | `@lucide/svelte` (1.72); `unplugin-icons` / Iconify (any set, tree-shaken) | **Lucide.** It's shadcn-svelte's default and includes `droplet`, `sprout`, `sun`, `thermometer`. Status badges still need text labels (see 9). Cheap to switch. | During M1 |
+| **Forms and validation** | Valibot 1.5; Zod 4.6; hand-written checks; optionally sveltekit-superforms | **Valibot.** It's small and tree-shakeable, and one schema can validate both the add/edit form and the bundled preset JSON and provider-API mapping (8.1). Superforms is aimed at server actions, which a static SPA doesn't have, so skip it. | During M1 |
+| **Dates and time zones** | date-fns 4.4 (+ `@date-fns/tz`); Temporal; plain `Date` | **date-fns.** **Temporal still isn't in Safari/iOS** (Baseline is blocked on WebKit), so it would need a polyfill (`temporal-polyfill` 1.0). Decide the storage convention now: due dates as local calendar dates (`YYYY-MM-DD`), log timestamps as Firestore `Timestamp`/UTC. That avoids DST off-by-one bugs at Helsinki's clock changes and keeps the M5 Cloud Function (Europe/Helsinki) consistent. ⚠️ The date format is baked into stored data. | Before M2 (format: During M1) |
+| **i18n / UI language** | English only; Finnish only; both via Paraglide JS 3 (compile-time, type-safe) or wuchale | **Both, via Paraglide**, with English source and Finnish for mum. Wire it up in M1 even if only English strings exist at first. Retrofitting string extraction across every screen later is tedious. Note that preset care texts and generated sitter instructions are content and need translating too, so decide whether presets carry `{en, fi}` fields. | During M1 (setup); Finnish by M4 |
+| **Image downscaling** (M3) | Canvas / `createImageBitmap` + `OffscreenCanvas.convertToBlob`, hand-rolled; `pica` 10 (higher-quality resize); `browser-image-compression` (unmaintained since 2023) | **Hand-rolled canvas** to 1600 px long edge + about 400 px thumbnail, as JPEG ~0.8. Check that HEIC from the iPhone camera/gallery arrives decoded (Safari usually hands over JPEG) and that EXIF orientation is applied. Add `pica` only if quality disappoints. | Later (M3) |
+| **Error monitoring** | None; Sentry (`@sentry/sveltekit` 11, free tier); a home-made `errors/` collection in Firestore | **None in M1.** Add **Sentry free tier before onboarding mum (M4)**, because you can't see her phone's console. Errors on an installed iOS PWA are otherwise invisible. Turn off session replay and PII to keep to the "no analytics" principle in section 10, and mention it in the About screen. | Later (M4) |
+| **App name and icons** | Working name vs final; icon via `@vite-pwa/assets-generator` from one SVG | **Pick the name before mum installs.** The home-screen label comes from the manifest/`apple-mobile-web-app-title` captured at install, so renaming means reinstalling to see it. Generate the iOS `apple-touch-icon` (180 px, no transparency) and splash screens from one source SVG. | Name: Before M4; icons: During M1 |
+
+## D. Other things worth settling early
+
+- ⚠️ **Firestore data conventions.** Doc IDs (auto IDs vs readable slugs), a `schemaVersion` field on `users/{uid}` for future migrations, and Timestamp vs ISO strings: the design's TS types use strings, while rules compare `expiresAt` as a Timestamp. Make this consistent before real data exists. *During M1.*
+- **State pattern.** Design 7.2 says "wrapped as Svelte stores". In Svelte 5, decide whether to use runes-based classes (`$state` in `.svelte.ts`) or stores. Recommendation: runes. *Before M1.*
+- **Offline cache mode.** Use `persistentLocalCache` with `persistentMultipleTabManager` (safe if Safari and the installed app are both open) vs the single-tab manager. Recommendation: multi-tab. *During M1.*
+- **Service-worker update strategy.** Choose `autoUpdate` vs a "new version available, tap to reload" prompt. Recommendation: prompt, so a deploy never reloads in the middle of logging. *During M1.*
+- **Firestore backups.** Firestore is the source of truth. The design's zip export is user-driven only. Consider scheduled managed exports or point-in-time recovery once on Blaze. *Later (M3).*
+
+## Decide first (top 5)
+
+1. ⚠️ **Firestore location: `europe-north1`.** It's permanent once the database is created.
+2. ⚠️ **Firebase project ID and project layout (one project + emulators).** The ID becomes the default domain and can't be renamed.
+3. **Toolchain baseline:** pnpm + Node 24 + SvelteKit 3 + ESLint/Prettier + Java 21 for the emulators. Every later step builds on this.
+4. **UI kit and styling (shadcn-svelte + Tailwind v4, or Bits UI + plain CSS).** It shapes every component you write in M1.
+5. ⚠️ **Date storage convention and i18n scaffolding.** Both are cheap now and painful to retrofit once real data and strings exist.

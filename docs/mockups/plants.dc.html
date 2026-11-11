@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Plants</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2F6B4F}a:hover{color:#1F4A36}
+</style>
+</helmet>
+<div style="width: 390px; height: 1000px; box-sizing: border-box; position: relative; background: #F3F5F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1B241F; overflow: hidden">
+  <div style="padding: 56px 20px 120px; display: flex; flex-direction: column; gap: 20px">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 12px">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <h1 style="margin: 0; font-size: 34px; font-weight: 800; letter-spacing: -0.02em">Plants</h1>
+        <div style="font-size: 15px; color: #45514A">5 plants · 1 struggling</div>
+      </div>
+      <button type="button" aria-label="Add plant" style="width: 48px; height: 48px; border: none; border-radius: 16px; background: #2F6B4F; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+      </button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <sc-for list="{{plants}}" as="p" hint-placeholder-count="5">
+        <a href="PlantDetail.dc.html" style="background: #FFFFFF; border-radius: 18px; padding: 12px; text-decoration: none; color: #1B241F; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 2px rgba(20,40,30,0.06)">
+          <div style="width: 68px; height: 68px; flex: none; border-radius: 16px; background: {{p.tint}}; display: flex; align-items: center; justify-content: center; color: #2F6B4F; position: relative">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>
+            <div style="position: absolute; right: -8px; bottom: -8px; width: 32px; height: 32px; border-radius: 999px; background: {{p.hBg}}; border: 2.5px solid #FFFFFF; display: flex; align-items: center; justify-content: center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{p.hFg}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Health: {{p.hLabel}}"><circle cx="12" cy="12" r="10"></circle><circle cx="9" cy="10" r="0.6" fill="{{p.hFg}}"></circle><circle cx="15" cy="10" r="0.6" fill="{{p.hFg}}"></circle><path d="{{p.mouth}}"></path></svg>
+            </div>
+          </div>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; padding-left: 4px">
+            <div style="font-size: 17px; font-weight: 700">{{p.name}}</div>
+            <div style="font-size: 13px; font-weight: 600; color: {{p.hFg}}">{{p.hLabel}}</div>
+            <div style="display: flex; align-items: center; gap: 5px; font-size: 13px; color: {{p.nextFg}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg><span>Check: {{p.next}}</span></div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px">
+              <span style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 999px; background: #FBF3E4; color: #6B4510; font-size: 12px; font-weight: 600"><svg width="13" height="13" viewBox="0 0 24 24" fill="#B7791F" stroke="#B7791F" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.9 4.9 1.4 1.4"></path><path d="m17.7 17.7 1.4 1.4"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.3 17.7-1.4 1.4"></path><path d="m19.1 4.9-1.4 1.4"></path></svg>{{p.lightShort}}</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 999px; background: #E6EEF7; color: #1D3E63; font-size: 12px; font-weight: 600"><svg width="13" height="13" viewBox="0 0 24 24" fill="#2B5F9E" stroke="none" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg>{{p.waterShort}}</span>
+            </div>
+          </div>
+
+        </a>
+      </sc-for>
+    </div>
+  </div>
+  <nav aria-label="Main" style="position: absolute; left: 0; right: 0; bottom: 0; height: 84px; box-sizing: border-box; padding: 8px 12px 24px; background: rgba(255,255,255,0.96); border-top: 1px solid #E1E6E2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr))">
+    <a href="Main.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #5A665F; text-decoration: none; font-size: 11px; font-weight: 600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg>
+      Today
+    </a>
+    <a href="Plants.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #2F6B4F; text-decoration: none; font-size: 11px; font-weight: 700">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>
+      Plants
+    </a>
+    <a href="Plants.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #5A665F; text-decoration: none; font-size: 11px; font-weight: 600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+      Photos
+    </a>
+    <a href="Plants.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #5A665F; text-decoration: none; font-size: 11px; font-weight: 600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      Settings
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var H = {
+      thriving: { label: 'Thriving', fg: '#2F6B4F', bg: '#EAF3EC', mouth: 'M8 14s1.5 2 4 2 4-2 4-2' },
+      okay: { label: 'Okay', fg: '#45514A', bg: '#ECEFEC', mouth: 'M8.5 15h7' },
+      recovering: { label: 'Recovering', fg: '#1D3E63', bg: '#E6EEF7', mouth: 'M9 14.6c.8.5 1.8.8 3 .8s2.2-.3 3-.8' },
+      struggling: { label: 'Struggling', fg: '#8A3B06', bg: '#FBEBD9', mouth: 'M16 16s-1.5-2-4-2-4 2-4 2' }
+    };
+    var LT = ['', 'Low light', 'Medium light', 'Bright light'];
+    var WT = ['', 'Little water', 'Moderate water', 'Lots of water'];
+    var LS = ['', 'Low', 'Medium', 'Bright'];
+    var WS = ['', 'Little', 'Moderate', 'Lots'];
+    var base = [
+      { name: 'Pilea', next: 'Overdue', tint: '#DCEBDD', health: 'thriving', light: 3, water: 2 },
+      { name: 'Dracaena', next: 'Today', tint: '#E3E9D5', health: 'recovering', light: 2, water: 2 },
+      { name: 'Tree aloe', next: 'In 9 days', tint: '#E1EBE4', health: 'thriving', light: 3, water: 1 },
+      { name: 'Crassula', next: 'Sat', tint: '#E4ECD9', health: 'okay', light: 3, water: 1 },
+      { name: 'Yucca', next: 'Today', tint: '#E8E6D6', health: 'struggling', light: 3, water: 1 }
+    ];
+    var plants = base.map(function (p) {
+      var h = H[p.health];
+      return Object.assign({}, p, {
+        hLabel: h.label, hFg: h.fg, hBg: h.bg, mouth: h.mouth,
+        lightText: LT[p.light], waterText: WT[p.water], lightShort: LS[p.light], waterShort: WS[p.water],
+        nextFg: p.next === 'Overdue' ? '#8A3B06' : '#45514A',
+        suns: [1, 2, 3].map(function (i) { return { c: i <= p.light ? '#B7791F' : '#CBD2CD' }; }),
+        drops: [1, 2, 3].map(function (i) { return { c: i <= p.water ? '#2B5F9E' : '#CBD2CD' }; })
+      });
+    });
+    return { plants: plants };
+  }
+}
+</script>
+</body>
+</html>
