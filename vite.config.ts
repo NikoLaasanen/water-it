@@ -15,6 +15,21 @@ const SPA_FALLBACK = '200.html';
 const LIGHT_BG = '#F3F5F1';
 
 export default defineConfig({
+	server: {
+		// Same host as the Auth emulator (`127.0.0.1`, see firebase/client.ts) —
+		// deliberately not `localhost`.
+		//
+		// The emulator's redirect handler stashes the sign-in event in
+		// sessionStorage on its own origin, and the SDK reads it back through an
+		// iframe served from the emulator. Served from `localhost`, that iframe
+		// is cross-site, so the browser gives it a partitioned sessionStorage,
+		// the event is never found, and Google sign-in redirects back to /signin
+		// with no error anywhere. The same origin mismatch that breaks sign-in in
+		// production (design.md §7.4) breaks it in dev.
+		host: '127.0.0.1'
+	},
+	// Match dev, so `pnpm preview` can exercise sign-in against the emulators too.
+	preview: { host: '127.0.0.1' },
 	plugins: [
 		tailwindcss(),
 
