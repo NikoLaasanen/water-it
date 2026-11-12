@@ -2,22 +2,93 @@ import { paraglideVitePlugin } from '@inlang/paraglide-js';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vitest/config';
 import adapter from '@sveltejs/adapter-static';
-import { sveltekit } from '@sveltejs/kit/vite';
+import { withPwa } from '@vite-pwa/sveltekit';
+
+// SPA: every route is served from this fallback page. `200.html` rather than
+// `index.html` so it can never collide with a prerendered homepage; Firebase
+// Hosting rewrites `**` to it (see firebase.json).
+const SPA_FALLBACK = '200.html';
+
+// Light-theme background from docs/screens.md. The manifest can hold only one
+// theme/background colour, so it carries the light one; the per-theme
+// `theme-color` metas live in src/app.html (design.md 9.1).
+const LIGHT_BG = '#F3F5F1';
 
 export default defineConfig({
 	plugins: [
 		tailwindcss(),
-		sveltekit({
-			compilerOptions: {
-				// Force runes mode for the project, except for libraries. Can be removed in svelte 6.
-				runes: ({ filename }) =>
-					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
+
+		// `withPwa` *wraps* SvelteKit's Vite plugin instead of sitting next to it.
+		// In SvelteKit 3 there is no svelte.config.js and the adapter is a plugin
+		// option, so the PWA plugin has to be given those options to read the
+		// adapter's fallback. @vite-pwa/sveltekit v2 exports only `withPwa` for
+		// this reason — there is no separate `SvelteKitPWA` plugin any more.
+		...withPwa(
+			{
+				compilerOptions: {
+					// Force runes mode for the project, except for libraries. Can be removed in svelte 6.
+					runes: ({ filename }) =>
+						filename.split(/[/\\]/).includes('node_modules') ? undefined : true
+				},
+				adapter: adapter({ fallback: SPA_FALLBACK })
 			},
-			// SPA: every route is served from the fallback page. `200.html` rather than
-			// `index.html` so it can never collide with a prerendered homepage; Firebase
-			// Hosting rewrites `**` to it (see firebase.json).
-			adapter: adapter({ fallback: '200.html' })
-		}),
+			{
+				// CLAUDE.md: "new version available, tap to reload" — never reload on
+				// its own, which could discard a half-finished log entry.
+				registerType: 'prompt',
+				// ReloadPrompt.svelte registers the worker itself via
+				// `useRegisterSW`. The plugin can't inject its own script tag into
+				// app.html anyway (it disables the index-html hooks for SvelteKit), so
+				// leaving this on would only emit an unused registerSW.js.
+				injectRegister: false,
+				manifest: {
+					id: '/',
+					name: 'Water.it',
+					short_name: 'Water.it',
+					start_url: '/',
+					scope: '/',
+					display: 'standalone',
+					orientation: 'portrait',
+					theme_color: LIGHT_BG,
+					background_color: LIGHT_BG
+					// No `description`: the manifest is static and single-locale, so any
+					// prose here would be user-facing text that can't go through
+					// Paraglide. The name is identical in English and Finnish.
+				},
+				// Icons come from pwa-assets.config.ts, generated from
+				// static/app-icon.svg, and are written into the manifest for us.
+				pwaAssets: {
+					config: true,
+					overrideManifestIcons: true,
+					// We emit two `theme-color` metas by hand, one per colour scheme.
+					// Letting the plugin inject its own single one would duplicate them.
+					injectThemeColor: false
+				},
+				// Renamed from `workbox` in @vite-pwa/sveltekit v2; the old key still
+				// works but warns.
+				generateSW: {
+					globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,woff,woff2,webmanifest}'],
+					// The plugin always appends `prerendered/**/*.{html,json}` to these
+					// patterns, but this app prerenders nothing (`ssr = false`
+					// everywhere), so that directory never exists and a strict glob
+					// fails the build. The SPA shell is precached by the `spa` +
+					// `adapterFallback` options below instead, which inject the
+					// fallback entry directly, so nothing is actually left uncached.
+					globStrict: false
+				},
+				kit: {
+					// Together these put the SPA fallback in the precache manifest, so
+					// the installed app opens offline on any route.
+					adapterFallback: SPA_FALLBACK,
+					spa: true,
+					includeVersionFile: true
+				},
+				// No service worker in `vite dev`: it caches aggressively and would
+				// fight both HMR and the Firebase emulators. Verify the real thing
+				// with `pnpm build && pnpm preview`, or on a deployed URL.
+				devOptions: { enabled: false }
+			}
+		),
 
 		paraglideVitePlugin({
 			project: './project.inlang',

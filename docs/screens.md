@@ -92,6 +92,21 @@ Fixed, 84 px tall incl. safe area, white with top border `#E1E6E2`. Four tabs: *
 
 Account-free page from the share link. No tab bar. Owner's message + "Message Niko" button, today's plants as large cards (photo, where it is, plain instructions, **I watered it** / **Still damp** / **Looks wrong**), done rows, "No water needed while Niko is away" chips, next visits, link expiry note.
 
+## Dark mode
+
+In scope from the start (design.md 9.1), following the phone's
+`prefers-color-scheme` with no in-app toggle in M1.
+
+Every token above is implemented as a semantic CSS custom property, so dark
+mode is a second set of values for the same names — not a second set of
+components. **The dark values are not specified yet.** They cannot be derived
+mechanically: the status, health and chip colours are tuned for the pale sage
+background and need re-picking against a dark surface to keep contrast
+≥ 4.5:1, and `water` (`#2B5F9E`) in particular is too dark to sit on one.
+
+Until that table exists, build components against the token names only, never
+a literal hex.
+
 ## Not designed yet
 
-Sign-in, Add/Edit plant, Settings, Photos tab, Log tab, empty states, dark mode, tablet two-pane layout. Follow the tokens and rules above; standard forms are fine for sign-in and Add/Edit.
+Sign-in, Add/Edit plant, Settings, Photos tab, Log tab, empty states, tablet two-pane layout. Follow the tokens and rules above; standard forms are fine for sign-in and Add/Edit.

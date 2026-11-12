@@ -17,6 +17,7 @@ Status: draft v0.10 (app name: Water.it)
 - **Toolchain:** pnpm, Node 24 LTS, SvelteKit 3 (Vite 8, TS 6), ESLint + Prettier, Java 21+ for the Firebase emulators. See `open-decisions.md`.
 - **UI kit:** shadcn-svelte (on Bits UI) with Tailwind v4; Lucide icons.
 - **Languages:** English and Finnish from the start, via Paraglide JS (English source strings). Preset care texts carry both languages.
+- **Dark mode:** supported from the start (decided 2026-11-12), following the phone's setting. See 9.1.
 - **Dates:** due dates stored as local calendar dates (`YYYY-MM-DD`); log times and share expiry as Firestore `Timestamp`. date-fns for date maths.
 - **Infra:** everything on Firebase, one project and one CLI: Hosting, Auth, Firestore now; Cloud Storage, a scheduled Cloud Function and Cloud Messaging later (these need the Blaze plan, which keeps a no-cost tier). Vercel was considered; Firebase Hosting avoids the iOS sign-in workaround and a second platform.
 
@@ -434,6 +435,39 @@ Rules: a lookup never overwrites a field with source `user`; re-fetching is a ma
 - **Accessible**: sufficient contrast, labels on icon buttons, respects reduced motion.
 - **Units**: Celsius, metric; dates in local format.
 - **Language**: English or Finnish, picked from the phone's language on first launch and changeable in Settings.
+
+### 9.1 Dark mode
+
+Supported **from the start**, not retrofitted. The app follows the phone's
+`prefers-color-scheme`; there is no in-app theme toggle in M1 (a Settings
+override can be added later without changing any component).
+
+Doing this from day one is mostly an architectural choice rather than extra
+screens, and it has consequences worth writing down:
+
+- **Tokens are semantic CSS custom properties**, not literal colours:
+  `--color-bg`, `--color-surface`, `--color-primary` and so on, declared once
+  for light and overridden inside a single `@media (prefers-color-scheme: dark)`
+  block. No component ever names a hex value, so the dark palette stays one
+  file to edit instead of a change to every screen. This is the main reason to
+  decide it now: retrofitting means touching every component.
+- **Both palettes must satisfy the existing rules** in `screens.md`: text
+  contrast ≥ 4.5:1, and status never carried by colour alone (icon + label).
+  The second rule matters *more* in dark mode, where a dark surface compresses
+  the difference between the status hues.
+- **The status, health and chip colours each need a dark variant.** The light
+  values are tuned for a pale sage background and will not pass contrast on a
+  dark surface — they can't simply be reused.
+- **The PWA shell carries two `theme-color` metas**, one per
+  `prefers-color-scheme`, plus `color-scheme: light dark` so the iOS status bar,
+  scrollbars and form controls follow the theme. The web manifest can hold only
+  one `theme_color`/`background_color` pair, so it carries the light values;
+  iOS uses those for the Home Screen splash.
+- **Plant photos are user content and are never dimmed, tinted or inverted.**
+  A struggling plant should look the same in both themes.
+
+The dark token values themselves belong in `screens.md` alongside the light
+ones; see "Dark mode" there.
 
 ---
 

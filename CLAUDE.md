@@ -40,6 +40,17 @@ PWA shell (installable, offline) → Firebase wiring + Auth + rules → Plants l
 - Deploying to the live Hosting site. Preview channels are fine.
 - Adding a new dependency that isn't in the stack above.
 
+## Costs
+
+The project runs on the **free Spark plan** and must stay there until M3. **Say
+so explicitly, before doing the work, whenever a decision or step would change
+what the project costs** — moving to Blaze, enabling a billable API or service,
+a paid domain, anything with a per-use price, or a change that materially
+raises usage of a metered free tier (Hosting's 360 MB/day transfer, Firestore's
+daily read/write quota). Name the cost and the trigger; don't fold it into a
+longer explanation and don't assume a free tier still covers it. Known upcoming
+costs are listed in `docs/design.md` §7.1 and `docs/open-decisions.md`.
+
 ## Commands
 
 Firebase project: **`water-it-95171`** (`europe-north1`). Install the iPhone app from
@@ -59,6 +70,13 @@ Firebase project: **`water-it-95171`** (`europe-north1`). Install the iPhone app
 | `pnpm exec firebase deploy --only firestore:rules,firestore:indexes` | Deploy rules and indexes. The only way they should ever change.                                                                                                     |
 | `pnpm exec firebase hosting:channel:deploy <name>`                   | Preview channel. Fine without asking — but it's a `*.web.app` URL, so **sign-in won't work there**; use it for UI only.                                             |
 | `pnpm exec firebase deploy --only hosting`                           | Deploy to live. **Ask first.**                                                                                                                                      |
+
+The Hosting emulator **ignores the `headers` block in `firebase.json`** (verified:
+even a `**` catch-all header never appears in a response). The `no-cache` on
+`sw.js`/`200.html` and the immutable caching for `_app/immutable/**` are therefore
+unverified until something is deployed — check them with `curl -sI` against the
+first deploy, because a missing `no-cache` on `sw.js` is what strands an installed
+app on an old version.
 
 Emulators need Java 21+ (installed: Microsoft OpenJDK 21). The `demo-` project prefix
 means the emulators never touch the real project and work offline and signed out.

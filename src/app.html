@@ -2,8 +2,28 @@
 <html lang="%paraglide.lang%" dir="%paraglide.dir%">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- viewport-fit=cover so the layout can reach under the notch and home
+		     indicator; screens use env(safe-area-inset-*) for real padding. -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 		<meta name="text-scale" content="scale" />
+
+		<!-- Dark mode (design.md 9.1). Two theme-colors so iOS tints the status
+		     bar to match the active theme; one value could only ever match one. -->
+		<meta name="color-scheme" content="light dark" />
+		<meta name="theme-color" media="(prefers-color-scheme: light)" content="#F3F5F1" />
+		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#121714" />
+
+		<!-- Installed app on the Home Screen. `apple-mobile-web-app-capable` is
+		     the deprecated spelling but still the one iOS honours, so both. -->
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-title" content="Water.it" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+		<!-- Generated from static/app-icon.svg by pwa-assets.config.ts. -->
+		<link rel="icon" href="/favicon.ico" sizes="48x48" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
+
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">

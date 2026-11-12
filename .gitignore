@@ -8,6 +8,14 @@ node_modules
 /.svelte-kit
 /build
 
+# Generated PWA icons. The source art (design/icons/app-icon.png) is tracked;
+# the generator drops its output next to it, but the copies that ship live in
+# static/ and those are the ones under version control.
+design/icons/favicon.ico
+design/icons/apple-touch-icon-*.png
+design/icons/maskable-icon-*.png
+design/icons/pwa-*.png
+
 # Firebase
 .firebase/
 *-debug.log

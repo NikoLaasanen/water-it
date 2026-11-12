@@ -1,1 +1,78 @@
 @import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Design tokens — docs/screens.md.
+
+   Components reference these names only, never a literal hex. That is the
+   whole point of deciding dark mode up front (design.md 9.1): the dark theme
+   is one block in this file rather than an edit to every component.
+
+   The light values are the specified palette. The dark values are a
+   PROVISIONAL structural subset — enough for the app shell to be genuinely
+   dark-mode-capable, picked to hold text contrast >= 4.5:1. The status, health
+   and chip colours are deliberately absent: they are tuned for the pale sage
+   background and need re-picking by hand against a dark surface. screens.md
+   records that as still open.
+   --------------------------------------------------------------------------- */
+
+:root {
+	/* Lets the OS style form controls, scrollbars and the caret per theme. */
+	color-scheme: light dark;
+
+	--bg: #f3f5f1;
+	--surface: #ffffff;
+	--ink: #1b241f;
+	--ink-2: #2e3933;
+	--muted: #45514a;
+	--muted-2: #5a665f;
+	--line: #e8ece8;
+	--border: #c9d3cc;
+	--primary: #2f6b4f;
+	--water: #2b5f9e;
+	/* Text/icons drawn on top of a --primary or --water fill. */
+	--on-primary: #ffffff;
+	--on-water: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #121714;
+		--surface: #1a211d;
+		--ink: #e8ede9;
+		--ink-2: #d3dbd6;
+		--muted: #a8b3ad;
+		--muted-2: #8d9993;
+		--line: #27302b;
+		--border: #3a453f;
+		/* Lightened: the light #2f6b4f and #2b5f9e are too dark to read on a
+		   dark surface. Lightening them flips what can sit on top, hence the
+		   --on-* tokens below — white text on light green would fail. */
+		--primary: #6fbf92;
+		--water: #86b4ea;
+		--on-primary: #0e2419;
+		--on-water: #0b1d30;
+	}
+}
+
+/* Expose the tokens as Tailwind utilities (bg-surface, text-ink, ...).
+   `inline` so the utilities resolve to the var(), which keeps the theme
+   switching at runtime rather than being baked in at build time. */
+@theme inline {
+	--color-bg: var(--bg);
+	--color-surface: var(--surface);
+	--color-ink: var(--ink);
+	--color-ink-2: var(--ink-2);
+	--color-muted: var(--muted);
+	--color-muted-2: var(--muted-2);
+	--color-line: var(--line);
+	--color-border: var(--border);
+	--color-primary: var(--primary);
+	--color-water: var(--water);
+	--color-on-primary: var(--on-primary);
+	--color-on-water: var(--on-water);
+}
+
+body {
+	background-color: var(--bg);
+	color: var(--ink);
+}
