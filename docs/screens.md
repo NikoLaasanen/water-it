@@ -79,6 +79,13 @@ Fixed, 84 px tall incl. safe area, white with top border `#E1E6E2`. Four tabs: *
   - Name (17/700), health label in the health colour (13/600), next check with a clock icon ("Check: Sat"; "Check: Overdue" in `#8A3B06`).
   - Two **labelled chips**: light (sun icon + "Bright" / "Medium" / "Low") and water (drop icon + "Little" / "Moderate" / "Lots"). These show the plant's **general** care needs from its care profile, not today's status.
 
+Built 2026-11-12, with these decisions:
+
+- The light chip reads `careProfile.lightLevel`, a field added for it. `careProfile.light` is a sentence for the Care tab and cannot be turned into a translatable one-word chip. The water chip needs no such field: it is derived from `wateringStyle` (`sparse` → Little, `soak-and-dry` → Moderate, `keep-moist` → Lots).
+- "Check:" shows `Overdue` / `Today` / a weekday / `In N days`, switching to the day count from a week out, where a weekday name stops naming one day. Weekday names come from `Intl`, which abbreviates them correctly per locale (Finnish uses lower case, "la").
+- Sorted by name, in the UI rather than in the Firestore query: Firestore orders strings by byte value, which files `Ä` after `Z` instead of after `A`.
+- **Rows are not links yet** and the Add button is disabled: both arrive with the screens behind them. Empty state follows the tokens, since screens.md does not design one.
+
 ## Plant detail — `docs/mockups/plant-detail.dc.html`
 
 - Header photo, 300 px tall, with round 44 px Back and Edit buttons on top; content sheet overlaps the photo by 28 px with a rounded top.
@@ -99,13 +106,35 @@ In scope from the start (design.md 9.1), following the phone's
 
 Every token above is implemented as a semantic CSS custom property, so dark
 mode is a second set of values for the same names — not a second set of
-components. **The dark values are not specified yet.** They cannot be derived
-mechanically: the status, health and chip colours are tuned for the pale sage
-background and need re-picking against a dark surface to keep contrast
-≥ 4.5:1, and `water` (`#2B5F9E`) in particular is too dark to sit on one.
+components. Build against the token names only, never a literal hex.
 
-Until that table exists, build components against the token names only, never
-a literal hex.
+The dark values are picked by hand, not derived: the light palette's pale
+tints with dark text would glare on a dark surface, so each pair inverts into
+a deep tint carrying light text. Hues are kept so a plant reads the same in
+both themes — green thriving, blue recovering, amber struggling.
+
+Dark surface is `#1A211D`. Health `fg` is used twice — inside the face badge
+and as the health label drawn straight on the card — so it is checked against
+both.
+
+| Token | Dark bg | Dark fg | fg on bg | fg on card |
+|---|---|---|---|---|
+| Health thriving | `#1E3A2A` | `#7FD0A0` | 6.75 | 8.94 |
+| Health okay | `#2A322D` | `#B9C4BD` | 7.34 | 9.14 |
+| Health recovering | `#1C3049` | `#93C0F0` | 7.04 | 8.63 |
+| Health struggling | `#3A2415` | `#E8A87C` | 7.15 | 8.07 |
+| Light chip | `#33291A` | `#E8C98A` (icon `#D9A944`) | 8.93 | 10.28 |
+| Water chip | `#1C2D44` | `#A8C8EC` (icon `#7FAEE6`) | 8.05 | 9.49 |
+
+Also dark: `--overdue` `#E8A87C` (the struggling colour, on the card), and
+`--thumb-tint` `#22302A` behind the placeholder leaf.
+
+Meaningful icons are held to ≥ 3:1 rather than 4.5:1 (WCAG 1.4.11): the sun
+and drop glyphs clear 6.0 in dark. The light palette's own sun icon
+(`#B7791F` on `#FBF3E4`) is the tightest value anywhere at 3.30.
+
+**Still open:** the status colours (Watered / Still damp / Skipped). They
+belong to the Today view and are picked when it is built.
 
 ## Not designed yet
 

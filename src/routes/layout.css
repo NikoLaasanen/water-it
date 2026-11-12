@@ -7,12 +7,13 @@
    whole point of deciding dark mode up front (design.md 9.1): the dark theme
    is one block in this file rather than an edit to every component.
 
-   The light values are the specified palette. The dark values are a
-   PROVISIONAL structural subset — enough for the app shell to be genuinely
-   dark-mode-capable, picked to hold text contrast >= 4.5:1. The status, health
-   and chip colours are deliberately absent: they are tuned for the pale sage
-   background and need re-picking by hand against a dark surface. screens.md
-   records that as still open.
+   The light values are the specified palette. Dark values are picked by hand
+   against the dark surface rather than derived, and every pair is checked:
+   text >= 4.5:1 on whatever it sits on, meaningful icons >= 3:1.
+
+   Still absent: the status colours (Watered / Still damp / Skipped), which
+   belong to the Today view and are picked when it is built. screens.md records
+   that as the remaining gap.
    --------------------------------------------------------------------------- */
 
 :root {
@@ -32,6 +33,32 @@
 	/* Text/icons drawn on top of a --primary or --water fill. */
 	--on-primary: #ffffff;
 	--on-water: #ffffff;
+
+	/* Health. The `fg` of each pair is used twice: inside the face badge, and
+	   for the health label drawn straight on the card. So it has to clear
+	   4.5:1 against both its own `bg` and --surface. */
+	--health-thriving-bg: #eaf3ec;
+	--health-thriving-fg: #2f6b4f;
+	--health-okay-bg: #ecefec;
+	--health-okay-fg: #45514a;
+	--health-recovering-bg: #e6eef7;
+	--health-recovering-fg: #1d3e63;
+	--health-struggling-bg: #fbebd9;
+	--health-struggling-fg: #8a3b06;
+
+	/* Care chips: the plant's general needs, not today's state. */
+	--chip-sun-bg: #fbf3e4;
+	--chip-sun-fg: #6b4510;
+	--chip-sun-icon: #b7791f;
+	--chip-water-bg: #e6eef7;
+	--chip-water-fg: #1d3e63;
+	--chip-water-icon: #2b5f9e;
+
+	/* An overdue check, in words as well as colour. */
+	--overdue: #8a3b06;
+
+	/* Behind the leaf glyph where a plant has no photo yet. */
+	--thumb-tint: #dcebdd;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -51,7 +78,51 @@
 		--water: #86b4ea;
 		--on-primary: #0e2419;
 		--on-water: #0b1d30;
+
+		/* The light palette inverts here rather than dimming: a pale tint with
+		   dark text would glare, so each badge becomes a deep tint carrying
+		   light text. The hues are kept so a plant reads the same either way —
+		   green thriving, blue recovering, amber struggling. */
+		--health-thriving-bg: #1e3a2a;
+		--health-thriving-fg: #7fd0a0;
+		--health-okay-bg: #2a322d;
+		--health-okay-fg: #b9c4bd;
+		--health-recovering-bg: #1c3049;
+		--health-recovering-fg: #93c0f0;
+		--health-struggling-bg: #3a2415;
+		--health-struggling-fg: #e8a87c;
+
+		--chip-sun-bg: #33291a;
+		--chip-sun-fg: #e8c98a;
+		--chip-sun-icon: #d9a944;
+		--chip-water-bg: #1c2d44;
+		--chip-water-fg: #a8c8ec;
+		--chip-water-icon: #7faee6;
+
+		--overdue: #e8a87c;
+
+		--thumb-tint: #22302a;
 	}
+}
+
+/* Health resolves once, on the row, so the badge and the label beside it can
+   never drift apart. Components then name --health-bg / --health-fg and no
+   component holds a colour of its own. */
+[data-health='thriving'] {
+	--health-bg: var(--health-thriving-bg);
+	--health-fg: var(--health-thriving-fg);
+}
+[data-health='okay'] {
+	--health-bg: var(--health-okay-bg);
+	--health-fg: var(--health-okay-fg);
+}
+[data-health='recovering'] {
+	--health-bg: var(--health-recovering-bg);
+	--health-fg: var(--health-recovering-fg);
+}
+[data-health='struggling'] {
+	--health-bg: var(--health-struggling-bg);
+	--health-fg: var(--health-struggling-fg);
 }
 
 /* Expose the tokens as Tailwind utilities (bg-surface, text-ink, ...).

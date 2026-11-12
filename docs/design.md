@@ -220,6 +220,7 @@ type Plant = {
 
 type CareProfile = {
   light: string;
+  lightLevel: 'low' | 'medium' | 'bright'; // the same need as a value, for chips
   wateringStyle: 'soak-and-dry' | 'keep-moist' | 'sparse';
   checkIntervalDays: { growing: number; resting: number };
   fixedSchedule?: boolean;     // "water every N days" instead of "check soil"
@@ -359,6 +360,7 @@ Presets are a bundled JSON file, easy to hand-edit:
   "id": "pilea-peperomioides",
   "commonName": "Chinese money plant",
   "light": "Bright indirect light; avoid hot direct sun",
+  "lightLevel": "bright",
   "wateringStyle": "soak-and-dry",
   "checkIntervalDays": { "growing": 7, "resting": 14 },
   "dryDownTest": "Top 2–3 cm dry",

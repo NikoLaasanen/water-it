@@ -21,5 +21,42 @@
 	"sign_out": "Kirjaudu ulos",
 	"loading": "Ladataan…",
 	"signed_in_as": "Kirjautuneena: {email}",
-	"home_placeholder": "Kasvisi ja päivän tarkistukset ilmestyvät tähän."
+	"home_placeholder": "Kasvisi ja päivän tarkistukset ilmestyvät tähän.",
+	"nav_plants": "Kasvit",
+	"plants_title": "Kasvit",
+	"plants_add": "Lisää kasvi",
+	"plants_add_soon": "Kasvien lisäystä ei ole vielä tehty",
+	"plants_summary_count": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "1 kasvi",
+				"countPlural=other": "{count} kasvia"
+			}
+		}
+	],
+	"plants_summary_struggling": "{count} kärvistelee",
+	"plants_loading": "Ladataan kasveja…",
+	"plants_failed": "Kasvien lataus ei onnistunut. Tarkista verkkoyhteys.",
+	"plants_empty_heading": "Ei vielä kasveja",
+	"plants_empty_body": "Kasvit näkyvät tässä, kun lisäystoiminto on valmis.",
+	"plants_check": "Tarkista: {when}",
+	"plants_check_today": "Tänään",
+	"plants_check_overdue": "Myöhässä",
+	"plants_check_in_days": "{days} päivän päästä",
+	"plants_check_unscheduled": "Ei ajastettu",
+	"health_thriving": "Kukoistaa",
+	"health_okay": "Ok",
+	"health_recovering": "Toipuu",
+	"health_struggling": "Kärvistelee",
+	"health_aria": "Kunto: {health}",
+	"light_low": "Vähän",
+	"light_medium": "Keskitasoa",
+	"light_bright": "Kirkas",
+	"light_aria": "Valo: {level}",
+	"water_little": "Vähän",
+	"water_moderate": "Kohtalaisesti",
+	"water_lots": "Paljon",
+	"water_aria": "Vesi: {level}"
 }

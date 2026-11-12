@@ -21,5 +21,42 @@
 	"sign_out": "Sign out",
 	"loading": "Loading…",
 	"signed_in_as": "Signed in as {email}",
-	"home_placeholder": "Your plants and today's checks will appear here."
+	"home_placeholder": "Your plants and today's checks will appear here.",
+	"nav_plants": "Plants",
+	"plants_title": "Plants",
+	"plants_add": "Add plant",
+	"plants_add_soon": "Adding plants is not built yet",
+	"plants_summary_count": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "1 plant",
+				"countPlural=other": "{count} plants"
+			}
+		}
+	],
+	"plants_summary_struggling": "{count} struggling",
+	"plants_loading": "Loading your plants…",
+	"plants_failed": "Could not load your plants. Check your connection.",
+	"plants_empty_heading": "No plants yet",
+	"plants_empty_body": "Your plants will appear here once adding them is built.",
+	"plants_check": "Check: {when}",
+	"plants_check_today": "Today",
+	"plants_check_overdue": "Overdue",
+	"plants_check_in_days": "In {days} days",
+	"plants_check_unscheduled": "Not scheduled",
+	"health_thriving": "Thriving",
+	"health_okay": "Okay",
+	"health_recovering": "Recovering",
+	"health_struggling": "Struggling",
+	"health_aria": "Health: {health}",
+	"light_low": "Low",
+	"light_medium": "Medium",
+	"light_bright": "Bright",
+	"light_aria": "Light: {level}",
+	"water_little": "Little",
+	"water_moderate": "Moderate",
+	"water_lots": "Lots",
+	"water_aria": "Water: {level}"
 }

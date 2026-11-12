@@ -11,6 +11,22 @@ import { describe, expect, it } from 'vitest';
 
 const messagesDir = join(dirname(fileURLToPath(import.meta.url)), '../../../messages');
 
+/**
+ * Every translated string in one message, with a label saying where it came
+ * from. A message is usually a plain string, but a message with plural
+ * variants is an array of `{ match: { "countPlural=one": "…" } }`, and those
+ * inner strings need checking too.
+ */
+function textsOf(value: unknown): [string, unknown][] {
+	if (!Array.isArray(value)) return [['', value]];
+	return value.flatMap((variants: { match?: Record<string, unknown> }) =>
+		Object.entries(variants?.match ?? {}).map(([match, text]): [string, unknown] => [
+			` [${match}]`,
+			text
+		])
+	);
+}
+
 function keysOf(locale: string): string[] {
 	const raw = JSON.parse(readFileSync(join(messagesDir, `${locale}.json`), 'utf8'));
 	return Object.keys(raw)
@@ -31,10 +47,33 @@ describe('paraglide messages', () => {
 			const raw = JSON.parse(readFileSync(join(messagesDir, `${locale}.json`), 'utf8'));
 			for (const [key, value] of Object.entries(raw)) {
 				if (key === '$schema') continue;
-				expect(
-					typeof value === 'string' && value.trim().length > 0,
-					`${locale}.${key} is empty`
-				).toBe(true);
+				for (const [variant, text] of textsOf(value)) {
+					expect(
+						typeof text === 'string' && text.trim().length > 0,
+						`${locale}.${key}${variant} is empty`
+					).toBe(true);
+				}
+			}
+		}
+	});
+
+	it('gives every plural message a fallback variant', () => {
+		// A plural message that matches only `one` renders nothing for every
+		// other count, so an unmatched variant is a blank line on screen rather
+		// than a build error. The number of categories is locale-specific (fi
+		// and en both have two, Polish has four), so what can be asserted
+		// everywhere is that a catch-all exists.
+		for (const locale of ['en', 'fi']) {
+			const raw = JSON.parse(readFileSync(join(messagesDir, `${locale}.json`), 'utf8'));
+			for (const [key, value] of Object.entries(raw)) {
+				if (!Array.isArray(value)) continue;
+				for (const variants of value) {
+					const keys = Object.keys(variants?.match ?? {});
+					expect(
+						keys.some((match) => /=(other|\*)\s*$/.test(match)),
+						`${locale}.${key} has no \`other\` or \`*\` variant: ${keys.join(', ')}`
+					).toBe(true);
+				}
 			}
 		}
 	});

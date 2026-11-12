@@ -21,6 +21,7 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"seed:dev": "node scripts/seed-emulator.mjs",
+		"seed:plants": "node scripts/seed-plants.mjs",
 		"generate-pwa-assets": "pwa-assets-generator && node scripts/copy-pwa-icons.mjs",
 		"test:unit": "vitest --project server",
 		"test": "vitest run --project server",
