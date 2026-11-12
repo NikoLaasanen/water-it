@@ -68,6 +68,16 @@ export default defineConfig({
 				// works but warns.
 				generateSW: {
 					globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,woff,woff2,webmanifest}'],
+					// Firebase's redirect sign-in navigates to `/__/auth/handler` on
+					// *this* origin, and `spa: true` below registers a NavigationRoute
+					// that answers every navigation with the cached 200.html shell.
+					// Without this denylist the worker swallows the handler: the app
+					// shell boots in its place, `getRedirectResult()` finds no pending
+					// credential and the route guard returns to /signin — so tapping
+					// "Sign in with Google" appears to do nothing at all. `/__/*` is
+					// Firebase Hosting's reserved namespace (auth handler, iframe,
+					// init.json), none of which we could usefully serve from cache.
+					navigateFallbackDenylist: [/^\/__\//],
 					// The plugin always appends `prerendered/**/*.{html,json}` to these
 					// patterns, but this app prerenders nothing (`ssr = false`
 					// everywhere), so that directory never exists and a strict glob

@@ -13,7 +13,7 @@
 	},
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build",
+		"build": "vite build && node scripts/check-sw.mjs",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -26,7 +26,8 @@
 		"test": "vitest run --project server",
 		"test:rules": "firebase emulators:exec --only firestore --project demo-water-it \"vitest run --project rules\"",
 		"test:all": "pnpm run test && pnpm run test:rules",
-		"emulators": "firebase emulators:start --only auth,firestore --project demo-water-it --import .firebase/seed --export-on-exit .firebase/seed"
+		"emulators": "firebase emulators:start --only auth,firestore --project demo-water-it --import .firebase/seed --export-on-exit .firebase/seed",
+		"check:sw": "node scripts/check-sw.mjs"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
