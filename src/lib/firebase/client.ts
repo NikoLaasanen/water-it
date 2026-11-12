@@ -18,12 +18,23 @@ import {
 	persistentMultipleTabManager,
 	type Firestore
 } from 'firebase/firestore';
-import { emulatorPorts, firebaseConfig } from './config';
+import { emulatorPorts, emulatorProjectId, firebaseConfig } from './config';
 
 const EMULATOR_HOST = '127.0.0.1';
 
+/**
+ * In dev, the project id has to be the emulators' own, or the client talks to
+ * a different (empty, rule-less) database inside the same emulator — see
+ * `emulatorProjectId`. Everything else is unchanged: the emulator ignores the
+ * API key, and `authDomain` is unused because redirect sign-in goes to the
+ * emulator's handler.
+ */
+const config = import.meta.env.DEV
+	? { ...firebaseConfig, projectId: emulatorProjectId }
+	: firebaseConfig;
+
 /** `getApps()` guard so HMR in dev doesn't try to initialize twice. */
-export const app: FirebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
+export const app: FirebaseApp = getApps().length ? getApp() : initializeApp(config);
 
 export const auth: Auth = getAuth(app);
 

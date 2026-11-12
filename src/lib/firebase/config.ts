@@ -33,3 +33,18 @@ export const emulatorPorts = {
 	auth: 9099,
 	firestore: 8080
 } as const;
+
+/**
+ * The project the emulators run as — see the `emulators` script in
+ * package.json and the seed scripts, which must all agree.
+ *
+ * In dev the client has to use this instead of `firebaseConfig.projectId`.
+ * The Firestore emulator serves *any* project id, each as its own isolated
+ * database, and ignores `singleProjectMode` (it logs "Ignoring unsupported
+ * arg: single_project_mode_error"). So a client asking for `water-it-95171`
+ * gets a second, empty database, with **no rules loaded and therefore open
+ * access** — reads return nothing and writes are never checked, with no error
+ * to notice. The `demo-` prefix is what keeps the emulators offline and
+ * unauthenticated, so the client moves rather than the emulators.
+ */
+export const emulatorProjectId = 'demo-water-it';
