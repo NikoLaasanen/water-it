@@ -1,6 +1,39 @@
 @import 'tailwindcss';
 
 /* ---------------------------------------------------------------------------
+   Plus Jakarta Sans (screens.md), self-hosted from
+   @fontsource-variable/plus-jakarta-sans.
+
+   Self-hosted rather than loaded from Google Fonts: a third-party font means
+   two more DNS + TLS handshakes on first load, hands Google the IP of everyone
+   who opens the app, and can never be precached — so an installed offline app
+   would fall back to a system font exactly when it has no network. Served from
+   our own origin it is in the service worker's precache like everything else.
+
+   Only the `latin` face is declared, not the package's own stylesheet, which
+   also carries cyrillic, vietnamese and latin-ext. The browser would download
+   only what it needs, but the service worker precaches every woff2 it finds,
+   and this app is English and Finnish: ä, ö and å all live in `latin`. One
+   variable file, 27 KB, covers the whole 400–800 range the design uses.
+   --------------------------------------------------------------------------- */
+@font-face {
+	font-family: 'Plus Jakarta Sans Variable';
+	font-style: normal;
+	font-display: swap;
+	font-weight: 200 800;
+	src: url('@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2')
+		format('woff2-variations');
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+		U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@theme {
+	/* Static, so not `inline`: there is nothing to re-resolve per theme. */
+	--font-sans: 'Plus Jakarta Sans Variable', system-ui, sans-serif;
+}
+
+/* ---------------------------------------------------------------------------
    Design tokens — docs/screens.md.
 
    Components reference these names only, never a literal hex. That is the
@@ -146,4 +179,7 @@
 body {
 	background-color: var(--bg);
 	color: var(--ink);
+	font-family: var(--font-sans);
+	/* The design's tracking at display sizes (screens.md: title 34/800). */
+	-webkit-font-smoothing: antialiased;
 }
