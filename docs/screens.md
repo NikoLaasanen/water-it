@@ -95,6 +95,15 @@ Built 2026-11-12, with these decisions:
 - **Care profile** list: Light, Watering, Check test, Temperature, Fertilizing, Repot, Watch out. Small provenance line under it ("From the Pilea preset · edited by you: check test").
 - **Note for plant-sitters** card.
 
+Built 2026-11-12 (Care tab), with these decisions:
+
+- **The Watered / Still damp buttons are not built.** Logging a check reschedules the plant, which is the scheduling work in M2, and the same two buttons are the primary action on the Today view. Built once with tests rather than wired up twice. The next-check card shows the status line only.
+- **Care rows with no data are dropped, not shown empty.** A plant added by hand will have only a couple of these filled in, and a column of blank values reads as a broken screen. Asserted in `labels.spec.ts` against the real compiled strings.
+- Watering reads as one sentence built from `wateringStyle` plus the two intervals, and says "Water every N days" instead of "Check every N days" when `fixedSchedule` is set — a different instruction, not different wording. The season is **not** resolved: both intervals are named, because which one applies needs `Settings.growingMonths`, and there is no settings document yet.
+- **Still missing:** the common + scientific name line and the provenance line, both of which need the species presets; the "Latest photo · 2 Nov" caption, which needs M3 photos (the header shows "No photo yet"); and the Log and Photos tabs, which are rendered `disabled` rather than hidden so the shape of the screen is honest.
+- The health chip reuses the list's `--health-*` tokens rather than the mockup's one-off `#1F4A36`, so health looks identical on both screens. The outline chips use `--border` rather than the mockup's `#D6DDD8`.
+- New token `--segment-bg` for the tab track. In dark it goes **lighter** than the page where light mode goes darker: a recessed track is invisible on a dark background (1.01 against `--bg`). At `#2B342E` it is 1.41 against the page and 1.28 under the selected tab, slightly clearer than the light design's own 1.13 / 1.24. The selection never rests on that edge alone — weight, ink colour and `aria-selected` all carry it.
+
 ## Sitter view (M4, later) — `docs/mockups/sitter.dc.html`
 
 Account-free page from the share link. No tab bar. Owner's message + "Message Niko" button, today's plants as large cards (photo, where it is, plain instructions, **I watered it** / **Still damp** / **Looks wrong**), done rows, "No water needed while Niko is away" chips, next visits, link expiry note.

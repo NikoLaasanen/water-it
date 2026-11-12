@@ -92,6 +92,12 @@
 
 	/* Behind the leaf glyph where a plant has no photo yet. */
 	--thumb-tint: #dcebdd;
+
+	/* Track behind the Care / Log / Photos segmented control. The selected tab
+	   is --surface sitting on this, a deliberately quiet difference — so the
+	   selection is also carried by weight, ink colour and `aria-selected`,
+	   never by this edge alone. */
+	--segment-bg: #e3e8e4;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -135,6 +141,12 @@
 		--overdue: #e8a87c;
 
 		--thumb-tint: #22302a;
+
+		/* Lighter than the page, where light mode goes darker: against a dark
+		   background a recessed track is invisible (1.01 against --bg), so the
+		   track lifts instead. 1.41 against --bg and 1.28 under the selected
+		   tab — both a little clearer than the light design's own 1.13 / 1.24. */
+		--segment-bg: #2b342e;
 	}
 }
 

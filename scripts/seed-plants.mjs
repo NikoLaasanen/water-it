@@ -35,6 +35,99 @@ function dayOffset(days) {
 	return `${date.getFullYear()}-${month}-${day}`;
 }
 
+const DETAIL = {
+	pilea: {
+		dryDownTest: 'Skewer under the clay pebbles: dry 2–3 cm down.',
+		tempMinC: 10,
+		tempComfortC: [15, 24],
+		fertilize: {
+			intervalDays: 30,
+			growingOnly: true
+		},
+		repotIntervalMonths: 24,
+		watchOuts: [
+			'Overwatering',
+			'Lower leaves shed naturally',
+			'Turn the pot weekly so it grows straight'
+		],
+		pot: {
+			material: 'Terracotta',
+			topLayer: 'clay pebbles',
+			sizeCm: 14
+		},
+		sitterNote:
+			'Left end of the living room window. Water slowly onto the pebbles until it drips into the saucer, then pour the saucer out.'
+	},
+	dracaena: {
+		dryDownTest: 'Top 4–5 cm dry.',
+		tempMinC: 13,
+		tempComfortC: [18, 24],
+		fertilize: {
+			intervalDays: 45,
+			growingOnly: true
+		},
+		repotIntervalMonths: 36,
+		watchOuts: ['Fluoride and salts in tap water brown the tips', 'Cold drafts'],
+		pot: {
+			material: 'Plastic',
+			topLayer: 'bark',
+			sizeCm: 19
+		},
+		sitterNote: 'Only if the soil is dry a finger deep. It would rather be too dry than too wet.'
+	},
+	'tree-aloe': {
+		dryDownTest: 'Soil bone dry all the way down.',
+		tempMinC: 5,
+		tempComfortC: [15, 30],
+		fertilize: {
+			intervalDays: 60,
+			growingOnly: true
+		},
+		repotIntervalMonths: 36,
+		watchOuts: ['Overwatering is the only real risk', 'No water in the rosette'],
+		pot: {
+			material: 'Terracotta',
+			topLayer: 'gravel',
+			sizeCm: 24
+		},
+		sitterNote: 'Skip it. Two weeks without water is nothing to this one.'
+	},
+	crassula: {
+		dryDownTest: 'Leaves slightly soft, soil dry throughout.',
+		tempMinC: 7,
+		tempComfortC: [15, 26],
+		fertilize: {
+			intervalDays: 60,
+			growingOnly: true
+		},
+		repotIntervalMonths: 36,
+		watchOuts: ['Overwatering', 'Leaves drop if moved suddenly into full sun'],
+		pot: {
+			material: 'Terracotta',
+			topLayer: 'gravel',
+			sizeCm: 12
+		},
+		sitterNote: 'Needs nothing for two weeks. Water only if the leaves look wrinkled.'
+	},
+	yucca: {
+		dryDownTest: 'Top 5 cm dry.',
+		tempMinC: 7,
+		tempComfortC: [16, 28],
+		fertilize: {
+			intervalDays: 60,
+			growingOnly: true
+		},
+		repotIntervalMonths: 36,
+		watchOuts: ['Overwatering rots the trunk', 'Lower leaves yellow with age'],
+		pot: {
+			material: 'Plastic',
+			topLayer: 'none',
+			sizeCm: 22
+		},
+		sitterNote: 'Recovering from being too wet, so leave it alone unless the soil is dry 5 cm down.'
+	}
+};
+
 const PLANTS = [
 	{
 		id: 'pilea',
@@ -103,32 +196,59 @@ const PLANTS = [
 	}
 ];
 
-/** Firestore REST wants every value tagged with its type. */
-const str = (value) => ({ stringValue: value });
-const num = (value) => ({ integerValue: String(value) });
+/**
+ * Firestore REST tags every value with its type, including inside maps and
+ * arrays — so encode generically rather than per field. Writing the plant as
+ * a plain object below then keeps the data readable.
+ */
+function toValue(value) {
+	if (value === null || value === undefined) return { nullValue: null };
+	if (typeof value === 'string') return { stringValue: value };
+	if (typeof value === 'boolean') return { booleanValue: value };
+	if (typeof value === 'number') {
+		// Integers must not go in as doubles: `checkIntervalDays.growing` is read
+		// back with `typeof === 'number'` either way, but a 7 that comes back as
+		// 7.0 reads as "every 7 days" only by luck of formatting.
+		return Number.isInteger(value) ? { integerValue: String(value) } : { doubleValue: value };
+	}
+	if (value instanceof Date) return { timestampValue: value.toISOString() };
+	if (Array.isArray(value)) return { arrayValue: { values: value.map(toValue) } };
+	return { mapValue: { fields: toFields(value) } };
+}
+
+function toFields(object) {
+	return Object.fromEntries(
+		Object.entries(object)
+			// Skip absent values rather than storing nulls: the app treats a
+			// missing care field as "nothing to say" and hides that row.
+			.filter(([, value]) => value !== undefined)
+			.map(([key, value]) => [key, toValue(value)])
+	);
+}
 
 function plantFields(plant) {
-	return {
-		name: str(plant.name),
-		health: str(plant.health),
-		location: str(plant.location),
-		speciesId: str(plant.speciesId),
-		createdAt: { timestampValue: new Date().toISOString() },
+	const detail = DETAIL[plant.id] ?? {};
+	return toFields({
+		name: plant.name,
+		health: plant.health,
+		location: plant.location,
+		speciesId: plant.speciesId,
+		createdAt: new Date(),
+		pot: detail.pot,
+		sitterNote: detail.sitterNote,
 		careProfile: {
-			mapValue: {
-				fields: {
-					light: str(plant.light),
-					lightLevel: str(plant.lightLevel),
-					wateringStyle: str(plant.wateringStyle),
-					checkIntervalDays: {
-						mapValue: {
-							fields: { growing: num(plant.growing), resting: num(plant.resting) }
-						}
-					}
-				}
-			}
+			light: plant.light,
+			lightLevel: plant.lightLevel,
+			wateringStyle: plant.wateringStyle,
+			checkIntervalDays: { growing: plant.growing, resting: plant.resting },
+			dryDownTest: detail.dryDownTest,
+			tempMinC: detail.tempMinC,
+			tempComfortC: detail.tempComfortC,
+			fertilize: detail.fertilize,
+			repotIntervalMonths: detail.repotIntervalMonths,
+			watchOuts: detail.watchOuts
 		}
-	};
+	});
 }
 
 async function emulatorUsers() {
@@ -200,12 +320,15 @@ if (!user) {
 
 for (const plant of PLANTS) {
 	await put(`users/${user.localId}/plants/${plant.id}`, plantFields(plant));
-	await put(`users/${user.localId}/tasks/check-${plant.id}`, {
-		plantId: str(plant.id),
-		kind: str('check-water'),
-		nextDue: str(dayOffset(plant.dueIn)),
-		intervalDays: num(plant.growing)
-	});
+	await put(
+		`users/${user.localId}/tasks/check-${plant.id}`,
+		toFields({
+			plantId: plant.id,
+			kind: 'check-water',
+			nextDue: dayOffset(plant.dueIn),
+			intervalDays: plant.growing
+		})
+	);
 }
 
 console.log(`Seeded ${PLANTS.length} plants for ${user.email ?? user.localId}.`);

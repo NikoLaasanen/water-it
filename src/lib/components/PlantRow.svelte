@@ -1,13 +1,13 @@
 <!--
-  One row of the Plants list (screens.md "Plants").
+  One row of the Plants list (screens.md "Plants"), linking to the plant.
 
-  Not a link yet: the plant detail route arrives with the next view, and a card
-  that looks tappable but goes nowhere is worse than one that doesn't invite
-  the tap. The `<a>` wrapper lands with that screen.
+  The whole card is the link, as in the mockup: a 68 px thumbnail and three
+  lines of text are easier to hit than any single element inside them.
 -->
 <script lang="ts">
 	import Clock from '@lucide/svelte/icons/clock';
 	import Leaf from '@lucide/svelte/icons/leaf';
+	import { resolve } from '$app/paths';
 	import CareChip from './CareChip.svelte';
 	import HealthFace from './HealthFace.svelte';
 	import { m } from '#lib/paraglide/messages.js';
@@ -36,9 +36,10 @@
 	const water = $derived(waterLabel(waterLevel(plant.careProfile.wateringStyle)));
 </script>
 
-<article
+<a
+	href={resolve('/plants/[id]', { id: plant.id })}
 	data-health={plant.health}
-	class="flex items-center gap-3.5 rounded-[18px] bg-surface p-3 shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
+	class="flex items-center gap-3.5 rounded-[18px] bg-surface p-3 no-underline shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
 >
 	<!-- Photo placeholder. Real photos arrive in M3, so for now every plant
 	     gets the tinted square and leaf from the spec. -->
@@ -75,4 +76,4 @@
 			<CareChip variant="water" label={water} aria={m.water_aria({ level: water })} />
 		</div>
 	</div>
-</article>
+</a>

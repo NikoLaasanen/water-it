@@ -7,6 +7,7 @@
  */
 import {
 	collection,
+	doc,
 	onSnapshot,
 	query,
 	where,
@@ -134,6 +135,75 @@ export class PlantsQuery {
 		return () => {
 			stopPlants();
 			stopTasks();
+		};
+	}
+}
+
+/**
+ * Live view of one plant and its water check, for the detail screen.
+ *
+ * A listener rather than a one-off read: editing a plant, or logging a check
+ * from somewhere else, should be reflected here without a reload. Same
+ * ownership rule as `PlantsQuery` — `listen()` hands back its own cleanup.
+ */
+export class PlantQuery {
+	plant = $state<Plant | null>(null);
+
+	/** This plant's `check-water` task. */
+	checkTask = $state<Task | undefined>(undefined);
+
+	loading = $state(true);
+
+	/** The document is not there — a stale link, or a deleted plant. */
+	missing = $state(false);
+
+	failed = $state(false);
+
+	#delivered = { plant: false, task: false };
+
+	#settle(which: 'plant' | 'task') {
+		this.#delivered[which] = true;
+		if (this.#delivered.plant && this.#delivered.task) this.loading = false;
+	}
+
+	#onError = (error: FirestoreError) => {
+		console.error('[plant] listener failed', error.code);
+		this.failed = true;
+		this.loading = false;
+	};
+
+	listen(uid: string, plantId: string): () => void {
+		const stopPlant = onSnapshot(
+			doc(db, 'users', uid, 'plants', plantId),
+			(snapshot) => {
+				const data = snapshot.data();
+				// `exists()` false is a missing plant; a document that exists but
+				// can't be read as one (no name) is equally unusable here.
+				this.plant = data ? toPlant(snapshot.id, data) : null;
+				this.missing = this.plant === null;
+				this.#settle('plant');
+			},
+			this.#onError
+		);
+
+		const stopTask = onSnapshot(
+			query(
+				collection(db, 'users', uid, 'tasks'),
+				where('kind', '==', 'check-water'),
+				where('plantId', '==', plantId)
+			),
+			(snapshot) => {
+				this.checkTask = snapshot.docs
+					.map((task) => ({ ...task.data(), id: task.id }) as Task)
+					.at(0);
+				this.#settle('task');
+			},
+			this.#onError
+		);
+
+		return () => {
+			stopPlant();
+			stopTask();
 		};
 	}
 }

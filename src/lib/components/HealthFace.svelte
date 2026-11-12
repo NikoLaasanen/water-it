@@ -13,7 +13,20 @@
 	import { healthLabel } from '#lib/plants/labels.js';
 	import type { Health } from '#lib/types/plant.js';
 
-	let { health, size = 32 }: { health: Health; size?: number } = $props();
+	let {
+		health,
+		size = 32,
+		ring = true
+	}: {
+		health: Health;
+		size?: number;
+		/**
+		 * The surface-coloured ring that lifts the badge off a photo. Wanted on
+		 * the list thumbnail it overlaps; not inside a chip, where it would read
+		 * as a gap in the chip's own fill.
+		 */
+		ring?: boolean;
+	} = $props();
 
 	// Mouth paths from docs/mockups/plants.dc.html, which is the reference for
 	// the exact shapes: a smile, a flat line, a faint smile and a frown.
@@ -38,7 +51,7 @@
 	style:height="{size}px"
 	style:background="var(--health-bg)"
 	style:color="var(--health-fg)"
-	style:border="2.5px solid var(--surface)"
+	style:border={ring ? '2.5px solid var(--surface)' : 'none'}
 >
 	<svg
 		width={glyph}
