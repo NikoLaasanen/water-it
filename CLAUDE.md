@@ -74,10 +74,13 @@ Firebase project: **`water-it-95171`** (`europe-north1`). Install the iPhone app
 
 The Hosting emulator **ignores the `headers` block in `firebase.json`** (verified:
 even a `**` catch-all header never appears in a response). The `no-cache` on
-`sw.js`/`200.html` and the immutable caching for `_app/immutable/**` are therefore
-unverified until something is deployed — check them with `curl -sI` against the
-first deploy, because a missing `no-cache` on `sw.js` is what strands an installed
-app on an old version.
+`sw.js`/`200.html` and the immutable caching for `_app/immutable/**` can therefore
+only be checked against a deploy — do it with `curl -sI` after any change to the
+`headers` block, because a missing `no-cache` on `sw.js` is what strands an
+installed app on an old version. Confirmed on the first live deploy
+(2026-11-12): `sw.js`, `200.html` and `manifest.webmanifest` all `no-cache`,
+`_app/immutable/**` `public, max-age=31536000, immutable`, and `/`, `/signin`,
+`/plants/pilea` and `/settings/deep/route` all return the identical SPA shell.
 
 Emulators need Java 21+ (installed: Microsoft OpenJDK 21). The `demo-` project prefix
 means the emulators never touch the real project and work offline and signed out.
