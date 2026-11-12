@@ -2,10 +2,10 @@ rules_version = '2';
 
 // Water.it security rules.
 //
-// M1 scope: a signed-in user reads and writes only their own tree under
-// `users/{uid}`. Everything else is denied, including the `shares/{token}`
-// collection from design.md §6 — that arrives in M4 together with its own
-// rules tests, rather than sitting here unused and untested.
+// M1 scope: an **invited** signed-in user reads and writes only their own tree
+// under `users/{uid}`. Everything else is denied, including the
+// `shares/{token}` collection from design.md §6 — that arrives in M4 together
+// with its own rules tests, rather than sitting here unused and untested.
 //
 // Species presets are a bundled read-only JSON file, not Firestore documents,
 // so no rule is needed for them.
@@ -13,8 +13,29 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Invite-only (open-decisions.md, "Invite-only enforcement", option b).
+    //
+    // Google sign-in can't be disabled per-account, so anyone with the URL can
+    // *create* an account. What they cannot do is touch any data: every rule
+    // below also requires an `allowlist/{email}` document for their address.
+    // An uninvited account is therefore inert — it exists and sees nothing.
+    //
+    // The email is the document ID, stored lowercase. `request.auth.token.email`
+    // is set for both Google and email/password accounts. It is *not* set for
+    // anonymous auth, which is what M4's plant-sitters will use — they must
+    // never reach `users/{uid}`, and this is what stops them.
+    function isInvited() {
+      return isSignedIn()
+        && request.auth.token.email != null
+        && exists(/databases/$(database)/documents/allowlist/$(request.auth.token.email.lower()));
+    }
+
     function isOwner(uid) {
-      return request.auth != null && request.auth.uid == uid;
+      return isSignedIn() && request.auth.uid == uid && isInvited();
     }
 
     // Settings + profile document.
@@ -25,6 +46,13 @@ service cloud.firestore {
       match /{documents=**} {
         allow read, write: if isOwner(uid);
       }
+    }
+
+    // The allowlist is managed out of band (Firebase console / CLI) and is
+    // never touched by the app. `exists()` above runs server-side and needs no
+    // client read access, so nobody can enumerate who has been invited.
+    match /allowlist/{email} {
+      allow read, write: if false;
     }
   }
 }
