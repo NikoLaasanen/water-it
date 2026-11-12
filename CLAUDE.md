@@ -42,4 +42,23 @@ PWA shell (installable, offline) → Firebase wiring + Auth + rules → Plants l
 
 ## Commands
 
-_Fill in after scaffolding (dev server, emulators, tests, lint, deploy)._
+Firebase project: **`water-it-95171`** (`europe-north1`). Install the iPhone app from
+**`https://water-it-95171.firebaseapp.com`** — not the `.web.app` twin, because
+`signInWithRedirect` needs the app and `authDomain` on the same origin (design.md §7.4).
+
+| Command                                                              | What it does                                                                                                                                                        |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm dev`                                                           | Vite dev server. Expects `pnpm emulators` running in another terminal.                                                                                              |
+| `pnpm emulators`                                                     | Auth + Firestore emulators on the `demo-water-it` project, UI at <http://127.0.0.1:4000>. Imports and re-exports `.firebase/seed`, so test data survives a restart. |
+| `pnpm test`                                                          | Unit tests (Vitest, `src/**`).                                                                                                                                      |
+| `pnpm test:rules`                                                    | Firestore rules tests. Starts its own Firestore emulator, so it needs Java but not a running `pnpm emulators`.                                                      |
+| `pnpm test:all`                                                      | Both of the above.                                                                                                                                                  |
+| `pnpm check`                                                         | `svelte-check` type checking.                                                                                                                                       |
+| `pnpm lint` / `pnpm format`                                          | Prettier + ESLint.                                                                                                                                                  |
+| `pnpm build` / `pnpm preview`                                        | Static build into `build/`.                                                                                                                                         |
+| `pnpm exec firebase deploy --only firestore:rules,firestore:indexes` | Deploy rules and indexes. The only way they should ever change.                                                                                                     |
+| `pnpm exec firebase hosting:channel:deploy <name>`                   | Preview channel. Fine without asking — but it's a `*.web.app` URL, so **sign-in won't work there**; use it for UI only.                                             |
+| `pnpm exec firebase deploy --only hosting`                           | Deploy to live. **Ask first.**                                                                                                                                      |
+
+Emulators need Java 21+ (installed: Microsoft OpenJDK 21). The `demo-` project prefix
+means the emulators never touch the real project and work offline and signed out.

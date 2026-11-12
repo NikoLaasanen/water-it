@@ -8,6 +8,11 @@ node_modules
 /.svelte-kit
 /build
 
+# Firebase
+.firebase/
+*-debug.log
+firebase-export-*/
+
 # OS
 .DS_Store
 Thumbs.db

@@ -1,0 +1,30 @@
+rules_version = '2';
+
+// Water.it security rules.
+//
+// M1 scope: a signed-in user reads and writes only their own tree under
+// `users/{uid}`. Everything else is denied, including the `shares/{token}`
+// collection from design.md §6 — that arrives in M4 together with its own
+// rules tests, rather than sitting here unused and untested.
+//
+// Species presets are a bundled read-only JSON file, not Firestore documents,
+// so no rule is needed for them.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // Settings + profile document.
+    match /users/{uid} {
+      allow read, write: if isOwner(uid);
+
+      // plants, tasks, log, photos (and later devices) — all owner-only.
+      match /{documents=**} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+  }
+}

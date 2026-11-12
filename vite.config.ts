@@ -40,6 +40,21 @@ export default defineConfig({
 					include: ['src/**/*.{test,spec}.{js,ts}'],
 					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}']
 				}
+			},
+			{
+				extends: './vite.config.ts',
+				test: {
+					name: 'rules',
+					environment: 'node',
+					include: ['tests/rules/**/*.{test,spec}.ts'],
+					// Rules tests talk to the Firestore emulator, so they need it
+					// running: use `pnpm test:rules`, never a bare `vitest`.
+					// `assertFails`/`assertSucceeds` throw instead of calling
+					// `expect`, so the global assertion requirement can't apply here.
+					expect: { requireAssertions: false },
+					testTimeout: 15000,
+					hookTimeout: 30000
+				}
 			}
 		]
 	}

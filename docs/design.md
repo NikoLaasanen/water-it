@@ -5,7 +5,7 @@
 Status: draft v0.10 (app name: Water.it)
 
 ### Decisions so far
-- **Name:** Water.it, the same in English and Finnish. Leafline was considered but an app with that name already exists. Firebase project ID: `water-it` if free, else `waterit-app` (IDs allow only lowercase letters, digits and hyphens, are globally unique and permanent; the home-screen name `Water.it` comes from the manifest, and the web address can be a separate Hosting site name).
+- **Name:** Water.it, the same in English and Finnish. Leafline was considered but an app with that name already exists. Firebase project ID: **`water-it-95171`**, created 2026-11-12 — `water-it` was already taken, so the console appended a suffix. IDs are globally unique and permanent. The home-screen name `Water.it` comes from the manifest, so the suffix is only ever visible in the URL.
 - **Platform:** PWA, used on iOS (iPhone), installed via Safari → Share → Add to Home Screen. A native iOS app is out of scope: it needs a Mac, Xcode and a paid Apple Developer account, and free sideloaded builds expire after 7 days.
 - **UI framework:** Svelte (see 7.2).
 - **Reminders in the MVP:** an in-app "needs watering" list shown when the app opens. No notifications at first. Push is a later, optional milestone.
@@ -13,7 +13,7 @@ Status: draft v0.10 (app name: Water.it)
 - **Seasons:** calendar months for the MVP (growing season April–September by default), plus a per-plant "under grow light" flag.
 - **Users and sync:** a handful of invited users (Niko, Niko's mum, maybe a few friends later), all on iPhone. Each has a fully separate account and plants; no shared households. Data lives in Firestore and syncs across devices; Firestore's offline cache keeps the app usable without a connection.
 - **Plant-sitting:** while away, a user can share a time-limited link with a sitter, who sees care instructions and logs what they did without needing an account (see 4.7).
-- **Firestore location:** `europe-north1` (Finland). Permanent once created.
+- **Firestore location:** `europe-north1` (Finland). The `(default)` database was created there on 2026-11-12; the location is now permanent.
 - **Toolchain:** pnpm, Node 24 LTS, SvelteKit 3 (Vite 8, TS 6), ESLint + Prettier, Java 21+ for the Firebase emulators. See `open-decisions.md`.
 - **UI kit:** shadcn-svelte (on Bits UI) with Tailwind v4; Lucide icons.
 - **Languages:** English and Finnish from the start, via Paraglide JS (English source strings). Preset care texts carry both languages.
@@ -337,7 +337,7 @@ Notes for B:
 
 ### 7.4 Authentication
 - Sign-in methods: **Google** and **email + password** (simplest for a non-technical user). Invite-only: new accounts are allowed only for emails on an allowlist (checked in security rules or by disabling open sign-up and creating accounts by hand).
-- **iOS gotcha 1 (Google sign-in):** Safari blocks the third-party storage that `signInWithRedirect` relies on when the app and `authDomain` are on different domains. On Firebase Hosting the fix is config only: set `authDomain` to the domain the app is served from (the `<project>.firebaseapp.com` default, or a custom domain added in Hosting). Popups are unreliable in an installed iOS web app, so use redirect.
+- **iOS gotcha 1 (Google sign-in):** Safari blocks the third-party storage that `signInWithRedirect` relies on when the app and `authDomain` are on different domains. On Firebase Hosting the fix is config only: serve the app from the same origin as `authDomain`. The two default domains are **not** interchangeable — `water-it-95171.firebaseapp.com` *is* the default `authDomain`, so redirect sign-in works there with no extra setup, while `water-it-95171.web.app` is a different origin and would need `authDomain` overridden to it. **So install the iPhone app from the `firebaseapp.com` URL.** This also constrains testing: preview channels are `<project>--<channel>-<hash>.web.app`, so they are fine for checking UI on the phone but sign-in will fail there — test sign-in on the live domain, or against the Auth emulator. Popups are unreliable in an installed iOS web app, so use redirect.
 - **iOS gotcha 2 (email links):** a Home Screen web app has its own storage, separate from Safari. A magic sign-in link tapped in Mail opens in Safari and signs in there, not in the installed app. So avoid email-link sign-in; use password or Google.
 - Use `browserLocalPersistence` (the default) so users stay signed in.
 

@@ -5,7 +5,11 @@ const config = {
 	trailingComma: 'none',
 	printWidth: 100,
 	plugins: ['prettier-plugin-svelte', 'prettier-plugin-tailwindcss'],
-	overrides: [{ files: '*.svelte', options: { parser: 'svelte' } }],
+	overrides: [
+		{ files: '*.svelte', options: { parser: 'svelte' } },
+		// Prettier can't infer a parser from an extensionless dotfile.
+		{ files: '.firebaserc', options: { parser: 'json' } }
+	],
 	tailwindStylesheet: './src/routes/layout.css'
 };
 
