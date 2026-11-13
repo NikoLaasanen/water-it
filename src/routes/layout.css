@@ -2,6 +2,9 @@
 /* Enter/exit animations for shadcn-svelte's dialogs and collapsibles. */
 @import 'tw-animate-css';
 
+/* Tailwind's `dark:` follows the app's theme setting, not the media query. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
 /* ---------------------------------------------------------------------------
    Plus Jakarta Sans (screens.md), self-hosted from
    @fontsource-variable/plus-jakarta-sans.
@@ -55,8 +58,9 @@
    --------------------------------------------------------------------------- */
 
 :root {
-	/* Lets the OS style form controls, scrollbars and the caret per theme. */
-	color-scheme: light dark;
+	/* Lets the OS style form controls, scrollbars and the caret per theme;
+	   the dark block below switches it to `dark`. */
+	color-scheme: light;
 
 	--bg: #f3f5f1;
 	--surface: #ffffff;
@@ -137,80 +141,83 @@
 	--google-logo-bg: transparent;
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--bg: #121614;
-		--surface: #1c221f;
-		--ink: #e9eeea;
-		--ink-2: #cdd5d0;
-		--muted: #a3aea8;
-		--muted-2: #97a29c;
-		--line: #2a322e;
-		--border: #3e4843;
-		/* Lightened: the light #2f6b4f and #2b5f9e are too dark to read on a
-		   dark surface. Lightening them flips what can sit on top, hence the
-		   --on-* tokens below — white text on light green would fail. */
-		--primary: #74c495;
-		--water: #86b4ea;
-		--on-primary: #0e2a1b;
-		--on-water: #0b1d30;
+/* Dark theme. Keyed on an attribute rather than the media query so Settings
+   can force light or dark: src/app.html sets `data-theme` before first paint
+   ("auto" resolves to the phone's setting there), and #lib/theme.svelte.ts
+   keeps it in step afterwards. One block either way. */
+:root[data-theme='dark'] {
+	color-scheme: dark;
+	--bg: #121614;
+	--surface: #1c221f;
+	--ink: #e9eeea;
+	--ink-2: #cdd5d0;
+	--muted: #a3aea8;
+	--muted-2: #97a29c;
+	--line: #2a322e;
+	--border: #3e4843;
+	/* Lightened: the light #2f6b4f and #2b5f9e are too dark to read on a
+	   dark surface. Lightening them flips what can sit on top, hence the
+	   --on-* tokens below — white text on light green would fail. */
+	--primary: #74c495;
+	--water: #86b4ea;
+	--on-primary: #0e2a1b;
+	--on-water: #0b1d30;
 
-		/* The light palette inverts here rather than dimming: a pale tint with
-		   dark text would glare, so each badge becomes a deep tint carrying
-		   light text. The hues are kept so a plant reads the same either way —
-		   green thriving, blue recovering, amber struggling. */
-		--health-thriving-bg: #1f3528;
-		--health-thriving-fg: #8fd3a8;
-		--health-okay-bg: #2a302c;
-		--health-okay-fg: #c2cbc5;
-		--health-recovering-bg: #1e2c3d;
-		--health-recovering-fg: #a9c8ee;
-		--health-struggling-bg: #3a2716;
-		--health-struggling-fg: #f2b077;
+	/* The light palette inverts here rather than dimming: a pale tint with
+	   dark text would glare, so each badge becomes a deep tint carrying
+	   light text. The hues are kept so a plant reads the same either way —
+	   green thriving, blue recovering, amber struggling. */
+	--health-thriving-bg: #1f3528;
+	--health-thriving-fg: #8fd3a8;
+	--health-okay-bg: #2a302c;
+	--health-okay-fg: #c2cbc5;
+	--health-recovering-bg: #1e2c3d;
+	--health-recovering-fg: #a9c8ee;
+	--health-struggling-bg: #3a2716;
+	--health-struggling-fg: #f2b077;
 
-		--chip-sun-bg: #33291a;
-		--chip-sun-fg: #e8c98a;
-		--chip-sun-icon: #d9a944;
-		--chip-water-bg: #1c2d44;
-		--chip-water-fg: #a8c8ec;
-		--chip-water-icon: #7faee6;
+	--chip-sun-bg: #33291a;
+	--chip-sun-fg: #e8c98a;
+	--chip-sun-icon: #d9a944;
+	--chip-water-bg: #1c2d44;
+	--chip-water-fg: #a8c8ec;
+	--chip-water-icon: #7faee6;
 
-		--overdue: #f2b077;
+	--overdue: #f2b077;
 
-		--thumb-tint: #22302a;
+	--thumb-tint: #22302a;
 
-		/* Lighter than the page, where light mode goes darker: against a dark
-		   background a recessed track is invisible, so the track lifts, and the
-		   selected segment lifts again rather than using --surface. Both edges
-		   are quiet (1.29 and 1.40), as in light mode, so the selection is also
-		   carried by weight, ink colour and `aria-selected`. */
-		--segment-bg: #262d29;
-		--segment-selected: #3a443f;
+	/* Lighter than the page, where light mode goes darker: against a dark
+	   background a recessed track is invisible, so the track lifts, and the
+	   selected segment lifts again rather than using --surface. Both edges
+	   are quiet (1.29 and 1.40), as in light mode, so the selection is also
+	   carried by weight, ink colour and `aria-selected`. */
+	--segment-bg: #262d29;
+	--segment-selected: #3a443f;
 
-		/* Fields sink below the card. Border 3.71 on --surface, 4.04 on the
-		   field, 4.19 on --bg. */
-		--field-bg: #151a17;
-		--field-border: #6f7c76;
-		--placeholder: #97a29c;
-		--link: #8fd3a8;
-		--selected-bg: #1f3528;
-		--selected-border: #74c495;
-		/* The design's #5e6a64 is 2.87 on the card, under 3:1, so the off
-		   switch borrows the field border (3.71). */
-		--switch-off: #6f7c76;
-		--switch-knob: #e9eeea;
-		--switch-knob-on: #0e2a1b;
-		--edited-bg: #3a3015;
-		--edited-fg: #f0d37a;
-		--danger: #f2a39b;
-		--danger-border: #e5776b;
+	/* Fields sink below the card. Border 3.71 on --surface, 4.04 on the
+	   field, 4.19 on --bg. */
+	--field-bg: #151a17;
+	--field-border: #6f7c76;
+	--placeholder: #97a29c;
+	--link: #8fd3a8;
+	--selected-bg: #1f3528;
+	--selected-border: #74c495;
+	/* The design's #5e6a64 is 2.87 on the card, under 3:1, so the off
+	   switch borrows the field border (3.71). */
+	--switch-off: #6f7c76;
+	--switch-knob: #e9eeea;
+	--switch-knob-on: #0e2a1b;
+	--edited-bg: #3a3015;
+	--edited-fg: #f0d37a;
+	--danger: #f2a39b;
+	--danger-border: #e5776b;
 
-		--google-bg: #131314;
-		--google-border: #8e918f;
-		--google-fg: #e3e3e3;
-		/* The "G" must sit on white. */
-		--google-logo-bg: #ffffff;
-	}
+	--google-bg: #131314;
+	--google-border: #8e918f;
+	--google-fg: #e3e3e3;
+	/* The "G" must sit on white. */
+	--google-logo-bg: #ffffff;
 }
 
 /* Health resolves once, on the row, so the badge and the label beside it can

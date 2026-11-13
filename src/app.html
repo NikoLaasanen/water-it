@@ -13,6 +13,38 @@
 		<meta name="theme-color" media="(prefers-color-scheme: light)" content="#F3F5F1" />
 		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#121614" />
 
+		<!-- Theme before first paint, so a reload never flashes light in dark
+		     mode. Settings stores "light" or "dark" under this key; anything
+		     else is "auto", the phone's setting. #lib/theme.svelte.ts takes
+		     over once the app runs — keep the key and colours in step. -->
+		<script>
+			(function () {
+				var pref = null;
+				try {
+					pref = localStorage.getItem('water-it-theme');
+				} catch (e) {}
+				var dark =
+					pref === 'dark' ||
+					(pref !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+				document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+				// Language on "auto" (#lib/i18n/language.ts): Paraglide saves
+				// whatever it resolved on first use, which would pin the phone's
+				// language of that day. Clearing it before the app starts makes it
+				// follow the phone again on every launch.
+				try {
+					if (!localStorage.getItem('water-it-language')) {
+						localStorage.removeItem('PARAGLIDE_LOCALE');
+					}
+				} catch (e) {}
+				if (pref === 'light' || pref === 'dark') {
+					var metas = document.querySelectorAll('meta[name="theme-color"]');
+					for (var i = 0; i < metas.length; i++) {
+						metas[i].content = dark ? '#121614' : '#F3F5F1';
+					}
+				}
+			})();
+		</script>
+
 		<!-- Installed app on the Home Screen. `apple-mobile-web-app-capable` is
 		     the deprecated spelling but still the one iOS honours, so both. -->
 		<meta name="mobile-web-app-capable" content="yes" />

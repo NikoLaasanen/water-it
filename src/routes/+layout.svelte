@@ -1,5 +1,8 @@
 <script lang="ts">
 	import './layout.css';
+	// Loaded for its side effect: applies the theme setting and follows the
+	// phone while it is on "auto".
+	import '#lib/theme.svelte.js';
 	import { pwaInfo } from 'virtual:pwa-info';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';

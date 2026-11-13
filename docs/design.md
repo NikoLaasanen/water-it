@@ -469,17 +469,20 @@ Rules: a lookup never overwrites a field with source `user`; re-fetching is a ma
 
 ### 9.1 Dark mode
 
-Supported **from the start**, not retrofitted. The app follows the phone's
-`prefers-color-scheme`; there is no in-app theme toggle in M1 (a Settings
-override can be added later without changing any component).
+Supported **from the start**, not retrofitted. By default the app follows the
+phone's `prefers-color-scheme`. Settings → Appearance can force Light or Dark
+(added 2026-11-13, partly to make testing both themes easy); the choice is
+stored per device. The dark tokens are keyed on `<html data-theme="dark">`,
+which an inline script in `src/app.html` sets before first paint (so a reload
+never flashes the wrong theme) and `src/lib/theme.svelte.ts` keeps in step,
+following the phone live while on Automatic.
 
 Doing this from day one is mostly an architectural choice rather than extra
 screens, and it has consequences worth writing down:
 
 - **Tokens are semantic CSS custom properties**, not literal colours:
   `--color-bg`, `--color-surface`, `--color-primary` and so on, declared once
-  for light and overridden inside a single `@media (prefers-color-scheme: dark)`
-  block. No component ever names a hex value, so the dark palette stays one
+  for light and overridden inside a single `:root[data-theme='dark']` block. No component ever names a hex value, so the dark palette stays one
   file to edit instead of a change to every screen. This is the main reason to
   decide it now: retrofitting means touching every component.
 - **Both palettes must satisfy the existing rules** in `screens.md`: text
@@ -490,7 +493,8 @@ screens, and it has consequences worth writing down:
   values are tuned for a pale sage background and will not pass contrast on a
   dark surface — they can't simply be reused.
 - **The PWA shell carries two `theme-color` metas**, one per
-  `prefers-color-scheme`, plus `color-scheme: light dark` so the iOS status bar,
+  `prefers-color-scheme` (both set to the forced theme's colour when Settings
+  forces one), plus CSS `color-scheme` per theme so the iOS status bar,
   scrollbars and form controls follow the theme. The web manifest can hold only
   one `theme_color`/`background_color` pair, so it carries the light values;
   iOS uses those for the Home Screen splash.

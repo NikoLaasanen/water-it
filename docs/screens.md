@@ -157,6 +157,13 @@ Two steps, full screen, no tab bar.
 
 **Step 1 — "What plant is it?"** Close (×) top left, "Step 1 of 2". Search field ("Search, e.g. pilea or money plant"). **Identify from a photo** (dashed card; M2, hidden until then). **Presets**: one card of rows — short name (16/700), scientific name in italics, light and water chips, chevron. **Not sure? Start general**: two cards side by side, Succulent and Tropical foliage, each with a one-line description. **Start from a blank profile** link. The lists come straight from `src/lib/presets/presets.json` (`kind: species` vs `generic`).
 
+Step 1 built 2026-11-13 (`src/routes/(flow)/plants/new`):
+
+- Add plant lives in a `(flow)` route group with no tab bar or rail; on an iPad it stays a centred column (`max-w-xl`) instead of stretching.
+- Each choice is a link to `/plants/new/<preset id>` (or `/plants/new/blank`), so Back from step 2 and a reload keep the choice.
+- Search matches short, common and scientific names **in both languages** ("money plant" works in a Finnish UI), every word must match. The general starting points stay visible whatever is typed, as the fallback when search finds nothing.
+- The Add buttons on the Plants list (phone and iPad) and in the iPad side list now open it; the empty Plants list gets an "Add your first plant" button.
+
 **Step 2 — "Your Pilea".** Back to step 1, "Step 2 of 2". Sections, each a white card:
 
 - **Add a photo** (dashed, optional; M3, hidden until then). **Name** (prefilled with the preset's short name; hint "What you call it. Shown on Today and in the plant list."). **Species** row ("Pilea · *Pilea peperomioides*", **Change** link back to step 1). **Where is it?** with chips of the locations the user's other plants already use (derived from the plants, not stored separately).
@@ -192,7 +199,14 @@ Not on the canvas. Built from the tokens, revised after review on 2026-11-13:
 
 ## Settings
 
-Not designed. For now only **Account**: "Signed in as …" and **Sign out** (moved here from the old home placeholder). Language, growing season and notifications join later.
+Not designed. For now:
+
+- **Display**: **Language** (Automatic / English / Suomi) and **Appearance** (Automatic / Light / Dark), each a segmented control (`SegmentedChoice.svelte`, native radios — the same control the Add form will use for pot material and light). Automatic follows the phone. Changing language reloads the app (that is how Paraglide switches). Both are stored per device for now; `Settings.language` moves to Firestore with the settings document.
+- **Account**: "Signed in as …" and **Sign out**.
+
+Growing season and notifications join later.
+
+The language names are endonyms ("English", "Suomi") in both languages.
 
 ## Sitter view (M4, later) — `docs/mockups/sitter.dc.html`
 
@@ -201,7 +215,7 @@ Account-free page from the share link. No tab bar. Owner's message + "Message Ni
 ## Dark mode
 
 In scope from the start (design.md 9.1), following the phone's
-`prefers-color-scheme` with no in-app toggle in M1.
+`prefers-color-scheme` unless Settings → Appearance forces Light or Dark.
 
 Every token above is implemented as a semantic CSS custom property, so dark
 mode is a second set of values for the same names — not a second set of
