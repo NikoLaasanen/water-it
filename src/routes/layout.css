@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+/* Enter/exit animations for shadcn-svelte's dialogs and collapsibles. */
+@import 'tw-animate-css';
 
 /* ---------------------------------------------------------------------------
    Plus Jakarta Sans (screens.md), self-hosted from
@@ -255,6 +257,41 @@
 	--color-segment: var(--segment-bg);
 	--color-segment-selected: var(--segment-selected);
 	--color-danger: var(--danger);
+
+	/* shadcn-svelte's colour names, defined in terms of ours
+	   (open-decisions.md, "Decided 2026-11-13"). The components in
+	   #lib/components/ui use these; app code never does. Its own theme block,
+	   its `.dark` class variant and its radius scale are deliberately not
+	   installed: our tokens already switch with the phone's theme, and a
+	   `--radius-*` scale would silently resize every `rounded-*` in the app.
+	   Names that already exist (`primary`, `border`) mean the same thing in
+	   both. `muted` does not — shadcn's is a background, ours is text — so the
+	   copied components use `bg-secondary` where upstream says `bg-muted`. */
+	--color-background: var(--bg);
+	--color-foreground: var(--ink);
+	--color-card: var(--surface);
+	--color-card-foreground: var(--ink);
+	--color-popover: var(--surface);
+	--color-popover-foreground: var(--ink);
+	--color-primary-foreground: var(--on-primary);
+	--color-secondary: var(--segment-bg);
+	--color-secondary-foreground: var(--ink);
+	--color-muted-foreground: var(--muted);
+	--color-accent: var(--selected-bg);
+	--color-accent-foreground: var(--ink);
+	--color-destructive: var(--danger);
+	--color-input: var(--field-border);
+	--color-ring: var(--primary);
+}
+
+/* As shadcn-svelte expects: a bare `border` uses the decorative border colour
+   rather than Tailwind v4's `currentColor`. */
+@layer base {
+	*,
+	::before,
+	::after {
+		border-color: var(--border);
+	}
 }
 
 /* Tailwind v4's preflight gives buttons the browser's default arrow cursor.
