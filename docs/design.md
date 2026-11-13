@@ -2,7 +2,7 @@
 
 **Water.it** ("water it": watering is the one thing the app must get right) is a personal plant-tending app: a catalogue of your plants with care instructions, watering reminders, a care log, and a photo timeline of growth. Built as a PWA so it works as a website and installs on a phone's home screen.
 
-Status: draft v0.10 (app name: Water.it)
+Status: draft v0.11 (app name: Water.it)
 
 ### Decisions so far
 - **Name:** Water.it, the same in English and Finnish. Leafline was considered but an app with that name already exists. Firebase project ID: **`water-it-95171`**, created 2026-11-12 — `water-it` was already taken, so the console appended a suffix. IDs are globally unique and permanent. The home-screen name `Water.it` comes from the manifest, so the suffix is only ever visible in the URL.
@@ -15,9 +15,11 @@ Status: draft v0.10 (app name: Water.it)
 - **Plant-sitting:** while away, a user can share a time-limited link with a sitter, who sees care instructions and logs what they did without needing an account (see 4.7).
 - **Firestore location:** `europe-north1` (Finland). The `(default)` database was created there on 2026-11-12; the location is now permanent.
 - **Toolchain:** pnpm, Node 24 LTS, SvelteKit 3 (Vite 8, TS 6), ESLint + Prettier, Java 21+ for the Firebase emulators. See `open-decisions.md`.
-- **UI kit:** shadcn-svelte (on Bits UI) with Tailwind v4; Lucide icons.
-- **Languages:** English and Finnish from the start, via Paraglide JS (English source strings). Preset care texts carry both languages.
-- **Dark mode:** supported from the start (decided 2026-11-12), following the phone's setting. See 9.1.
+- **UI kit:** shadcn-svelte (on Bits UI) with Tailwind v4; Lucide icons. shadcn's own colour variables are mapped onto the app's tokens, not the other way round (`open-decisions.md` C).
+- **Languages:** English and Finnish from the start, via Paraglide JS (English source strings). Preset care texts carry both languages (`{ en, fi }`, see 8).
+- **Dark mode:** supported from the start (decided 2026-11-12), following the phone's setting. See 9.1. The look follows the dark Edit plant mockup (decided 2026-11-13).
+- **Care overrides** (decided 2026-11-13): a plant stores its preset id and only the care fields the owner changed; the rest is read from the preset, in the current language, on every render. See 6.
+- **Tablet:** iPad layouts are designed (side rail, list + detail side by side) and the app frame is built for them from M1. See `screens.md` "Breakpoints".
 - **Dates:** due dates stored as local calendar dates (`YYYY-MM-DD`); log times and share expiry as Firestore `Timestamp`. date-fns for date maths.
 - **Infra:** everything on Firebase, one project and one CLI: Hosting, Auth, Firestore now; Cloud Storage, a scheduled Cloud Function and Cloud Messaging later (these need the Blaze plan, which keeps a no-cost tier). Vercel was considered; Firebase Hosting avoids the iOS sign-in workaround and a second platform.
 
@@ -168,6 +170,13 @@ shares/{token}/log/{entryId}    Actions logged by the sitter
 
 Security rules: a user can read and write only under `users/{their uid}`. Species presets stay a bundled read-only JSON file, not in the database.
 
+**Care overrides** (decided 2026-11-13). A plant stores `speciesId` and only the care fields its owner has changed (`careOverrides`); the effective profile is the preset, in the current language, with those laid over it (`resolveCare` in `src/lib/plants/care-profile.ts`). Copying the whole profile into each plant was the alternative, and it would:
+- freeze the care text in the language the plant was added in, so a Finnish user would read English care text;
+- make the Edit form's "Edited" tag a guess (compare against a preset that may have been improved since);
+- keep preset fixes from ever reaching plants already added.
+
+Rules that follow from it: **preset ids are permanent** (a test pins them); each override key is all-or-nothing (`checkIntervalDays` holds both intervals); "Reset to preset" deletes the key, and editing a field back to the preset's value also deletes it. A plant with no preset ("Start from a blank profile") keeps its whole profile in `careOverrides` and shows no "Edited" tags. Text a user types is stored as typed — only preset text is translated.
+
 **Shares.** Rules can't read a token from a URL, so the share is designed around that:
 - The share document holds a **snapshot** of what the sitter needs (plant name, location, instructions, sitter note, schedule for the period, thumbnail path), copied from the owner's plants. The owner's app re-writes the snapshot whenever a shared plant is edited during the trip. The sitter never reads `users/...`.
 - The token is the document ID (random, 128-bit). Rules allow `get` on `shares/{token}` while `now < expiresAt`. `list` is allowed only for the owner's own shares, so nobody can enumerate other people's tokens.
@@ -204,20 +213,26 @@ type Plant = {
   id: string;
   name: string;
   sitterNote?: string;         // default note for plant-sitters
-  speciesId?: string;          // link to preset
+  speciesId?: string;          // preset id — permanent, see "Care overrides"
   location?: string;
-  acquired?: string;           // local date, YYYY-MM-DD
+  acquired?: string;           // month it arrived, YYYY-MM
   origin?: 'bought' | 'cutting' | 'propagated' | 'gift';
-  pot?: { material?: string; sizeCm?: number; topLayer?: string };
+  pot?: {
+    material?: 'plastic' | 'terracotta' | 'glazed';
+    sizeCm?: number;
+    topLayer?: 'soil' | 'pebbles' | 'gravel';   // 'soil' = nothing on top
+  };
   health: 'thriving' | 'okay' | 'recovering' | 'struggling';
   dormant?: boolean;           // seasonal mode, not a health state
   underGrowLight?: boolean;    // use growing interval all year
   notes?: string;
   coverPhotoId?: string;
-  careProfile: CareProfile;
+  careOverrides: Partial<CareProfile>;  // only what differs from the preset
   createdAt: Timestamp;
 };
 
+// The effective profile, as the UI reads it: preset (in the current
+// language) + careOverrides. Never stored whole.
 type CareProfile = {
   light: string;
   lightLevel: 'low' | 'medium' | 'bright'; // the same need as a value, for chips
@@ -355,25 +370,35 @@ Notes for B:
 
 ## 8. Species preset format
 
-Presets are a bundled JSON file, easy to hand-edit:
+Presets are a bundled JSON file, `src/lib/presets/presets.json`, easy to hand-edit and validated by a Valibot schema at startup and in tests (`src/lib/presets/index.ts`). Every text is `{ en, fi }`:
 
 ```json
 {
   "id": "pilea-peperomioides",
-  "commonName": "Chinese money plant",
-  "light": "Bright indirect light; avoid hot direct sun",
-  "lightLevel": "bright",
-  "wateringStyle": "soak-and-dry",
-  "checkIntervalDays": { "growing": 7, "resting": 14 },
-  "dryDownTest": "Top 2–3 cm dry",
-  "tempMinC": 10,
-  "tempComfortC": [15, 24],
-  "repotIntervalMonths": 24,
-  "watchOuts": ["Overwatering", "Lower leaves shed naturally", "Turn pot weekly"]
+  "kind": "species",
+  "name": { "en": "Pilea", "fi": "Pilea" },
+  "commonName": { "en": "Chinese money plant", "fi": "Kiinanpilea" },
+  "scientificName": "Pilea peperomioides",
+  "care": {
+    "light": { "en": "Bright, indirect. Avoid hot afternoon sun.", "fi": "…" },
+    "lightLevel": "bright",
+    "wateringStyle": "soak-and-dry",
+    "checkIntervalDays": { "growing": 7, "resting": 14 },
+    "dryDownTest": { "en": "Top 2–3 cm of soil dry", "fi": "…" },
+    "tempMinC": 10,
+    "tempComfortC": [15, 24],
+    "fertilize": { "intervalDays": 30, "growingOnly": true },
+    "repotIntervalMonths": 24,
+    "watchOuts": [{ "en": "Overwatering", "fi": "Liikakastelu" }]
+  }
 }
 ```
 
-Starter presets to write first: Pilea, Dracaena marginata, tree aloe, Crassula, spineless yucca, plus generic "succulent" and "tropical foliage". The yucca-looking plant's species is unconfirmed; it's a good first test of photo identification. Presets are starting points; the user edits per plant.
+- `id` is **permanent** — plants point at it and read their care from it.
+- `name` is the everyday short name the Add form prefills ("Pilea", "Dragon tree"); `commonName` the longer one shown on plant detail when it differs ("Chinese money plant"); `scientificName` is not translated.
+- `kind: "generic"` presets (Succulent, Tropical foliage) appear under "Not sure? Start general" on the Add picker, with a one-line `description`, and have no scientific name.
+
+Starter presets, all written (2026-11-13): Pilea (`pilea-peperomioides`), Dracaena marginata (`dracaena-marginata`), tree aloe (`aloidendron-barberae`), Crassula (`crassula-ovata`), spineless yucca (`yucca-gigantea`), plus generic `generic-succulent` and `generic-tropical-foliage`. The yucca-looking plant's species is unconfirmed; it's a good first test of photo identification. Presets are starting points; the user edits per plant.
 
 ### 8.1 Plant data sources
 

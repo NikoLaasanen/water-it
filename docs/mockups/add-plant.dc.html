@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Add plant — details</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2F6B4F}a:hover{color:#1F4A36}
+input::placeholder,textarea::placeholder{color:#5A665F}
+</style>
+</helmet>
+<div style="width: 390px; height: 2200px; box-sizing: border-box; background: #F3F5F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1B241F; padding: 52px 20px 40px; display: flex; flex-direction: column; gap: 20px">
+
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="AddPlantSpecies.dc.html" aria-label="Back to species" style="width: 44px; height: 44px; border-radius: 999px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; color: #1B241F; box-shadow: 0 1px 2px rgba(20,40,30,0.06)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+    </a>
+    <span style="font-size: 13px; font-weight: 600; color: #5A665F">Step 2 of 2</span>
+    <span style="width: 44px"></span>
+  </div>
+  <h1 style="margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.02em">Your Pilea</h1>
+  <div style="background: #FFFFFF; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 1px 2px rgba(20,40,30,0.06)">
+    
+      <button type="button" style="display: flex; align-items: center; gap: 14px; padding: 0; border: none; background: transparent; font-family: inherit; text-align: left; color: #1B241F">
+        <span style="width: 96px; height: 96px; box-sizing: border-box; border-radius: 18px; border: 2px dashed #8A968F; display: flex; align-items: center; justify-content: center; color: #2F6B4F; flex: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg></span>
+        <span style="display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 16px; font-weight: 700">Add a photo</span>
+          <span style="font-size: 12px; font-weight: 500; color: #45514A; line-height: 1.4">Take one now or pick from your library. Optional.</span>
+        </span>
+      </button>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #2E3933">Name
+      <input type="text" value="Pilea" style="box-sizing: border-box; width: 100%; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1.5px solid #8A968F; background: #FFFFFF; font-family: inherit; font-size: 16px; color: #1B241F">
+      <span style="font-size: 12px; font-weight: 500; color: #45514A; line-height: 1.4">What you call it. Shown on Today and in the plant list.</span>
+    </label>
+    
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 14px; background: #EAF3EC">
+        <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 12px; font-weight: 700; color: #1F4A36">Species</span>
+          <span style="font-size: 15px; font-weight: 700; color: #1B241F">Pilea · <i style="font-weight: 500">Pilea peperomioides</i></span>
+        </span>
+        <a href="AddPlantSpecies.dc.html" style="min-height: 44px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 700; color: #2F6B4F">Change</a>
+      </div>
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #2E3933">Where is it?
+      <input type="text" value="Living room window" style="box-sizing: border-box; width: 100%; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1.5px solid #8A968F; background: #FFFFFF; font-family: inherit; font-size: 16px; color: #1B241F">
+    </label>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: -6px" aria-label="Your other locations">
+      <button type="button" style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1.5px solid #C9D3CC; background: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 600; color: #2E3933">Kitchen window</button>
+      <button type="button" style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1.5px solid #C9D3CC; background: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 600; color: #2E3933">Desk lamp</button>
+      <button type="button" style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1.5px solid #C9D3CC; background: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 600; color: #2E3933">Bedroom</button>
+    </div>
+  </div>
+  <section style="display: flex; flex-direction: column; gap: 8px">
+    <h2 style="margin: 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #5A665F">How is it doing?</h2>
+    <div role="radiogroup" aria-label="Health" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+      <sc-for list="{{healthOpts}}" as="o" hint-placeholder-count="4">
+        <button type="button" role="radio" aria-checked="{{o.checked}}" onClick="{{o.pick}}" style="{{o.style}}">
+          <span style="{{o.faceStyle}}" aria-hidden="true">
+            <sc-if value="{{o.isThriving}}" hint-placeholder-val="{{true}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F6B4F" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9 9.5h.01M15 9.5h.01" stroke-width="3"></path><path d="M8 14s1.5 2.5 4 2.5 4-2.5 4-2.5"></path></svg></sc-if>
+            <sc-if value="{{o.isOkay}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#45514A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9 9.5h.01M15 9.5h.01" stroke-width="3"></path><path d="M8.5 15h7"></path></svg></sc-if>
+            <sc-if value="{{o.isRecovering}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D3E63" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9 9.5h.01M15 9.5h.01" stroke-width="3"></path><path d="M9 14.5s1.2 1.2 3 1.2 3-1.2 3-1.2"></path></svg></sc-if>
+            <sc-if value="{{o.isStruggling}}" hint-placeholder-val="{{false}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A3B06" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9 9.5h.01M15 9.5h.01" stroke-width="3"></path><path d="M16 16.5s-1.5-2-4-2-4 2-4 2"></path></svg></sc-if>
+          </span>
+          <span>{{o.label}}</span>
+        </button>
+      </sc-for>
+    </div>
+  </section>
+  <section style="display: flex; flex-direction: column; gap: 8px">
+    <h2 style="margin: 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #5A665F">Pot</h2>
+    <div style="background: #FFFFFF; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 1px 2px rgba(20,40,30,0.06)">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 14px; font-weight: 700; color: #2E3933">Material</span>
+        <div role="radiogroup" aria-label="Pot material" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 14px; background: #E3E8E4">
+        <sc-for list="{{potOpts}}" as="s" hint-placeholder-count="3">
+          <button type="button" role="radio" aria-checked="{{s.checked}}" onClick="{{s.pick}}" style="{{s.style}}">{{s.label}}</button>
+        </sc-for>
+      </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 14px; font-weight: 700; color: #2E3933">Top layer</span>
+        <div role="radiogroup" aria-label="Top layer" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 14px; background: #E3E8E4">
+        <sc-for list="{{topOpts}}" as="s" hint-placeholder-count="3">
+          <button type="button" role="radio" aria-checked="{{s.checked}}" onClick="{{s.pick}}" style="{{s.style}}">{{s.label}}</button>
+        </sc-for>
+      </div>
+        <span style="font-size: 12px; font-weight: 500; color: #45514A; line-height: 1.4">{{potHint}}</span>
+      </div>
+      <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #2E3933"><span>Pot size <span style="font-size: 12px; font-weight: 500; color: #5A665F">(optional)</span></span>
+        <span style="display: flex; align-items: center; gap: 10px"><input type="text" inputmode="numeric" value="14" style="box-sizing: border-box; width: 100%; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1.5px solid #8A968F; background: #FFFFFF; font-family: inherit; font-size: 16px; color: #1B241F; width: 96px"><span style="font-size: 15px; font-weight: 600; color: #45514A">cm across</span></span>
+      </label>
+    </div>
+  </section>
+  <section style="display: flex; flex-direction: column; gap: 8px">
+    <h2 style="margin: 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #5A665F">Watering</h2>
+    <div style="background: #FFFFFF; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 1px 2px rgba(20,40,30,0.06)">
+      <span style="font-size: 12px; font-weight: 500; color: #45514A; line-height: 1.4; font-size: 13px">Filled in from the Pilea preset. Change anything that's different for your plant.</span>
+      <div role="radiogroup" aria-label="Reminder type" style="display: flex; flex-direction: column; gap: 8px">
+        
+          <button type="button" role="radio" aria-checked="{{modeCheck.checked}}" onClick="{{modeCheck.pick}}" style="{{modeCheck.style}}">
+            <span style="{{modeCheck.dot}}" aria-hidden="true"></span>
+            <span style="display: flex; flex-direction: column; gap: 2px; text-align: left">
+              <span style="font-size: 15px; font-weight: 700; color: #1B241F">Check the soil</span>
+              <span style="font-size: 12px; font-weight: 500; color: #45514A; line-height: 1.4">Recommended. Remind me to check; water only if it’s dry.</span>
+            </span>
+          </button>
+        
+          <button type="button" role="radio" aria-checked="{{modeFixed.checked}}" onClick="{{modeFixed.pick}}" style="{{modeFixed.style}}">
+            <span style="{{modeFixed.dot}}" aria-hidden="true"></span>
+            <span style="display: flex; flex-direction: column; gap: 2px; text-align: left">
+              <span style="font-size: 15px; font-weight: 700; color: #1B241F">Fixed schedule</span>
+              <span style="font-size: 12px; font-weight: 500; color: #45514A; line-height: 1.4">Remind me to water every time, no check.</span>
+            </span>
+          </button>
+      </div>
+      <div style="height: 1px; background: #E8ECE8"></div>
+      <span style="font-size: 14px; font-weight: 700; color: #2E3933">{{intervalLabel}}</span>
+      
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+          <span style="display: flex; flex-direction: column; gap: 1px">
+            <span style="font-size: 15px; font-weight: 700; color: #1B241F">Growing season</span>
+            <span style="font-size: 12px; font-weight: 500; color: #45514A; line-height: 1.4">Apr–Sep</span>
+          </span>
+          <span style="display: flex; align-items: center; gap: 6px">
+            <button type="button" aria-label="Fewer days, growing season" onClick="{{summerDec}}" style="width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid #C9D3CC; background: #FFFFFF; display: flex; align-items: center; justify-content: center; color: #1B241F; font-family: inherit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+            <span style="min-width: 64px; text-align: center; font-size: 16px; font-weight: 800; color: #1B241F" aria-live="polite">{{summer}} days</span>
+            <button type="button" aria-label="More days, growing season" onClick="{{summerInc}}" style="width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid #C9D3CC; background: #FFFFFF; display: flex; align-items: center; justify-content: center; color: #1B241F; font-family: inherit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"></path></svg></button>
+          </span>
+        </div>
+      
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+          <span style="display: flex; flex-direction: column; gap: 1px">
+            <span style="font-size: 15px; font-weight: 700; color: #1B241F">Winter</span>
+            <span style="font-size: 12px; font-weight: 500; color: #45514A; line-height: 1.4">Oct–Mar</span>
+          </span>
+          <span style="display: flex; align-items: center; gap: 6px">
+            <button type="button" aria-label="Fewer days, winter" onClick="{{winterDec}}" style="width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid #C9D3CC; background: #FFFFFF; display: flex; align-items: center; justify-content: center; color: #1B241F; font-family: inherit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+            <span style="min-width: 64px; text-align: center; font-size: 16px; font-weight: 800; color: #1B241F" aria-live="polite">{{winter}} days</span>
+            <button type="button" aria-label="More days, winter" onClick="{{winterInc}}" style="width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid #C9D3CC; background: #FFFFFF; display: flex; align-items: center; justify-content: center; color: #1B241F; font-family: inherit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"></path></svg></button>
+          </span>
+        </div>
+      <div style="height: 1px; background: #E8ECE8"></div>
+      <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #2E3933"><span style="display: flex; align-items: center; justify-content: space-between; gap: 8px">How to check<span style="font-size: 11px; font-weight: 600; color: #5A665F">From preset</span></span>
+        <input type="text" value="Top 2–3 cm of soil dry" style="box-sizing: border-box; width: 100%; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1.5px solid #8A968F; background: #FFFFFF; font-family: inherit; font-size: 16px; color: #1B241F">
+      </label>
+      
+      <div style="height: 1px; background: #E8ECE8"></div>
+      
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+          <span style="display: flex; flex-direction: column; gap: 1px">
+            <span style="font-size: 15px; font-weight: 700; color: #1B241F">Under a grow light</span>
+            <span style="font-size: 12px; font-weight: 500; color: #45514A; line-height: 1.4">Uses the growing-season interval all year.</span>
+          </span>
+          <button type="button" role="switch" aria-checked="{{growLight.on}}" aria-label="Under a grow light" onClick="{{toggleGrowLight}}" style="{{growLight.track}}"><span style="{{growLight.knob}}"></span></button>
+        </div>
+      
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+          <span style="display: flex; flex-direction: column; gap: 1px">
+            <span style="font-size: 15px; font-weight: 700; color: #1B241F">Resting (dormant)</span>
+            <span style="font-size: 12px; font-weight: 500; color: #45514A; line-height: 1.4">Uses the winter interval and pauses fertilizing.</span>
+          </span>
+          <button type="button" role="switch" aria-checked="{{dormant.on}}" aria-label="Resting (dormant)" onClick="{{toggleDormant}}" style="{{dormant.track}}"><span style="{{dormant.knob}}"></span></button>
+        </div>
+    </div>
+  </section>
+  <section style="display: flex; flex-direction: column; gap: 8px">
+    <button type="button" aria-expanded="{{moreOpen}}" onClick="{{toggleMore}}" style="display: flex; align-items: center; justify-content: space-between; min-height: 56px; padding: 0 16px; border: none; border-radius: 18px; background: #FFFFFF; font-family: inherit; color: #1B241F; box-shadow: 0 1px 2px rgba(20,40,30,0.06)">
+      <span style="display: flex; flex-direction: column; gap: 1px; text-align: left">
+        <span style="font-size: 15px; font-weight: 700">More care details</span>
+        <span style="font-size: 12px; font-weight: 500; color: #45514A; line-height: 1.4">Light, temperature, fertilizing, repotting, watch-outs</span>
+      </span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="{{chevronStyle}}"><path d="m6 9 6 6 6-6"></path></svg>
+    </button>
+    <sc-if value="{{moreOpen}}" hint-placeholder-val="{{false}}">
+      <div style="background: #FFFFFF; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 1px 2px rgba(20,40,30,0.06)">
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <span style="font-size: 14px; font-weight: 700; color: #2E3933">Light</span>
+          <div role="radiogroup" aria-label="Light" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 14px; background: #E3E8E4">
+        <sc-for list="{{lightOpts}}" as="s" hint-placeholder-count="3">
+          <button type="button" role="radio" aria-checked="{{s.checked}}" onClick="{{s.pick}}" style="{{s.style}}">{{s.label}}</button>
+        </sc-for>
+      </div>
+        </div>
+        
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #2E3933"><span style="display: flex; align-items: center; justify-content: space-between; gap: 8px">Light notes<span style="font-size: 11px; font-weight: 600; color: #5A665F">From preset</span></span>
+          <input type="text" value="Bright, indirect. Avoid hot afternoon sun." style="box-sizing: border-box; width: 100%; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1.5px solid #8A968F; background: #FFFFFF; font-family: inherit; font-size: 16px; color: #1B241F">
+        </label>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #2E3933">Lowest temp
+            <span style="display: flex; align-items: center; gap: 6px"><input type="text" inputmode="numeric" value="10" style="box-sizing: border-box; width: 100%; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1.5px solid #8A968F; background: #FFFFFF; font-family: inherit; font-size: 16px; color: #1B241F"><span style="font-size: 15px; font-weight: 600; color: #45514A">°C</span></span>
+          </label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #2E3933">Comfortable
+            <input type="text" value="15–24 °C" style="box-sizing: border-box; width: 100%; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1.5px solid #8A968F; background: #FFFFFF; font-family: inherit; font-size: 16px; color: #1B241F">
+          </label>
+        </div>
+        
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #2E3933"><span style="display: flex; align-items: center; justify-content: space-between; gap: 8px">Fertilizing<span style="font-size: 11px; font-weight: 600; color: #5A665F">From preset</span></span>
+          <input type="text" value="Monthly, April–September" style="box-sizing: border-box; width: 100%; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1.5px solid #8A968F; background: #FFFFFF; font-family: inherit; font-size: 16px; color: #1B241F">
+        </label>
+        
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #2E3933"><span style="display: flex; align-items: center; justify-content: space-between; gap: 8px">Repot<span style="font-size: 11px; font-weight: 600; color: #5A665F">From preset</span></span>
+          <input type="text" value="Every 2 years, in spring" style="box-sizing: border-box; width: 100%; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1.5px solid #8A968F; background: #FFFFFF; font-family: inherit; font-size: 16px; color: #1B241F">
+        </label>
+        
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #2E3933"><span style="display: flex; align-items: center; justify-content: space-between; gap: 8px">Watch out for<span style="font-size: 11px; font-weight: 600; color: #5A665F">From preset</span></span>
+          <textarea style="box-sizing: border-box; width: 100%; min-height: 84px; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #8A968F; background: #FFFFFF; font-family: inherit; font-size: 16px; line-height: 1.4; color: #1B241F; resize: vertical">Overwatering. Lower leaves drop naturally. Turn the pot weekly so it grows straight.</textarea>
+        </label>
+      </div>
+    </sc-if>
+  </section>
+  <section style="display: flex; flex-direction: column; gap: 8px">
+    <h2 style="margin: 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #5A665F">About this plant <span style="text-transform: none; letter-spacing: 0; font-weight: 500">(optional)</span></h2>
+    <div style="background: #FFFFFF; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 1px 2px rgba(20,40,30,0.06)">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 14px; font-weight: 700; color: #2E3933">How did you get it?</span>
+        <div role="radiogroup" aria-label="How did you get it" style="display: flex; gap: 8px; flex-wrap: wrap">
+          <sc-for list="{{originOpts}}" as="s" hint-placeholder-count="4">
+            <button type="button" role="radio" aria-checked="{{s.checked}}" onClick="{{s.pick}}" style="{{s.style}}">{{s.label}}</button>
+          </sc-for>
+        </div>
+      </div>
+      <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #2E3933">When
+        <input type="text" value="" placeholder="e.g. June 2024" style="box-sizing: border-box; width: 100%; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1.5px solid #8A968F; background: #FFFFFF; font-family: inherit; font-size: 16px; color: #1B241F">
+      </label>
+      <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #2E3933">Notes
+        <textarea placeholder="Anything worth remembering" style="box-sizing: border-box; width: 100%; min-height: 84px; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #8A968F; background: #FFFFFF; font-family: inherit; font-size: 16px; line-height: 1.4; color: #1B241F; resize: vertical"></textarea>
+      </label>
+      <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #2E3933">Note for plant-sitters
+        <textarea placeholder="Where exactly it is, how to water it" style="box-sizing: border-box; width: 100%; min-height: 84px; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #8A968F; background: #FFFFFF; font-family: inherit; font-size: 16px; line-height: 1.4; color: #1B241F; resize: vertical"></textarea>
+        <span style="font-size: 12px; font-weight: 500; color: #45514A; line-height: 1.4">Shown on the share link when someone looks after your plants.</span>
+      </label>
+    </div>
+  </section>
+  <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 4px">
+    <a href="Plants.dc.html" style="min-height: 56px; border: none; border-radius: 16px; background: #2F6B4F; color: #FFFFFF; font-family: inherit; font-size: 17px; font-weight: 800; display: flex; align-items: center; justify-content: center; text-decoration: none">Add plant</a>
+    <span style="font-size: 12px; font-weight: 500; color: #45514A; line-height: 1.4; text-align: center">First check: Wed 18 Nov. You can change everything later.</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":2200}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { health: 'okay', pot: 'terracotta', top: 'pebbles', mode: 'check', summer: 7, winter: 14, growLight: false, dormant: false, more: false, light: 'bright', origin: '' };
+  }
+  segOpts(key, opts) {
+    const cur = this.state[key];
+    return opts.map(([id, label]) => {
+      const on = cur === id;
+      return {
+        label, checked: on ? 'true' : 'false',
+        pick: () => this.setState({ [key]: id }),
+        style: 'min-height: 40px; border: none; border-radius: 10px; font-family: inherit; font-size: 14px; font-weight: ' + (on ? '700' : '600') + '; background: ' + (on ? '#FFFFFF' : 'transparent') + '; color: ' + (on ? '#1B241F' : '#45514A') + (on ? '; box-shadow: 0 1px 2px rgba(0,0,0,0.12)' : '')
+      };
+    });
+  }
+  chipOpts(key, opts) {
+    const cur = this.state[key];
+    return opts.map(([id, label]) => {
+      const on = cur === id;
+      return {
+        label, checked: on ? 'true' : 'false',
+        pick: () => this.setState({ [key]: on ? '' : id }),
+        style: 'min-height: 44px; padding: 0 16px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: ' + (on ? '700' : '600') + '; border: 1.5px solid ' + (on ? '#2F6B4F' : '#C9D3CC') + '; background: ' + (on ? '#EAF3EC' : '#FFFFFF') + '; color: ' + (on ? '#1F4A36' : '#2E3933')
+      };
+    });
+  }
+  sw(on) {
+    return {
+      on: on ? 'true' : 'false',
+      track: 'flex: none; position: relative; width: 52px; height: 32px; padding: 0; border: none; border-radius: 999px; background: ' + (on ? '#2F6B4F' : '#8A968F'),
+      knob: 'position: absolute; top: 3px; left: ' + (on ? '23px' : '3px') + '; width: 26px; height: 26px; border-radius: 999px; background: ' + (on ? '#FFFFFF' : '#FFFFFF') + '; box-shadow: 0 1px 2px rgba(0,0,0,0.25)'
+    };
+  }
+  radio(id) {
+    const on = this.state.mode === id;
+    return {
+      checked: on ? 'true' : 'false',
+      pick: () => this.setState({ mode: id }),
+      style: 'display: flex; align-items: flex-start; gap: 12px; padding: 12px; border-radius: 14px; font-family: inherit; background: ' + (on ? '#EAF3EC' : 'transparent') + '; border: ' + (on ? '2px solid #2F6B4F' : '1.5px solid #C9D3CC'),
+      dot: 'flex: none; margin-top: 2px; width: 20px; height: 20px; box-sizing: border-box; border-radius: 999px; border: ' + (on ? '6px solid #2F6B4F' : '2px solid #8A968F')
+    };
+  }
+  renderVals() {
+    const s = this.state;
+    const H = { thriving: ['#EAF3EC', '#2F6B4F'], okay: ['#ECEFEC', '#45514A'], recovering: ['#E6EEF7', '#1D3E63'], struggling: ['#FBEBD9', '#8A3B06'] };
+    const healthOpts = [['thriving', 'Thriving'], ['okay', 'Okay'], ['recovering', 'Recovering'], ['struggling', 'Struggling']].map(([id, label]) => {
+      const on = s.health === id;
+      return {
+        label, checked: on ? 'true' : 'false',
+        isThriving: id === 'thriving', isOkay: id === 'okay', isRecovering: id === 'recovering', isStruggling: id === 'struggling',
+        pick: () => this.setState({ health: id }),
+        style: 'display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 12px; border-radius: 14px; font-family: inherit; font-size: 15px; font-weight: 700; text-align: left; color: ' + (on ? H[id][1] : '#2E3933') + '; background: ' + (on ? H[id][0] : '#FFFFFF') + '; border: ' + (on ? '2px solid ' + H[id][1] : '1.5px solid #C9D3CC'),
+        faceStyle: 'width: 34px; height: 34px; border-radius: 999px; display: flex; align-items: center; justify-content: center; flex: none; background: ' + (on ? '#FFFFFF' : H[id][0])
+      };
+    });
+    const clamp = (v) => Math.max(1, Math.min(60, v));
+    const potHint = s.pot === 'terracotta'
+      ? (s.top === 'pebbles' ? 'Terracotta dries faster. Pebbles hide the soil, so check with a skewer.' : 'Terracotta dries faster, so checks come a little sooner.')
+      : (s.top === 'pebbles' ? 'Pebbles hide the soil, so check with a skewer or by lifting the pot.' : 'Plastic and glazed pots stay damp longer.');
+    return {
+      healthOpts,
+      potOpts: this.segOpts('pot', [['plastic', 'Plastic'], ['terracotta', 'Terracotta'], ['ceramic', 'Glazed']]),
+      topOpts: this.segOpts('top', [['none', 'Soil'], ['pebbles', 'Clay pebbles'], ['gravel', 'Gravel']]),
+      lightOpts: this.segOpts('light', [['bright', 'Bright'], ['medium', 'Medium'], ['low', 'Low']]),
+      originOpts: this.chipOpts('origin', [['bought', 'Bought'], ['cutting', 'Cutting'], ['propagated', 'Propagated'], ['gift', 'Gift']]),
+      potHint,
+      modeCheck: this.radio('check'), modeFixed: this.radio('fixed'),
+      intervalLabel: s.mode === 'check' ? 'Check every' : 'Water every',
+      summer: s.summer, winter: s.winter,
+      summerDec: () => this.setState({ summer: clamp(s.summer - 1) }), summerInc: () => this.setState({ summer: clamp(s.summer + 1) }),
+      winterDec: () => this.setState({ winter: clamp(s.winter - 1) }), winterInc: () => this.setState({ winter: clamp(s.winter + 1) }),
+      growLight: this.sw(s.growLight), dormant: this.sw(s.dormant),
+      toggleGrowLight: () => this.setState({ growLight: !s.growLight }),
+      toggleDormant: () => this.setState({ dormant: !s.dormant }),
+      moreOpen: s.more, toggleMore: () => this.setState({ more: !s.more }),
+      chevronStyle: s.more ? 'transform: rotate(180deg)' : ''
+    };
+  }
+}
+</script>
+</body>
+</html>

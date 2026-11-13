@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Plant detail — tablet</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2F6B4F}a:hover{color:#1F4A36}
+button{font-family:inherit}
+input::placeholder{color:#5A665F}
+</style>
+</helmet>
+<div style="width: 1180px; height: 1000px; box-sizing: border-box; display: flex; background: #F3F5F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1B241F; overflow: hidden">
+
+  <nav aria-label="Main" style="width: 96px; flex: none; box-sizing: border-box; padding: 28px 0; background: #FFFFFF; border-right: 1px solid #E1E6E2; display: flex; flex-direction: column; align-items: center; gap: 12px">
+    <div role="img" aria-label="Water.it" style="width: 48px; height: 48px; border-radius: 14px; background: #2F6B4F; display: flex; align-items: center; justify-content: center; margin-bottom: 16px">
+      <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z" fill="#F7F7F2"></path><path d="M12 19v-5M12 16c-1.8 0-3-1.2-3-3 1.8 0 3 1.2 3 3zM12 15.5c1.8 0 3-1.2 3-3-1.8 0-3 1.2-3 3z" stroke="#2F6B4F" stroke-width="1.3" fill="#2F6B4F" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </div>
+    <a href="TabletToday.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 64px; justify-content: center; text-decoration: none; color: #5A665F; font-size: 12px; font-weight: 600">
+      <span style="width: 56px; height: 32px; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: transparent"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg></span>Today
+    </a>
+    <a href="TabletPlants.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 64px; justify-content: center; text-decoration: none; color: #2F6B4F; font-size: 12px; font-weight: 700">
+      <span style="width: 56px; height: 32px; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: #DCEBDD"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg></span>Plants
+    </a>
+    <a href="TabletToday.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 64px; justify-content: center; text-decoration: none; color: #5A665F; font-size: 12px; font-weight: 600">
+      <span style="width: 56px; height: 32px; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: transparent"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg></span>Photos
+    </a>
+    <a href="TabletToday.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 64px; justify-content: center; text-decoration: none; color: #5A665F; font-size: 12px; font-weight: 600">
+      <span style="width: 56px; height: 32px; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: transparent"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span>Settings
+    </a>
+  </nav>
+  <section aria-label="Plant list" style="width: 320px; flex: none; box-sizing: border-box; padding: 40px 16px 24px; border-right: 1px solid #E1E6E2; display: flex; flex-direction: column; gap: 16px">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 4px">
+      <h1 style="margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.02em">Plants</h1>
+      <a href="AddPlantSpecies.dc.html" aria-label="Add plant" style="width: 44px; height: 44px; border-radius: 14px; background: #2F6B4F; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg></a>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <sc-for list="{{plants}}" as="p" hint-placeholder-count="5">
+        <a href="TabletPlantDetail.dc.html" aria-current="{{p.ariaCurrent}}" style="display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 16px; text-decoration: none; color: #1B241F; background: {{p.rowBg}}; border: 2px solid {{p.rowBorder}}">
+          <div style="width: 52px; height: 52px; flex: none; border-radius: 14px; background: {{p.tint}}; display: flex; align-items: center; justify-content: center; color: #2F6B4F; position: relative">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>
+            <div style="position: absolute; right: -6px; bottom: -6px; width: 26px; height: 26px; border-radius: 999px; background: {{p.hBg}}; border: 2.5px solid #FFFFFF; display: flex; align-items: center; justify-content: center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.hFg}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Health: {{p.hLabel}}"><circle cx="12" cy="12" r="10"></circle><circle cx="9" cy="10" r="0.6" fill="{{p.hFg}}"></circle><circle cx="15" cy="10" r="0.6" fill="{{p.hFg}}"></circle><path d="{{p.mouth}}"></path></svg>
+            </div>
+          </div>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; padding-left: 2px">
+            <div style="font-size: 16px; font-weight: 700">{{p.name}}</div>
+            <div style="font-size: 13px; color: #45514A"><span style="font-weight: 600; color: {{p.hFg}}">{{p.hLabel}}</span> · <span style="color: {{p.nextFg}}">{{p.next}}</span></div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+  <main style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+    <div style="height: 220px; flex: none; background: #DCEBDD; position: relative; display: flex; align-items: center; justify-content: center; color: #2F6B4F">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>
+      <span style="position: absolute; left: 32px; bottom: 44px; font-size: 12px; font-weight: 600; color: #45514A">Latest photo · 2 Nov</span>
+      <a href="EditPlantDark.dc.html" style="position: absolute; right: 24px; top: 28px; min-height: 44px; padding: 0 16px; border-radius: 999px; background: rgba(255,255,255,0.94); display: inline-flex; align-items: center; gap: 8px; color: #1B241F; font-size: 14px; font-weight: 700; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>Edit</a>
+    </div>
+    <div style="margin-top: -28px; position: relative; flex: 1; background: #F3F5F1; border-radius: 28px 28px 0 0; padding: 24px 32px 32px; display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 20px">
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <h2 style="margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.02em">Pilea</h2>
+          <div style="font-size: 14px; color: #45514A">Chinese money plant · <i>Pilea peperomioides</i></div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px">
+            <span style="display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 999px; background: #EAF3EC; color: #1F4A36; font-size: 12px; font-weight: 700"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Thriving</span>
+            <span style="padding: 5px 10px; border-radius: 999px; background: #FFFFFF; border: 1px solid #D6DDD8; font-size: 12px; font-weight: 600; color: #2E3933">Living room window</span>
+            <span style="padding: 5px 10px; border-radius: 999px; background: #FFFFFF; border: 1px solid #D6DDD8; font-size: 12px; font-weight: 600; color: #2E3933">Terracotta · clay pebbles</span>
+          </div>
+        </div>
+        <div role="tablist" aria-label="Plant sections" style="width: 300px; flex: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 14px; background: #E3E8E4">
+          <button type="button" role="tab" aria-selected="true" style="min-height: 40px; border: none; border-radius: 10px; background: #FFFFFF; font-size: 14px; font-weight: 700; color: #1B241F">Care</button>
+          <button type="button" role="tab" aria-selected="false" style="min-height: 40px; border: none; border-radius: 10px; background: transparent; font-size: 14px; font-weight: 600; color: #45514A">Log</button>
+          <button type="button" role="tab" aria-selected="false" style="min-height: 40px; border: none; border-radius: 10px; background: transparent; font-size: 14px; font-weight: 600; color: #45514A">Photos</button>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start">
+        <div style="display: flex; flex-direction: column; gap: 20px">
+          <div style="background: #FFFFFF; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(20,40,30,0.06)">
+            <div style="display: flex; flex-direction: column; gap: 2px">
+              <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8A3B06">Check overdue 2 days</div>
+              <div style="font-size: 15px; color: #2E3933">Last watered 25 Oct · winter interval 14 days</div>
+            </div>
+            <div style="display: flex; gap: 8px">
+              <button type="button" style="flex: 1; min-height: 48px; border: none; border-radius: 12px; background: #2B5F9E; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg>Watered</button>
+              <button type="button" style="flex: 1; min-height: 48px; border: 1.5px solid #C9D3CC; border-radius: 12px; background: #FFFFFF; color: #1B241F; font-size: 15px; font-weight: 600">Still damp</button>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <h3 style="margin: 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #5A665F">Note for plant-sitters</h3>
+            <div style="background: #FFFFFF; border-radius: 18px; padding: 14px 16px; font-size: 14px; line-height: 1.45; color: #2E3933">Left end of the living room window. Water slowly onto the pebbles until it drips into the saucer, then pour out the saucer.</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <h3 style="margin: 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #5A665F">Recent log</h3>
+            <div style="background: #FFFFFF; border-radius: 18px; padding: 2px 16px 4px; display: flex; flex-direction: column">
+            <sc-for list="{{log}}" as="l" hint-placeholder-count="4">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #E8ECE8">
+                <span style="display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; background: {{l.bg}}; color: {{l.fg}}; font-size: 12px; font-weight: 700">{{l.kind}}</span>
+                <span style="flex: 1; font-size: 13px; color: #45514A">{{l.note}}</span>
+                <span style="font-size: 13px; font-weight: 600; color: #2E3933">{{l.date}}</span>
+              </div>
+            </sc-for>
+              <button type="button" style="min-height: 44px; padding: 0; border: none; background: transparent; text-align: left; font-size: 14px; font-weight: 700; color: #2F6B4F">Open full log</button>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <h3 style="margin: 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #5A665F">Care profile</h3>
+          <div style="background: #FFFFFF; border-radius: 18px; padding: 4px 16px; display: flex; flex-direction: column">
+            <sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+              <div style="display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 12px; padding: 13px 0; border-bottom: 1px solid #E8ECE8; font-size: 14px; line-height: 1.4">
+                <span style="font-weight: 700; color: #45514A">{{r.label}}</span>
+                <span style="color: #1B241F">{{r.value}}</span>
+              </div>
+            </sc-for>
+            <div style="display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 12px; padding: 13px 0; font-size: 14px; line-height: 1.4">
+              <span style="font-weight: 700; color: #45514A">Watch out</span>
+              <span style="color: #1B241F">Overwatering. Lower leaves drop naturally. Turn the pot weekly so it grows straight.</span>
+            </div>
+          </div>
+          <div style="font-size: 12px; color: #5A665F">From the Pilea preset · edited by you: check test</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var H = {
+      thriving: { label: 'Thriving', fg: '#2F6B4F', bg: '#EAF3EC', mouth: 'M8 14s1.5 2 4 2 4-2 4-2' },
+      okay: { label: 'Okay', fg: '#45514A', bg: '#ECEFEC', mouth: 'M8.5 15h7' },
+      recovering: { label: 'Recovering', fg: '#1D3E63', bg: '#E6EEF7', mouth: 'M9 14.6c.8.5 1.8.8 3 .8s2.2-.3 3-.8' },
+      struggling: { label: 'Struggling', fg: '#8A3B06', bg: '#FBEBD9', mouth: 'M16 16s-1.5-2-4-2-4 2-4 2' }
+    };
+    var LS = ['', 'Low', 'Medium', 'Bright'];
+    var WS = ['', 'Little', 'Moderate', 'Lots'];
+    var base = [
+      { name: 'Pilea', where: 'Living room window', next: 'Overdue', tint: '#DCEBDD', health: 'thriving', light: 3, water: 2 },
+      { name: 'Dracaena', where: 'Bookshelf, desk lamp', next: 'Today', tint: '#E3E9D5', health: 'recovering', light: 2, water: 2 },
+      { name: 'Tree aloe', where: 'Bedroom window', next: 'In 9 days', tint: '#E1EBE4', health: 'thriving', light: 3, water: 1 },
+      { name: 'Crassula', where: 'Bedroom window', next: 'Sat', tint: '#E4ECD9', health: 'okay', light: 3, water: 1 },
+      { name: 'Yucca', where: 'TV stand', next: 'Today', tint: '#E8E6D6', health: 'struggling', light: 3, water: 1 }
+    ];
+    var plants = base.map(function (p, i) {
+      var h = H[p.health];
+      return Object.assign({}, p, {
+        hLabel: h.label, hFg: h.fg, hBg: h.bg, mouth: h.mouth,
+        lightShort: LS[p.light], waterShort: WS[p.water],
+        nextFg: p.next === 'Overdue' ? '#8A3B06' : '#45514A',
+        selected: i === 0,
+        rowBg: i === 0 ? '#EAF3EC' : 'transparent',
+        rowBorder: i === 0 ? '#2F6B4F' : 'transparent'
+      });
+    });
+    plants = plants.map(function (p) { return Object.assign({}, p, { ariaCurrent: p.selected ? 'page' : 'false' }); });
+    return {
+      plants: plants,
+      rows: [
+        { label: 'Light', value: 'Bright, indirect. Avoid hot afternoon sun.' },
+        { label: 'Watering', value: 'Soak, then let it dry. Check every 7 days in summer, 14 in winter.' },
+        { label: 'Check test', value: 'Skewer under the clay pebbles: dry 2–3 cm down.' },
+        { label: 'Temperature', value: '15–24 °C. Damage below 10 °C.' },
+        { label: 'Fertilizing', value: 'Monthly, April–September. None in winter.' },
+        { label: 'Repot', value: 'Every 2 years, in spring. Next: spring 2027.' }
+      ],
+      log: [
+        { kind: 'Watered', note: 'Until the saucer filled', date: '25 Oct', bg: '#DDF0E2', fg: '#1F5A36' },
+        { kind: 'Still damp', note: 'Skewer damp at 3 cm', date: '21 Oct', bg: '#FCEFC7', fg: '#6E4B00' },
+        { kind: 'Watered', note: '', date: '11 Oct', bg: '#DDF0E2', fg: '#1F5A36' },
+        { kind: 'Photo', note: 'New offshoot at the base', date: '2 Oct', bg: '#ECEFEC', fg: '#45514A' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

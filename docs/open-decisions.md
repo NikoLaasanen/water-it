@@ -4,6 +4,13 @@ Companion to `design.md` (v0.6). The design doc settles the platform (installed 
 
 **Decided 2026-11-11:** Firestore in `europe-north1`; toolchain pnpm + Node 24 + SvelteKit 3 + ESLint/Prettier; shadcn-svelte + Tailwind v4; English + Finnish via Paraglide; due dates as `YYYY-MM-DD`, timestamps as Firestore `Timestamp`. App name **Water.it**; project ID `water-it` or `waterit-app`, whichever is free.
 
+**Decided 2026-11-13** (after reviewing the Add/Edit, dark and tablet designs):
+- **Care overrides:** plants store `speciesId` + only the fields they change; see design.md §6. Preset ids are permanent.
+- **Preset text is `{ en, fi }`** in the preset file, not Paraglide messages (it's content). Answers the i18n row's open question below.
+- **Structured care inputs:** fertilizing, repotting and the comfortable range stay numbers in the data model; the Add/Edit form uses steppers and number pairs rather than the mockup's free-text fields. Pot material and top layer are fixed options; `acquired` is `YYYY-MM`.
+- **shadcn-svelte keeps our token names.** Its `init` writes its own colour variables (`--background`, `--foreground`, `--muted` as a *background*, `--primary-foreground`, …), which clash with ours (`--muted` is a *text* colour here). When it is installed for the Add/Edit form: skip or undo the generated colour block, and add one mapping block in `layout.css` that defines shadcn's names in terms of ours (`--background: var(--bg)`, `--foreground: var(--ink)`, `--muted-foreground: var(--muted)`, `--primary-foreground: var(--on-primary)`, `--input: var(--field-border)`, `--ring: var(--primary)`, `--destructive: var(--danger)` …). Components never name shadcn's variables directly in app code.
+- **Dark mode look:** the dark Edit plant board is the reference; its palette replaced the earlier hand-picked one (screens.md "Dark mode").
+
 **Legend.** ⚠️ **Irreversible / costly to change.** When: **Before M1** = before the first `firebase init` or the first commit; **During M1** = while building the shell; **Later** = can wait for M2 or later.
 
 ## A. Firebase setup (decide these in the console, before writing code)

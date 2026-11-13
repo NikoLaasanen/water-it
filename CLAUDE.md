@@ -6,7 +6,7 @@ A personal plant-care PWA for a handful of invited users (Niko, Niko's mum, mayb
 
 - `docs/design.md` — the design doc and source of truth: features, data model, Firestore rules sketch, architecture, milestones. Update it when a decision changes.
 - `docs/screens.md` — the chosen UI designs: tokens, components and per-screen spec.
-- `docs/mockups/*.dc.html` — mockup sources for Today, Plants, Plant detail and the sitter view. Reference only; they don't run on their own.
+- `docs/mockups/*.dc.html` — mockup sources: Today, Plants, Plant detail, Add plant (two steps), Edit plant (drawn dark — the reference for dark mode), the sitter view, and iPad versions of Today, Plants and Plant detail. Reference only; they don't run on their own.
 - `docs/open-decisions.md` — technical choices with reasons; anything not yet decided is listed there.
 
 ## Stack (decided)
@@ -29,6 +29,8 @@ A personal plant-care PWA for a handful of invited users (Niko, Niko's mum, mayb
 - **Local dev uses the Firebase emulators** (`connect*Emulator` when `import.meta.env.DEV`). Never point dev at the production project unless explicitly asked.
 - **iOS sign-in:** use `signInWithRedirect` (not popups), with `authDomain` set to the domain the app is served from. No email-link sign-in: on iOS, Home Screen apps don't share storage with Safari.
 - Use Svelte 5 runes (`$state`, `$derived`, classes in `.svelte.ts`) rather than legacy stores.
+- **Care profiles:** a plant stores `speciesId` plus `careOverrides` (only the fields its owner changed), never a full copy. Read a plant's profile through `careOf()` / `resolveCare()`. Preset ids in `src/lib/presets/presets.json` are permanent; preset text is `{ en, fi }`.
+- **Layout:** pages under `src/routes/(app)/` don't set their own outer width or navigation; the frame (bottom tab bar on phones, side rail from `md`) is `(app)/+layout.svelte`. Breakpoints `md` = iPad portrait, `lg` = iPad landscape (screens.md "Breakpoints").
 
 ## Current milestone: M1 — Catalogue
 
