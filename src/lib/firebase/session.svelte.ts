@@ -13,6 +13,7 @@ import {
 	GoogleAuthProvider,
 	getRedirectResult,
 	onAuthStateChanged,
+	sendPasswordResetEmail,
 	signInWithEmailAndPassword,
 	signInWithRedirect,
 	signOut,
@@ -24,6 +25,7 @@ import { auth, db } from './client';
 /** Key of the Paraglide message to show. Never a raw Firebase string. */
 export type AuthErrorKey =
 	| 'signin_error_invalid'
+	| 'signin_error_email'
 	| 'signin_error_too_many'
 	| 'signin_error_network'
 	| 'signin_error_unknown';
@@ -32,12 +34,15 @@ function toErrorKey(error: unknown): AuthErrorKey {
 	const code = typeof error === 'object' && error !== null && 'code' in error ? error.code : '';
 	switch (code) {
 		case 'auth/invalid-credential':
-		case 'auth/invalid-email':
 		case 'auth/user-not-found':
 		case 'auth/wrong-password':
-			// Deliberately one message for all four: saying "no such user"
+			// Deliberately one message for all three: saying "no such user"
 			// would let anyone test which addresses have accounts.
 			return 'signin_error_invalid';
+		case 'auth/invalid-email':
+			// A malformed address, which reveals nothing about accounts, and is
+			// the likely mistake on the reset form, so it gets its own message.
+			return 'signin_error_email';
 		case 'auth/too-many-requests':
 			return 'signin_error_too_many';
 		case 'auth/network-request-failed':
@@ -133,6 +138,30 @@ class Session {
 			await signInWithEmailAndPassword(auth, email.trim(), password);
 		} catch (error: unknown) {
 			this.errorKey = toErrorKey(error);
+		} finally {
+			this.busy = false;
+		}
+	}
+
+	/**
+	 * Emails a password-reset link. Resolves `true` once Firebase has taken
+	 * the request.
+	 *
+	 * Firebase's email enumeration protection (on by default for new
+	 * projects) answers the same whether or not the address has an account, so
+	 * the UI says "if there is an account" rather than claiming to know. The
+	 * link opens Firebase's own reset page; on an iPhone that is Safari, which
+	 * is fine — the new password then works in the installed app.
+	 */
+	async sendPasswordReset(email: string): Promise<boolean> {
+		this.busy = true;
+		this.errorKey = null;
+		try {
+			await sendPasswordResetEmail(auth, email.trim());
+			return true;
+		} catch (error: unknown) {
+			this.errorKey = toErrorKey(error);
+			return false;
 		} finally {
 			this.busy = false;
 		}
