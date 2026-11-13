@@ -34,7 +34,16 @@
 			}
 		}
 	],
-	"plants_summary_struggling": "{count} kärvistelee",
+	"plants_summary_struggling": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "1 huonokuntoinen",
+				"countPlural=other": "{count} huonokuntoista"
+			}
+		}
+	],
 	"plants_loading": "Ladataan kasveja…",
 	"plants_failed": "Kasvien lataus ei onnistunut. Tarkista verkkoyhteys.",
 	"plants_empty_heading": "Ei vielä kasveja",
@@ -90,7 +99,7 @@
 	"health_thriving": "Kukoistaa",
 	"health_okay": "Ok",
 	"health_recovering": "Toipuu",
-	"health_struggling": "Kärvistelee",
+	"health_struggling": "Huonokuntoinen",
 	"health_aria": "Kunto: {health}",
 	"light_low": "Vähän",
 	"light_medium": "Keskitasoa",
@@ -249,5 +258,9 @@
 	"delete_body": "Tämä poistaa kasvin, sen aikataulun ja hoitolokin. Poistoa ei voi perua.",
 	"delete_confirm": "Poista",
 	"delete_busy": "Poistetaan…",
-	"delete_keep": "Säilytä"
+	"delete_keep": "Säilytä",
+	"species_current": "Nykyinen",
+	"species_change_heading": "Vaihda laji",
+	"species_change_intro": "Hoito-ohjeet alkavat alusta uuden valinnan mukaan, ja muokkaamasi hoitokentät palaavat sen arvoihin. Nimi, ruukku, paikka ja muistiinpanot säilyvät. Mitään ei tallenneta ennen kuin napautat Tallenna.",
+	"species_change_back": "Takaisin muokkaukseen"
 }

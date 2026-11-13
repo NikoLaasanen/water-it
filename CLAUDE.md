@@ -36,7 +36,7 @@ A personal plant-care PWA for a handful of invited users (Niko, Niko's mum, mayb
 
 PWA shell (installable, offline) → Firebase wiring + Auth + rules → Plants list, Plant detail (Care tab), Add/Edit plant, bundled species presets (Pilea, Dracaena marginata, tree aloe, Crassula, spineless yucca, generic succulent and tropical foliage). Test sign-in in the installed iPhone app early.
 
-Status 2026-11-13: all of the above is built and live, plus the iPad layouts and Settings (language, appearance). Left in M1: changing an existing plant's species (screens.md "Edit plant") and the Perenual/Trefle lookup spike. See `docs/design.md` §11 for M2–M5.
+Status 2026-11-13: all of the above is built and live, plus the iPad layouts and Settings (language, appearance). Changing an existing plant's species was added the same day. The Perenual/Trefle lookup spike is postponed (Niko, 2026-11-13); next up is M2's Today page, to start using the app in practice. See `docs/design.md` §11 for M2–M5.
 
 ## Ask before
 

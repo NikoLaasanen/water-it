@@ -122,3 +122,51 @@ describe('PlantForm validation', () => {
 		expect(Object.keys(form.errors).sort()).toEqual(['acquired', 'fertilizeDays', 'potSize']);
 	});
 });
+
+describe('PlantForm.changePreset', () => {
+	const crassula = presetById('crassula-ovata')!;
+	const plant = {
+		id: 'p1',
+		name: 'Pippa',
+		health: 'struggling',
+		speciesId: pilea.id,
+		location: 'Kitchen',
+		pot: { material: 'terracotta' },
+		notes: 'From grandma',
+		careOverrides: { dryDownTest: 'Skewer', checkIntervalDays: { growing: 3, resting: 5 } },
+		createdAt: null
+	} as unknown as Plant;
+
+	it('starts care over from the new preset and keeps the rest', () => {
+		const form = new PlantForm(pilea, 'en', plant);
+		form.changePreset(crassula);
+		expect(form.preset?.id).toBe(crassula.id);
+		expect(form.growing).toBe(crassula.care.checkIntervalDays.growing);
+		expect(form.light).toBe(crassula.care.light.en);
+		expect(form.edited).toEqual([]);
+		expect(form.toPlantData()).toMatchObject({
+			speciesId: crassula.id,
+			name: 'Pippa',
+			health: 'struggling',
+			location: 'Kitchen',
+			pot: { material: 'terracotta' },
+			notes: 'From grandma',
+			careOverrides: {}
+		});
+	});
+
+	it("renames a plant still called by the old preset's name", () => {
+		const form = new PlantForm(pilea, 'en');
+		form.changePreset(crassula);
+		expect(form.name).toBe(crassula.name.en);
+	});
+
+	it('keeps the care as the plant’s own when switched to no preset', () => {
+		const form = new PlantForm(pilea, 'en', plant);
+		form.changePreset(undefined);
+		expect(form.preset).toBeUndefined();
+		expect(form.growing).toBe(3);
+		expect(form.toPlantData().speciesId).toBeUndefined();
+		expect(form.toPlantData().careOverrides.light).toBe(pilea.care.light.en);
+	});
+});

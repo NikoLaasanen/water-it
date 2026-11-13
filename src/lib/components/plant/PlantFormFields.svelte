@@ -53,17 +53,16 @@
 	let {
 		form,
 		locations,
-		speciesHref
+		speciesHref,
+		onchangespecies
 	}: {
 		form: PlantForm;
 		/** Locations the user's other plants use, for the quick-fill chips. */
 		locations: string[];
-		/**
-		 * Where "Change" on the species row goes, already resolved. Add passes the
-		 * picker; Edit leaves it out for now, since changing an existing plant's
-		 * species needs its own flow (screens.md "Edit plant").
-		 */
+		/** Add: where "Change" on the species row links to, already resolved. */
 		speciesHref?: string;
+		/** Edit: "Change" on the species row opens the picker over the form. */
+		onchangespecies?: () => void;
 	} = $props();
 
 	const hasPreset = $derived(form.preset !== undefined);
@@ -171,6 +170,14 @@
 				{m.form_species_change()}
 			</a>
 			<!-- eslint-enable svelte/no-navigation-without-resolve -->
+		{:else if onchangespecies}
+			<button
+				type="button"
+				onclick={onchangespecies}
+				class="flex min-h-11 flex-none items-center text-sm font-bold text-link"
+			>
+				{m.form_species_change()}
+			</button>
 		{/if}
 	</div>
 

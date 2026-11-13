@@ -8,7 +8,11 @@ declare global {
 		// interface Error {}
 		// interface Locals {}
 		// interface PageData {}
-		// interface PageState {}
+		/** Shallow-routing state (goto with `shallow: true`). */
+		interface PageState {
+			/** Edit plant: the species picker is open over the form. */
+			pickingSpecies?: boolean;
+		}
 		// interface Platform {}
 	}
 }

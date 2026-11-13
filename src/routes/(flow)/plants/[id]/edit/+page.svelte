@@ -5,17 +5,24 @@
   top, "Edited" tags and "Reset to preset" on changed care fields, and Save
   changes plus Delete plant at the bottom.
 
+  "Change" on the species row opens SpeciesPicker over the form with shallow
+  routing, so the iOS back swipe closes it. Picking reloads the care fields
+  from the new preset (PlantForm.changePreset); nothing is written until Save,
+  so Cancel still discards it.
+
   Saving updates the plant and, if the interval for today's season changed,
   moves its next check so it still counts from the last check
   (`rescheduleForNewInterval`). Delete asks first, then removes the plant with
   its checks and log.
 -->
 <script lang="ts">
+	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
 	import Trash from '@lucide/svelte/icons/trash-2';
 	import { untrack } from 'svelte';
 	import { afterNavigate, goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
+	import SpeciesPicker from '#lib/components/plant/SpeciesPicker.svelte';
 	import PlantFormFields from '#lib/components/plant/PlantFormFields.svelte';
 	import * as AlertDialog from '#lib/components/ui/alert-dialog/index.js';
 	import { deletePlant, updatePlant, type CheckUpdate } from '#lib/firebase/plant-writes.js';
@@ -29,7 +36,7 @@
 		currentIntervalDays,
 		rescheduleForNewInterval
 	} from '#lib/plants/schedule.js';
-	import { presetById } from '#lib/presets/index.js';
+	import { BLANK_PRESET, presetById } from '#lib/presets/index.js';
 
 	const plantId = page.params.id ?? '';
 	const detailHref = resolve('/(app)/plants/[id]', { id: plantId });
@@ -66,9 +73,34 @@
 	// Came here from the plant's own page? Then leaving goes *back*, so Back
 	// afterwards doesn't reopen the form. Opened directly, it replaces itself.
 	let cameFromDetail = $state(false);
-	afterNavigate(({ from }) => {
+	// Shallow navigations (opening and closing the species picker) fire this
+	// too in SvelteKit 3; they say nothing about where Edit was opened from.
+	afterNavigate(({ from, shallow }) => {
+		if (shallow) return;
 		cameFromDetail = from?.url.pathname === detailHref;
 	});
+
+	const picking = $derived(page.state.pickingSpecies === true);
+	let formScroll = 0;
+
+	function openPicker() {
+		formScroll = window.scrollY;
+		void goto(resolve('/(flow)/plants/[id]/edit', { id: plantId }), {
+			shallow: true,
+			state: { pickingSpecies: true }
+		});
+		window.scrollTo(0, 0);
+	}
+
+	// Closing (Back, swipe, or a pick) returns to where the form was scrolled.
+	$effect(() => {
+		if (!picking) requestAnimationFrame(() => window.scrollTo(0, formScroll));
+	});
+
+	function pickSpecies(id: string) {
+		form?.changePreset(id === BLANK_PRESET ? undefined : presetById(id));
+		history.back();
+	}
 
 	function leave() {
 		if (cameFromDetail) history.back();
@@ -138,7 +170,28 @@
 		</a>
 	</main>
 {:else if form}
-	<main class="flex flex-col gap-5 px-5 pt-[52px] pb-10 md:pt-10">
+	{#if picking}
+		<main class="flex flex-col gap-5 px-5 pt-[52px] pb-8 md:pt-10">
+			<button
+				type="button"
+				onclick={() => history.back()}
+				aria-label={m.species_change_back()}
+				class="flex size-11 items-center justify-center rounded-full bg-surface text-ink shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
+			>
+				<ChevronLeft size={22} strokeWidth={2.2} aria-hidden="true" />
+			</button>
+			<header class="flex flex-col gap-1.5">
+				<h1 class="text-[30px] leading-tight font-extrabold tracking-[-0.02em] text-ink">
+					{m.species_change_heading()}
+				</h1>
+				<p class="text-sm leading-[1.45] text-muted">{m.species_change_intro()}</p>
+			</header>
+			<SpeciesPicker onpick={pickSpecies} current={form.preset?.id ?? BLANK_PRESET} />
+		</main>
+	{/if}
+	<!-- Hidden, not unmounted, while the picker is open: the form keeps its
+	     open sections and Save stays wired up. -->
+	<main class="flex flex-col gap-5 px-5 pt-[52px] pb-10 md:pt-10" hidden={picking}>
 		<!-- Cancel · Edit plant · Save, as in the mockup. Save submits the form
 		     below through the `form` attribute. -->
 		<header class="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
@@ -161,7 +214,7 @@
 		</header>
 
 		<form id="plant-edit" class="flex flex-col gap-5" novalidate {onsubmit}>
-			<PlantFormFields {form} {locations} />
+			<PlantFormFields {form} {locations} onchangespecies={openPicker} />
 
 			<div class="flex flex-col gap-3">
 				<button

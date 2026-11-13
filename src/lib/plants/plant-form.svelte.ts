@@ -109,7 +109,8 @@ function schema() {
 const trimmed = (text: string) => text.trim() || undefined;
 
 export class PlantForm {
-	readonly preset: Preset | undefined;
+	/** The species preset the care profile starts from; changes with `changePreset`. */
+	preset = $state<Preset | undefined>(undefined);
 	readonly #locale: Locale;
 
 	// --- The plant -------------------------------------------------------------
@@ -234,6 +235,26 @@ export class PlantForm {
 	/** "Reset to preset": put one care field back to the preset's value. */
 	reset(field: CareField): void {
 		if (this.preset) this.#loadCare(presetCare(this.preset, this.#locale), field);
+	}
+
+	/**
+	 * Switch the plant to another species (screens.md "Edit plant"). The care
+	 * fields start over from the new preset, so edits made against the old one
+	 * are dropped; everything that isn't care (pot, location, notes, health)
+	 * stays. A name still equal to the old preset's default follows the new
+	 * one, since it was never really chosen.
+	 *
+	 * Switching to no preset keeps the care as it stands: it becomes the
+	 * plant's own profile instead of being wiped.
+	 */
+	changePreset(next: Preset | undefined): void {
+		const previous = this.preset;
+		if (next?.id === previous?.id) return;
+		this.preset = next;
+		if (!next) return;
+		this.#loadCare(presetCare(next, this.#locale));
+		const oldDefault = previous ? previous.name[this.#locale] : '';
+		if (this.name.trim() === oldDefault) this.name = next.name[this.#locale];
 	}
 
 	/** Checks the form; fills `errors` and returns whether it can be saved. */

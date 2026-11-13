@@ -249,5 +249,9 @@
 	"delete_body": "This removes the plant, its schedule and its care log. It can’t be undone.",
 	"delete_confirm": "Delete",
 	"delete_busy": "Deleting…",
-	"delete_keep": "Keep it"
+	"delete_keep": "Keep it",
+	"species_current": "Current",
+	"species_change_heading": "Change species",
+	"species_change_intro": "The care profile starts over from the new choice, and care fields you edited go back to its values. Name, pot, location and notes stay. Nothing is saved until you tap Save.",
+	"species_change_back": "Back to editing"
 }
