@@ -197,6 +197,14 @@ The Add form, prefilled, with three differences: a header with **Cancel** · "Ed
 
 The board is drawn in dark theme, and is the reference for the dark palette (see "Dark mode").
 
+Built 2026-11-13 (`src/routes/(flow)/plants/[id]/edit`):
+
+- Opened from the Edit button on plant detail (round on phones, labelled pill on iPad). The form is built once from the first snapshot, so a sync from another device can't wipe what's being typed.
+- **Cancel and Save go back** to plant detail when that's where Edit was opened from (so Back never reopens the form); opened directly, they replace the form with plant detail.
+- **Save** updates the plant in one batch with its check. Cleared fields are deleted, and `careOverrides` is replaced whole, so a reset override really disappears. If the interval for today's season changed, the next check moves by the difference, which keeps it counted from the last check (`rescheduleForNewInterval`, tested); it can become overdue, which is then true. A plant with no check (older data) gets one, from today.
+- **Delete plant** opens a confirmation dialog ("Delete Pilea?" · Delete / Keep it). Confirming removes the plant, its tasks and its log entries in one batch and returns to the Plants list. The confirm button uses `--danger-fill` / `--on-danger`: white text on dark mode's `#E5776B` is only 2.92, so dark mode puts dark text on it (6.13).
+- **Not yet: changing the species of an existing plant.** The species row shows no Change link in Edit. It needs its own picker flow and a rule for what happens to the old preset's overrides (probably: start from the new preset, keep the non-care fields).
+
 ## Sign-in
 
 Not on the canvas. Built from the tokens, revised after review on 2026-11-13:

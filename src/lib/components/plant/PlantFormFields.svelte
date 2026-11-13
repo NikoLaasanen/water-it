@@ -12,7 +12,6 @@
 <script lang="ts">
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import { untrack } from 'svelte';
-	import { resolve } from '$app/paths';
 	import SegmentedChoice from '#lib/components/SegmentedChoice.svelte';
 	import ChipChoice from '#lib/components/form/ChipChoice.svelte';
 	import FormField from '#lib/components/form/FormField.svelte';
@@ -53,11 +52,18 @@
 
 	let {
 		form,
-		locations
+		locations,
+		speciesHref
 	}: {
 		form: PlantForm;
 		/** Locations the user's other plants use, for the quick-fill chips. */
 		locations: string[];
+		/**
+		 * Where "Change" on the species row goes, already resolved. Add passes the
+		 * picker; Edit leaves it out for now, since changing an existing plant's
+		 * species needs its own flow (screens.md "Edit plant").
+		 */
+		speciesHref?: string;
 	} = $props();
 
 	const hasPreset = $derived(form.preset !== undefined);
@@ -155,12 +161,17 @@
 				{/if}
 			</span>
 		</span>
-		<a
-			href={resolve('/(flow)/plants/new')}
-			class="flex min-h-11 flex-none items-center text-sm font-bold text-link"
-		>
-			{m.form_species_change()}
-		</a>
+		{#if speciesHref}
+			<!-- speciesHref arrives already resolved by the page. -->
+			<!-- eslint-disable svelte/no-navigation-without-resolve -->
+			<a
+				href={speciesHref}
+				class="flex min-h-11 flex-none items-center text-sm font-bold text-link"
+			>
+				{m.form_species_change()}
+			</a>
+			<!-- eslint-enable svelte/no-navigation-without-resolve -->
+		{/if}
 	</div>
 
 	<div class="flex flex-col gap-2">

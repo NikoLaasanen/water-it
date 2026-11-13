@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { withoutUndefined } from './without-undefined.js';
+import { fieldsForUpdate, withoutUndefined } from './without-undefined.js';
 
 describe('withoutUndefined', () => {
 	it('drops undefined fields at any depth, keeping null, false and 0', () => {
@@ -24,5 +24,27 @@ describe('withoutUndefined', () => {
 	it('leaves non-plain objects, like Firestore sentinels or dates, alone', () => {
 		const date = new Date(0);
 		expect(withoutUndefined({ at: date }).at).toBe(date);
+	});
+});
+
+describe('fieldsForUpdate', () => {
+	it('turns cleared top-level fields into the delete marker, and writes maps whole', () => {
+		const REMOVE = Symbol('deleteField');
+		expect(
+			fieldsForUpdate(
+				{
+					name: 'Pilea',
+					location: undefined,
+					pot: { material: 'plastic', sizeCm: undefined },
+					careOverrides: {}
+				},
+				REMOVE
+			)
+		).toEqual({
+			name: 'Pilea',
+			location: REMOVE,
+			pot: { material: 'plastic' },
+			careOverrides: {}
+		});
 	});
 });

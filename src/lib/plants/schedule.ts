@@ -65,3 +65,24 @@ export function toLocalDateString(date: Date): string {
 export function checkDateAfter(from: Date, days: number): string {
 	return toLocalDateString(addDays(from, days));
 }
+
+/**
+ * The next check after the plant's interval was edited.
+ *
+ * A stored due date is "last check + old interval", so moving it by the
+ * difference gives "last check + new interval" — still counted from the last
+ * action, as the scheduling rule says, without needing the log. It may land
+ * in the past: shortening a long interval can make a plant overdue, which is
+ * then simply true. Returns the date unchanged when the interval didn't change
+ * or the stored date can't be read.
+ */
+export function rescheduleForNewInterval(
+	nextDue: string,
+	oldIntervalDays: number,
+	newIntervalDays: number
+): string {
+	const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(nextDue);
+	if (!match || oldIntervalDays === newIntervalDays) return nextDue;
+	const [, y, m, d] = match.map(Number);
+	return checkDateAfter(new Date(y, m - 1, d), newIntervalDays - oldIntervalDays);
+}

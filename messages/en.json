@@ -47,7 +47,6 @@
 	"plants_check_unscheduled": "Not scheduled",
 	"plant_back": "Back to plants",
 	"plant_edit": "Edit plant",
-	"plant_edit_soon": "Editing a plant is not built yet",
 	"plant_not_found_heading": "Plant not found",
 	"plant_not_found_body": "This plant no longer exists, or the link is wrong.",
 	"plant_not_found_back": "Back to plants",
@@ -240,5 +239,16 @@
 	"form_error_comfort": "Fill in both ends, with the lower one first.",
 	"form_error_fertilize": "Use 1–365 days, or leave it empty.",
 	"form_error_repot": "Use 1–120 months, or leave it empty.",
-	"form_error_month": "Pick a month."
+	"form_error_month": "Pick a month.",
+	"edit_heading": "Edit plant",
+	"edit_cancel": "Cancel",
+	"edit_save": "Save",
+	"edit_save_changes": "Save changes",
+	"edit_delete": "Delete plant",
+	"edit_delete_note": "Deleting removes its schedule and care log too. You’ll be asked to confirm.",
+	"delete_title": "Delete {name}?",
+	"delete_body": "This removes the plant, its schedule and its care log. It can’t be undone.",
+	"delete_confirm": "Delete",
+	"delete_busy": "Deleting…",
+	"delete_keep": "Keep it"
 }

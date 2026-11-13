@@ -4,6 +4,7 @@ import {
 	currentIntervalDays,
 	currentSeason,
 	isGrowingSeason,
+	rescheduleForNewInterval,
 	toLocalDateString
 } from './schedule.js';
 
@@ -62,5 +63,23 @@ describe('checkDateAfter', () => {
 		// Finland moves to summer time on 29 March 2026; a 7-day check from the
 		// 26th is still the 2nd, not the 1st.
 		expect(checkDateAfter(day(2026, 3, 26, 0), 7)).toBe('2026-04-02');
+	});
+});
+
+describe('rescheduleForNewInterval', () => {
+	it('keeps counting from the last check when the interval changes', () => {
+		// Checked on the 13th with a 14-day interval → due the 27th. Now 7 days
+		// → due the 20th, a week after that check.
+		expect(rescheduleForNewInterval('2026-11-27', 14, 7)).toBe('2026-11-20');
+		expect(rescheduleForNewInterval('2026-11-27', 14, 21)).toBe('2026-12-04');
+	});
+
+	it('can land in the past, which makes the plant honestly overdue', () => {
+		expect(rescheduleForNewInterval('2026-11-15', 30, 7)).toBe('2026-10-23');
+	});
+
+	it('leaves the date alone when nothing changed or it is unreadable', () => {
+		expect(rescheduleForNewInterval('2026-11-27', 14, 14)).toBe('2026-11-27');
+		expect(rescheduleForNewInterval('garbage', 14, 7)).toBe('garbage');
 	});
 });

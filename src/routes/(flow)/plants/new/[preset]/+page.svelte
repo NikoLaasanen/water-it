@@ -90,7 +90,7 @@
 		</h1>
 
 		<form class="flex flex-col gap-5" novalidate {onsubmit}>
-			<PlantFormFields {form} {locations} />
+			<PlantFormFields {form} {locations} speciesHref={resolve('/(flow)/plants/new')} />
 
 			<div class="flex flex-col gap-2">
 				<button

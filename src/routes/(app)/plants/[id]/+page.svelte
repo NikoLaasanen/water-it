@@ -93,17 +93,16 @@
 			<ChevronLeft size={22} strokeWidth={2.2} aria-hidden="true" />
 		</a>
 
-		<!-- Inert until Add/Edit exists. Round on phones, a labelled pill on
-		     the iPad, as in the two mockups. -->
-		<button
-			type="button"
-			disabled
-			aria-label={m.plant_edit_soon()}
-			class="absolute top-13 right-4 flex size-11 items-center justify-center gap-2 rounded-full bg-surface/90 text-ink disabled:opacity-50 md:top-7 md:right-6 md:w-auto md:px-4"
+		<!-- Edit: round on phones, a labelled pill on the iPad, as in the two
+		     mockups. -->
+		<a
+			href={resolve('/(flow)/plants/[id]/edit', { id: plant.id })}
+			class="absolute top-13 right-4 flex size-11 items-center justify-center gap-2 rounded-full bg-surface/90 text-ink no-underline md:top-7 md:right-6 md:w-auto md:px-4"
 		>
 			<Pencil size={20} strokeWidth={2} aria-hidden="true" />
-			<span class="hidden text-sm font-bold md:inline">{m.plant_edit()}</span>
-		</button>
+			<!-- The label is always there for screen readers; visible from `md`. -->
+			<span class="sr-only text-sm font-bold md:not-sr-only">{m.plant_edit()}</span>
+		</a>
 	</div>
 
 	<div

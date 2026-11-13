@@ -12,7 +12,9 @@ import {
 	getDocs,
 	setDoc,
 	deleteDoc,
+	deleteField,
 	serverTimestamp,
+	updateDoc,
 	writeBatch,
 	type Firestore
 } from 'firebase/firestore';
@@ -144,6 +146,54 @@ describe('Add plant: the plant and its first check in one batch', () => {
 		await invite(NIKO_EMAIL);
 		await invite(MUM_EMAIL);
 		await assertFails(addPlantBatch(as(MUM, MUM_EMAIL), NIKO));
+	});
+});
+
+describe('Edit and Delete plant', () => {
+	async function seedPlant(uid: string) {
+		await seed('users/' + uid + '/plants/p1', {
+			name: 'Pilea',
+			location: 'Hallway',
+			careOverrides: { dryDownTest: 'Skewer' }
+		});
+		await seed('users/' + uid + '/tasks/check-water-p1', { plantId: 'p1', kind: 'check-water' });
+		await seed('users/' + uid + '/log/l1', { plantId: 'p1', kind: 'watered' });
+	}
+
+	/** The Delete write (deletePlant in plant-writes.ts). */
+	function deleteBatch(db: Firestore, uid: string) {
+		const batch = writeBatch(db);
+		for (const path of ['/plants/p1', '/tasks/check-water-p1', '/log/l1']) {
+			batch.delete(doc(db, 'users/' + uid + path));
+		}
+		return batch.commit();
+	}
+
+	test('the owner can update a plant, clearing fields and replacing its overrides', async () => {
+		await invite(NIKO_EMAIL);
+		await seedPlant(NIKO);
+		const db = as(NIKO, NIKO_EMAIL);
+		await assertSucceeds(
+			updateDoc(doc(db, 'users/' + NIKO + '/plants/p1'), {
+				location: deleteField(),
+				careOverrides: {}
+			})
+		);
+	});
+
+	test('the owner can delete a plant with its tasks and log in one batch', async () => {
+		await invite(NIKO_EMAIL);
+		await seedPlant(NIKO);
+		await assertSucceeds(deleteBatch(as(NIKO, NIKO_EMAIL), NIKO));
+	});
+
+	test('another invited user can neither edit nor delete it', async () => {
+		await invite(NIKO_EMAIL);
+		await invite(MUM_EMAIL);
+		await seedPlant(NIKO);
+		const db = as(MUM, MUM_EMAIL);
+		await assertFails(updateDoc(doc(db, 'users/' + NIKO + '/plants/p1'), { name: 'Mine' }));
+		await assertFails(deleteBatch(db, NIKO));
 	});
 });
 

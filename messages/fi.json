@@ -47,7 +47,6 @@
 	"plants_check_unscheduled": "Ei ajastettu",
 	"plant_back": "Takaisin kasveihin",
 	"plant_edit": "Muokkaa kasvia",
-	"plant_edit_soon": "Kasvin muokkausta ei ole vielä tehty",
 	"plant_not_found_heading": "Kasvia ei löytynyt",
 	"plant_not_found_body": "Kasvia ei enää ole, tai linkki on virheellinen.",
 	"plant_not_found_back": "Takaisin kasveihin",
@@ -240,5 +239,16 @@
 	"form_error_comfort": "Täytä molemmat, pienempi ensin.",
 	"form_error_fertilize": "Käytä 1–365 päivää tai jätä tyhjäksi.",
 	"form_error_repot": "Käytä 1–120 kuukautta tai jätä tyhjäksi.",
-	"form_error_month": "Valitse kuukausi."
+	"form_error_month": "Valitse kuukausi.",
+	"edit_heading": "Muokkaa kasvia",
+	"edit_cancel": "Peruuta",
+	"edit_save": "Tallenna",
+	"edit_save_changes": "Tallenna muutokset",
+	"edit_delete": "Poista kasvi",
+	"edit_delete_note": "Poistaminen poistaa myös aikataulun ja hoitolokin. Sinulta kysytään vahvistus.",
+	"delete_title": "Poistetaanko {name}?",
+	"delete_body": "Tämä poistaa kasvin, sen aikataulun ja hoitolokin. Poistoa ei voi perua.",
+	"delete_confirm": "Poista",
+	"delete_busy": "Poistetaan…",
+	"delete_keep": "Säilytä"
 }

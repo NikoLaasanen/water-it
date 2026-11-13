@@ -131,6 +131,9 @@
 	/* Destructive actions (Delete plant) and the overdue card border. */
 	--danger: #9b1c1c;
 	--danger-border: #c53030;
+	/* The confirm button in the delete dialog: a solid fill and its text (5.47). */
+	--danger-fill: #c53030;
+	--on-danger: #ffffff;
 
 	/* Google's sign-in button, in Google's own colours rather than ours: its
 	   branding guidelines fix them (GoogleButton.svelte). Light theme here,
@@ -212,6 +215,9 @@
 	--edited-fg: #f0d37a;
 	--danger: #f2a39b;
 	--danger-border: #e5776b;
+	/* White on #e5776b is 2.92, so the dark fill carries dark text (6.13). */
+	--danger-fill: #e5776b;
+	--on-danger: #2a0f0c;
 
 	--google-bg: #131314;
 	--google-border: #8e918f;
