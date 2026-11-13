@@ -126,7 +126,7 @@ Built 2026-11-12, with these decisions:
 - The light chip reads `careProfile.lightLevel`, a field added for it. `careProfile.light` is a sentence for the Care tab and cannot be turned into a translatable one-word chip. The water chip needs no such field: it is derived from `wateringStyle` (`sparse` → Little, `soak-and-dry` → Moderate, `keep-moist` → Lots).
 - "Check:" shows `Overdue` / `Today` / a weekday / `In N days`, switching to the day count from a week out, where a weekday name stops naming one day. Weekday names come from `Intl`, which abbreviates them correctly per locale (Finnish uses lower case, "la").
 - Sorted by name, in the UI rather than in the Firestore query: Firestore orders strings by byte value, which files `Ä` after `Z` instead of after `A`.
-- The Add button is disabled until Add/Edit exists. Empty state follows the tokens, since screens.md does not design one.
+- The Add button opens Add plant (since 2026-11-13). The empty state follows the tokens, since screens.md does not design one, and leads with "Add your first plant".
 - **iPad (`tablet-plants.dc.html`), built 2026-11-13:** the same cards in a grid, two columns from `md`, three from `lg`. The header adds a 280 px **search** field (filters by name and location) and the Add button gains its label ("+ Add plant"). Search is iPad-only, as designed.
 - The list's data lives in `src/routes/(app)/plants/+layout.svelte`, shared through context, so the list page and the iPad side list under plant detail use one listener.
 

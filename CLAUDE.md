@@ -34,7 +34,9 @@ A personal plant-care PWA for a handful of invited users (Niko, Niko's mum, mayb
 
 ## Current milestone: M1 — Catalogue
 
-PWA shell (installable, offline) → Firebase wiring + Auth + rules → Plants list, Plant detail (Care tab), Add/Edit plant, bundled species presets (Pilea, Dracaena marginata, tree aloe, Crassula, spineless yucca, generic succulent and tropical foliage). Test sign-in in the installed iPhone app early. See `docs/design.md` §11 for M2–M5.
+PWA shell (installable, offline) → Firebase wiring + Auth + rules → Plants list, Plant detail (Care tab), Add/Edit plant, bundled species presets (Pilea, Dracaena marginata, tree aloe, Crassula, spineless yucca, generic succulent and tropical foliage). Test sign-in in the installed iPhone app early.
+
+Status 2026-11-13: all of the above is built and live, plus the iPad layouts and Settings (language, appearance). Left in M1: changing an existing plant's species (screens.md "Edit plant") and the Perenual/Trefle lookup spike. See `docs/design.md` §11 for M2–M5.
 
 ## Ask before
 
@@ -63,7 +65,7 @@ Firebase project: **`water-it-95171`** (`europe-north1`). Install the iPhone app
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `pnpm dev`                                                           | Vite dev server, on **<http://127.0.0.1:5173>** — open that, never `localhost`, or Google sign-in silently bounces back to /signin (design.md 7.4 "Dev gotcha"). Expects `pnpm emulators` running in another terminal.                                       |
 | `pnpm seed:dev [email]`                                              | Put an email on the invite allowlist in the Firestore emulator. Needed before you can sign in locally, because invite-only is enforced in the rules and the emulator starts empty.                                                                           |
-| `pnpm seed:plants [email]`                                           | Put the five mockup plants and their checks in the emulator, for a signed-in emulator user. Stands in for the Add plant screen until it exists. Sign in locally once first, so the account is there to attach them to.                                       |
+| `pnpm seed:plants [email]`                                           | Put the five mockup plants and their checks in the emulator, for a signed-in emulator user. Quicker than adding them by hand; re-run after a data-model change. Sign in locally once first, so the account is there to attach them to.                       |
 | `pnpm emulators`                                                     | Auth + Firestore emulators on the `demo-water-it` project, UI at <http://127.0.0.1:4000>. Imports and re-exports `.firebase/seed`, so test data survives a restart.                                                                                          |
 | `pnpm test`                                                          | Unit tests (Vitest, `src/**`).                                                                                                                                                                                                                               |
 | `pnpm test:rules`                                                    | Firestore rules tests. Starts its own Firestore emulator on port 8080, so it needs Java, and fails with "port taken" while `pnpm emulators` is running — stop that first. Never point these tests at the dev emulator: they wipe the database between tests. |

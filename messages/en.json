@@ -1,6 +1,5 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"hello_world": "Hello, {name} from en!",
 	"pwa_update_ready": "A new version is ready",
 	"pwa_reload": "Reload",
 	"pwa_later": "Later",

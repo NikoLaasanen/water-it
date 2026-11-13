@@ -1,6 +1,5 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"hello_world": "Hello, {name} from fi!",
 	"pwa_update_ready": "Uusi versio on valmis",
 	"pwa_reload": "Lataa uudelleen",
 	"pwa_later": "Myöhemmin",

@@ -2,6 +2,9 @@
 
 Copied in by the shadcn-svelte CLI (1.8.1, manual install — `init` was not
 used, because it overwrites `layout.css`). We own this code; edit it freely.
+Only what the app uses is kept: alert-dialog (and the button it uses),
+collapsible, switch. Segmented controls and radio cards are native radios
+(`SegmentedChoice.svelte`, `HealthPicker.svelte`).
 
 **After every `pnpm dlx shadcn-svelte@1.8.1 add <name>`, apply the same two
 local changes to the new files:**
