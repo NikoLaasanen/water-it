@@ -18,6 +18,7 @@ import type {
 	WaterLevel
 } from '#lib/types/plant.js';
 import type { NextCheck } from './care.js';
+import type { CheckAction } from './schedule.js';
 import { resolveCare, type CareField, type ResolvedCare } from './care-profile.js';
 
 /** A plant's effective care profile in the current language. */
@@ -309,4 +310,42 @@ export function shortDateLabel(date: Date): string {
 		day: 'numeric',
 		month: 'short'
 	}).format(date);
+}
+
+/** The badge on an answered check: "Watered", "Still damp", "Skipped". */
+export function statusLabel(action: CheckAction): string {
+	switch (action) {
+		case 'watered':
+			return m.status_watered();
+		case 'checked-damp':
+			return m.status_damp();
+		case 'skipped':
+			return m.status_skipped();
+	}
+}
+
+/** What an answer did, beside its badge: "Next check in 14 days". */
+export function statusNextLabel(action: CheckAction, days: number): string {
+	switch (action) {
+		case 'watered':
+			return m.status_next_watered({ days });
+		case 'checked-damp':
+			return m.status_next_damp({ days });
+		case 'skipped':
+			return m.status_next_skipped();
+	}
+}
+
+/**
+ * The date line on Today: "Friday 13 November". Finnish writes weekdays in
+ * lower case ("perjantai 13. marraskuuta"); this starts the line, so its
+ * first letter is raised.
+ */
+export function longDateLabel(date: Date): string {
+	const text = new Intl.DateTimeFormat(getLocale(), {
+		weekday: 'long',
+		day: 'numeric',
+		month: 'long'
+	}).format(date);
+	return text.charAt(0).toLocaleUpperCase(getLocale()) + text.slice(1);
 }

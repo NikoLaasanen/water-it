@@ -52,9 +52,9 @@
    text >= 4.5:1 on whatever it sits on, field borders and meaningful icons
    >= 3:1 (WCAG 1.4.11). screens.md "Dark mode" has the measured ratios.
 
-   Still absent: the status colours (Watered / Still damp / Skipped), which
-   belong to the Today view and are picked when it is built. screens.md records
-   that as the remaining gap.
+   The status colours (Watered / Still damp / Skipped) were added with the
+   Today view: light from screens.md, dark reusing the thriving, edited and
+   danger hues. Each fg is only drawn on its own bg (6.57–8.86).
    --------------------------------------------------------------------------- */
 
 :root {
@@ -98,6 +98,17 @@
 
 	/* An overdue check, in words as well as colour. */
 	--overdue: #8a3b06;
+	/* "Today" on a due check (the water chip's ink). */
+	--due-today: #1d3e63;
+
+	/* A check's answer on Today: badge and tinted square, always with an icon
+	   and a word as well. fg on bg: 6.85, 6.86, 6.57. */
+	--status-watered-bg: #ddf0e2;
+	--status-watered-fg: #1f5a36;
+	--status-damp-bg: #fcefc7;
+	--status-damp-fg: #6e4b00;
+	--status-skipped-bg: #fbe1de;
+	--status-skipped-fg: #9b1c1c;
 
 	/* Behind the leaf glyph where a plant has no photo yet. */
 	--thumb-tint: #dcebdd;
@@ -187,6 +198,15 @@
 	--chip-water-icon: #7faee6;
 
 	--overdue: #f2b077;
+	--due-today: #a8c8ec;
+
+	/* fg on bg: 7.54, 8.86, 7.53. */
+	--status-watered-bg: #1f3528;
+	--status-watered-fg: #8fd3a8;
+	--status-damp-bg: #3a3015;
+	--status-damp-fg: #f0d37a;
+	--status-skipped-bg: #3a1f1c;
+	--status-skipped-fg: #f2a39b;
 
 	--thumb-tint: #22302a;
 
@@ -244,6 +264,20 @@
 [data-health='struggling'] {
 	--health-bg: var(--health-struggling-bg);
 	--health-fg: var(--health-struggling-fg);
+}
+
+/* A check's answer, resolved once like health. */
+[data-status='watered'] {
+	--status-bg: var(--status-watered-bg);
+	--status-fg: var(--status-watered-fg);
+}
+[data-status='checked-damp'] {
+	--status-bg: var(--status-damp-bg);
+	--status-fg: var(--status-damp-fg);
+}
+[data-status='skipped'] {
+	--status-bg: var(--status-skipped-bg);
+	--status-fg: var(--status-skipped-fg);
 }
 
 /* Expose the tokens as Tailwind utilities (bg-surface, text-ink, ...).

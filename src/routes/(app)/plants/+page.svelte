@@ -11,6 +11,7 @@
   The data comes from `/plants/+layout.svelte`, which owns the listener.
 -->
 <script lang="ts">
+	import { clock } from '#lib/clock.svelte.js';
 	import Plus from '@lucide/svelte/icons/plus';
 	import { resolve } from '$app/paths';
 	import Search from '@lucide/svelte/icons/search';
@@ -38,11 +39,9 @@
 			: plants
 	);
 
-	// One date for the whole list, so no two rows can disagree about "today".
-	// It is read once per mount: a list left open past midnight shows the
-	// previous day until the page is revisited, which the Today view will have
-	// to solve properly.
-	const today = new Date();
+	// One date for the whole list, so no two rows can disagree about "today";
+	// the shared clock moves it on at midnight and when the app is reopened.
+	const today = $derived(clock.today);
 </script>
 
 <svelte:head>

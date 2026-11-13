@@ -2,8 +2,7 @@
  * The stored shapes, from design.md §6. These are the contract between
  * Firestore and the app, so they stay free of anything view-specific.
  *
- * Only the collections M1 touches are here. `LogEntry`, `Photo` and `Share`
- * arrive with the milestones that read them.
+ * `Photo` and `Share` arrive with the milestones that read them.
  */
 import type { Timestamp } from 'firebase/firestore';
 
@@ -122,4 +121,35 @@ export type Task = {
 	intervalDays?: number;
 	/** Local calendar date, `YYYY-MM-DD`. */
 	snoozedUntil?: string;
+};
+
+export type LogKind =
+	| 'watered'
+	| 'checked-damp'
+	| 'checked-dry'
+	| 'skipped'
+	| 'fertilized'
+	| 'repotted'
+	| 'pruned'
+	| 'moved'
+	| 'note'
+	| 'problem';
+
+/** The water check as it stood before an answer was logged, for Undo. */
+export type CheckSnapshot = Pick<Task, 'nextDue' | 'intervalDays' | 'snoozedUntil'>;
+
+export type LogEntry = {
+	id: string;
+	plantId: string;
+	kind: LogKind;
+	/** When it was logged, by the phone's clock (so it is right offline too). */
+	at: Timestamp;
+	note?: string;
+	by?: { kind: 'owner' } | { kind: 'sitter'; name?: string; shareId: string };
+	/**
+	 * For an answer to a water check: what it did to the check. `before` is
+	 * the check as it was (null if the plant had none), so Undo can put it
+	 * back from any device, after a reload too; `nextDue` is where it moved.
+	 */
+	check?: { before: CheckSnapshot | null; nextDue: string; intervalDays: number };
 };

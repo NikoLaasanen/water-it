@@ -224,6 +224,14 @@ async function remove(path) {
 	}
 }
 
+// Start the log over too: answers logged while testing Today would otherwise
+// survive the reset checks and show those plants as already answered.
+const logUrl = `http://${FIRESTORE}/v1/projects/${PROJECT}/databases/(default)/documents/users/${user.localId}/log?pageSize=300`;
+const logList = await (await fetch(logUrl, { headers: OWNER })).json();
+for (const entry of logList.documents ?? []) {
+	await remove(entry.name.split('/documents/')[1]);
+}
+
 for (const plant of PLANTS) {
 	await put(`users/${user.localId}/plants/${plant.id}`, plantFields(plant));
 	// Earlier seeds named the task `check-<plant>`; the app now uses
@@ -246,4 +254,4 @@ for (const plant of PLANTS) {
 }
 
 console.log(`Seeded ${PLANTS.length} plants for ${user.email ?? user.localId}.`);
-console.log('Open /plants to see them.');
+console.log('Open / for Today, or /plants for the list. The care log was cleared.');

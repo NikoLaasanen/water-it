@@ -262,5 +262,70 @@
 	"species_current": "Nykyinen",
 	"species_change_heading": "Vaihda laji",
 	"species_change_intro": "Hoito-ohjeet alkavat alusta uuden valinnan mukaan, ja muokkaamasi hoitokentät palaavat sen arvoihin. Nimi, ruukku, paikka ja muistiinpanot säilyvät. Mitään ei tallenneta ennen kuin napautat Tallenna.",
-	"species_change_back": "Takaisin muokkaukseen"
+	"species_change_back": "Takaisin muokkaukseen",
+	"today_summary_open": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "1 tarkistettava · napauta pisaraa, kun olet kastellut",
+				"countPlural=other": "{count} tarkistettavaa · napauta pisaraa, kun olet kastellut"
+			}
+		}
+	],
+	"today_summary_done": "Kaikki tehty tältä päivältä.",
+	"today_summary_none": "Tänään ei ole tarkistettavaa.",
+	"today_next_up": "Seuraavaksi: {name}, {when}.",
+	"today_no_plants": "Kasviesi tarkistukset näkyvät tässä.",
+	"today_due_today": "Tänään",
+	"today_overdue": [
+		{
+			"declarations": ["input days", "local daysPlural = days: plural"],
+			"selectors": ["daysPlural"],
+			"match": {
+				"daysPlural=one": "1 päivä myöhässä",
+				"daysPlural=other": "{days} päivää myöhässä"
+			}
+		}
+	],
+	"today_loading": "Ladataan päivän tarkistuksia…",
+	"today_cards_label": "Päivän tarkistukset",
+	"check_watered": "Kasteltu",
+	"check_watered_aria": "{name} kasteltu",
+	"check_damp": "Vielä kostea",
+	"check_damp_aria": "{name} on vielä kostea",
+	"check_skip": "Ohita",
+	"check_skip_aria": "Ohita {name} tänään",
+	"status_watered": "Kasteltu",
+	"status_damp": "Vielä kostea",
+	"status_skipped": "Ohitettu",
+	"status_next_watered": [
+		{
+			"declarations": ["input days", "local daysPlural = days: plural"],
+			"selectors": ["daysPlural"],
+			"match": {
+				"daysPlural=one": "Seuraava tarkistus huomenna",
+				"daysPlural=other": "Seuraava tarkistus {days} päivän päästä"
+			}
+		}
+	],
+	"status_next_damp": [
+		{
+			"declarations": ["input days", "local daysPlural = days: plural"],
+			"selectors": ["daysPlural"],
+			"match": {
+				"daysPlural=one": "Tarkistetaan uudelleen huomenna",
+				"daysPlural=other": "Tarkistetaan uudelleen {days} päivän päästä"
+			}
+		}
+	],
+	"status_next_skipped": "Takaisin listalla huomenna",
+	"check_undo": "Kumoa",
+	"check_undo_aria": "Kumoa ”{status}”: {name}",
+	"today_coming_up": "Tulossa",
+	"today_coming_up_none": "Muuta ei ole vielä aikataulussa.",
+	"today_see_all": "Näytä kaikki kasvit",
+	"today_dates_note": "Päivät siirtyvät, kun kirjaat jotain. Myöhässä tehty kastelu siirtää seuraavaa tarkistusta myöhemmäksi.",
+	"task_check_soil": "Tarkista multa",
+	"task_water": "Kastele"
 }

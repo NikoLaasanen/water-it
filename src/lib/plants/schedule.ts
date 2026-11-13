@@ -86,3 +86,37 @@ export function rescheduleForNewInterval(
 	const [, y, m, d] = match.map(Number);
 	return checkDateAfter(new Date(y, m - 1, d), newIntervalDays - oldIntervalDays);
 }
+
+/** The three answers to a water check that Today offers (design.md §4.3). */
+export type CheckAction = 'watered' | 'checked-damp' | 'skipped';
+
+/**
+ * How long "Still damp" puts a check off: a quarter of the interval (rounded down), at
+ * least two days — 3 days for a 14-day plant, 2 for a weekly one. The
+ * interval itself is left alone (Niko, 2026-11-13): a damp pot says this
+ * watering came early, not yet that the plant needs less water. Suggesting a
+ * longer interval after repeated damp checks is the adaptive step, later.
+ */
+export function dampSnoozeDays(intervalDays: number): number {
+	return Math.max(2, Math.floor(intervalDays / 4));
+}
+
+/** Days from the day of logging to the next check, per answer. */
+export function daysUntilNextCheck(action: CheckAction, intervalDays: number): number {
+	switch (action) {
+		case 'watered':
+			return intervalDays;
+		case 'checked-damp':
+			return dampSnoozeDays(intervalDays);
+		case 'skipped':
+			return 1;
+	}
+}
+
+/**
+ * The next check after answering one on `today`. Counted from today, not from
+ * the old due date, so a late watering doesn't bring the next check forward.
+ */
+export function nextDueAfter(action: CheckAction, today: Date, intervalDays: number): string {
+	return checkDateAfter(today, daysUntilNextCheck(action, intervalDays));
+}

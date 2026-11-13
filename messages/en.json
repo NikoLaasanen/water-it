@@ -253,5 +253,70 @@
 	"species_current": "Current",
 	"species_change_heading": "Change species",
 	"species_change_intro": "The care profile starts over from the new choice, and care fields you edited go back to its values. Name, pot, location and notes stay. Nothing is saved until you tap Save.",
-	"species_change_back": "Back to editing"
+	"species_change_back": "Back to editing",
+	"today_summary_open": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "1 to check · tap the drop when watered",
+				"countPlural=other": "{count} to check · tap the drop when watered"
+			}
+		}
+	],
+	"today_summary_done": "All done for today.",
+	"today_summary_none": "Nothing to check today.",
+	"today_next_up": "Next up: {name}, {when}.",
+	"today_no_plants": "Your plants’ checks will show up here.",
+	"today_due_today": "Today",
+	"today_overdue": [
+		{
+			"declarations": ["input days", "local daysPlural = days: plural"],
+			"selectors": ["daysPlural"],
+			"match": {
+				"daysPlural=one": "Overdue 1 day",
+				"daysPlural=other": "Overdue {days} days"
+			}
+		}
+	],
+	"today_loading": "Loading today’s checks…",
+	"today_cards_label": "Checks for today",
+	"check_watered": "Watered",
+	"check_watered_aria": "Watered {name}",
+	"check_damp": "Still damp",
+	"check_damp_aria": "{name} is still damp",
+	"check_skip": "Skip",
+	"check_skip_aria": "Skip {name} today",
+	"status_watered": "Watered",
+	"status_damp": "Still damp",
+	"status_skipped": "Skipped",
+	"status_next_watered": [
+		{
+			"declarations": ["input days", "local daysPlural = days: plural"],
+			"selectors": ["daysPlural"],
+			"match": {
+				"daysPlural=one": "Next check tomorrow",
+				"daysPlural=other": "Next check in {days} days"
+			}
+		}
+	],
+	"status_next_damp": [
+		{
+			"declarations": ["input days", "local daysPlural = days: plural"],
+			"selectors": ["daysPlural"],
+			"match": {
+				"daysPlural=one": "Checking again tomorrow",
+				"daysPlural=other": "Checking again in {days} days"
+			}
+		}
+	],
+	"status_next_skipped": "Back on the list tomorrow",
+	"check_undo": "Undo",
+	"check_undo_aria": "Undo “{status}” for {name}",
+	"today_coming_up": "Coming up",
+	"today_coming_up_none": "Nothing else scheduled yet.",
+	"today_see_all": "See all plants",
+	"today_dates_note": "Dates move when you log something. A late watering pushes the next check later.",
+	"task_check_soil": "Check soil",
+	"task_water": "Water"
 }

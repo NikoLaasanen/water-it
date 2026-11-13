@@ -265,6 +265,10 @@ type LogEntry = {
       | 'fertilized' | 'repotted' | 'pruned' | 'moved' | 'note' | 'problem';
   note?: string;
   by?: { kind: 'owner' } | { kind: 'sitter'; name?: string; shareId: string };
+  // An answer to a water check: the check as it was (for Undo; null if the
+  // plant had none) and where it moved. Added with Today, 2026-11-13.
+  check?: { before: { nextDue: string; intervalDays?: number; snoozedUntil?: string } | null;
+            nextDue: string; intervalDays: number };
 };
 
 type Share = {

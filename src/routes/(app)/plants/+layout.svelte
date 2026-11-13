@@ -11,6 +11,7 @@
   turning the iPad doesn't rebuild anything.
 -->
 <script lang="ts">
+	import { clock } from '#lib/clock.svelte.js';
 	import Plus from '@lucide/svelte/icons/plus';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
@@ -36,8 +37,8 @@
 	const selectedId = $derived(page.params.id);
 	const plants = $derived(query.sorted(getLocale()));
 
-	// See plants/+page.svelte: one date per mount, so rows agree on "today".
-	const today = new Date();
+	// One date for every row, kept current by the shared clock.
+	const today = $derived(clock.today);
 </script>
 
 {#if selectedId}

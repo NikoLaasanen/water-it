@@ -110,6 +110,20 @@ Form and control tokens (from the Add/Edit mockups; `layout.css` has both themes
   - The big square becomes a tinted square in the status colour with the status icon (check / clock / x).
   - The overdue border is removed.
 - Rejected alternatives (don't build): swipe rows, one-plant-at-a-time "watering round".
+
+Built 2026-11-13 (phone layout; `src/routes/(app)/+page.svelte`, `TodayCard.svelte`), with these decisions:
+
+- **What each answer does** (`schedule.ts`, tested): **Watered** → next check after the current season's interval, counted from today. **Still damp** → check again in a quarter of the interval, rounded down, at least 2 days (3 for a 14-day plant); the interval is **not** changed (Niko, 2026-11-13) — suggesting a longer one after repeated damp checks is the adaptive step, later. **Skip** → back tomorrow. Every answer also writes the current season's interval to the check, so a season change takes effect at the next answer.
+- **Each answer is a log entry plus the check's new date, in one batch.** The entry keeps the check as it was (`check.before`), so **Undo** restores it and deletes the entry — from any device, after a reload too. Undo is offered for the rest of the day, while nothing else has moved the check since (`canUndo`).
+- **Answered cards come from today's log**, not from memory: a plant watered this morning still shows "Watered" this afternoon. A plant shows as answered only if its check was due at the day's first answer, so watering early from plant detail doesn't put it on Today. "Still damp" then "Watered" on the same day is one card showing the latest.
+- **Order:** by the date each check was due (answered ones by their old date), then name — so a card keeps its place when answered.
+- `at` is the phone's clock, not a server timestamp: a pending server timestamp has no value offline, so "answered today" couldn't be known until the phone was back online.
+- **"Today" moves on** at local midnight and when the app comes back to the foreground (`clock.svelte.ts`), because an installed iOS app can sit open for days. The Plants list uses the same clock.
+- Seasons use the default April–September until there is a settings document.
+- The thumbnail and name link to the plant. Still damp and Skip are 44 px tall rather than the mockup's 36 (touch target rule).
+- Empty states, not designed: no plants → "Your plants' checks will show up here" + Add plant; nothing due → "Nothing to check today." plus "Next up: Pilea, Sat 21 Nov."
+- **iPad**, built the same day: from `md` the cards are a two-column grid (aligned to the top, as drawn) laid out upright, with a wide Watered button at the end of the Still damp / Skip row; answered, the badge, next step and Undo share one row. "Coming up" sits below the cards in portrait and becomes the 300 px right column from `lg`. It lists the next five checks after today — answered plants reappear there at their new date — each "Check soil", or "Water" for a plant on a fixed schedule. Other task kinds join the list when they exist. Phones keep the one-line "Next up" instead.
+- **Not yet:** "Checked, very dry", adaptive suggestions, the cold-night banner.
 - Not in v1 mockup but in the design doc: cold-night alert banner. Optional, below the cards.
 - **iPad (`tablet-today.dc.html`):** the cards go into two columns, each card laid out vertically (name and due line, hint, then Still damp / Skip on the left and a wide Watered button on the right). A **"Coming up"** column (300 px) on the right lists the next few tasks of any kind — date block (weekday + day), plant, task ("Turn the pot", "Check soil") — with a "See all plants" link and the note "Dates move when you log something. A late watering pushes the next check later." In portrait it goes below the cards. Built with the Today view in M2.
 
@@ -141,7 +155,7 @@ Built 2026-11-12, with these decisions:
 
 Built 2026-11-12 (Care tab), with these decisions:
 
-- **The Watered / Still damp buttons are not built.** Logging a check reschedules the plant, which is the scheduling work in M2, and the same two buttons are the primary action on the Today view. Built once with tests rather than wired up twice. The next-check card shows the status line only.
+- **Watered / Still damp** (built with Today, 2026-11-13) use the same writes as the Today cards. Unlike Today they are always offered, due or not — watering early is real and restarts the interval. Once answered today, the card shows the same status badge, next step and Undo as Today. "Last watered" in the mockup waits for the Log tab.
 - **Care rows with no data are dropped, not shown empty.** A plant added by hand will have only a couple of these filled in, and a column of blank values reads as a broken screen. Asserted in `labels.spec.ts` against the real compiled strings.
 - Watering reads as one sentence built from `wateringStyle` plus the two intervals, and says "Water every N days" instead of "Check every N days" when `fixedSchedule` is set — a different instruction, not different wording. The season is **not** resolved: both intervals are named, because which one applies needs `Settings.growingMonths`, and there is no settings document yet.
 - **Still missing:** the "Latest photo · 2 Nov" caption, which needs M3 photos (the header shows "No photo yet"); and the Log and Photos tabs, which are rendered `disabled` rather than hidden so the shape of the screen is honest.
@@ -281,8 +295,14 @@ Meaningful icons and field borders are held to ≥ 3:1 rather than 4.5:1 (WCAG
 1.4.11): the sun and drop glyphs clear 6.0 in dark. The light palette's own
 sun icon (`#B7791F` on `#FBF3E4`) is the tightest icon anywhere at 3.30.
 
-**Still open:** the status colours (Watered / Still damp / Skipped). They
-belong to the Today view and are picked when it is built.
+Status colours in dark (added with Today, 2026-11-13), reusing the thriving,
+edited and danger hues. Each is only drawn on its own background:
+
+| Status | Dark bg | Dark fg | fg on bg | Light fg on bg |
+|---|---|---|---|---|
+| Watered | `#1F3528` | `#8FD3A8` | 7.54 | 6.85 |
+| Still damp | `#3A3015` | `#F0D37A` | 8.86 | 6.86 |
+| Skipped | `#3A1F1C` | `#F2A39B` | 7.53 | 6.57 |
 
 ## Not designed yet
 

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
 	checkDateAfter,
+	dampSnoozeDays,
+	nextDueAfter,
 	currentIntervalDays,
 	currentSeason,
 	isGrowingSeason,
@@ -81,5 +83,34 @@ describe('rescheduleForNewInterval', () => {
 	it('leaves the date alone when nothing changed or it is unreadable', () => {
 		expect(rescheduleForNewInterval('2026-11-27', 14, 14)).toBe('2026-11-27');
 		expect(rescheduleForNewInterval('garbage', 14, 7)).toBe('garbage');
+	});
+});
+
+describe('answering a check', () => {
+	const today = day(2026, 11, 13);
+
+	it('Watered: the full interval, counted from today', () => {
+		expect(nextDueAfter('watered', today, 14)).toBe('2026-11-27');
+	});
+
+	it('Still damp: a quarter of the interval, at least two days', () => {
+		expect(dampSnoozeDays(14)).toBe(3);
+		expect(dampSnoozeDays(10)).toBe(2);
+		expect(dampSnoozeDays(7)).toBe(2);
+		expect(dampSnoozeDays(3)).toBe(2);
+		expect(dampSnoozeDays(28)).toBe(7);
+		expect(nextDueAfter('checked-damp', today, 7)).toBe('2026-11-15');
+	});
+
+	it('Skip: back tomorrow', () => {
+		expect(nextDueAfter('skipped', today, 14)).toBe('2026-11-14');
+	});
+
+	it('crosses a month end as a calendar date', () => {
+		expect(nextDueAfter('watered', day(2026, 1, 28, 23), 7)).toBe('2026-02-04');
+	});
+
+	it('is counted from today even when the check was weeks overdue', () => {
+		expect(nextDueAfter('watered', day(2026, 12, 20), 14)).toBe('2027-01-03');
 	});
 });

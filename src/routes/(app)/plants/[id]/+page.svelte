@@ -26,7 +26,6 @@
 	import { PlantQuery } from '#lib/firebase/plants.svelte.js';
 	import { session } from '#lib/firebase/session.svelte.js';
 	import { m } from '#lib/paraglide/messages.js';
-	import { nextCheck } from '#lib/plants/care.js';
 	import {
 		careOf,
 		careRows,
@@ -54,7 +53,6 @@
 	const rows = $derived(resolved ? careRows(resolved.care) : []);
 	const provenance = $derived(resolved ? provenanceLine(preset, resolved.edited) : null);
 	const species = $derived(speciesLine(preset));
-	const next = $derived(nextCheck(query.checkTask, new Date()));
 	const pot = $derived(potChip(plant?.pot));
 </script>
 
@@ -209,7 +207,7 @@
 		     until plant-sitting lands). -->
 		<div class="grid gap-5 md:grid-cols-2 md:items-start">
 			<div class="contents md:flex md:flex-col md:gap-5">
-				<div class="order-1"><NextCheckCard {next} /></div>
+				<div class="order-1"><NextCheckCard {plant} task={query.checkTask} /></div>
 			</div>
 			<div class="order-2 md:order-none">
 				<CareProfileCard {rows} {provenance} />
