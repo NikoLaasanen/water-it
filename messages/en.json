@@ -265,8 +265,7 @@
 		}
 	],
 	"today_summary_done": "All done for today.",
-	"today_summary_none": "Nothing to check today.",
-	"today_next_up": "Next up: {name}, {when}.",
+	"today_summary_none": "Nothing to water today.",
 	"today_no_plants": "Your plants’ checks will show up here.",
 	"today_due_today": "Today",
 	"today_overdue": [
@@ -315,8 +314,58 @@
 	"check_undo_aria": "Undo “{status}” for {name}",
 	"today_coming_up": "Coming up",
 	"today_coming_up_none": "Nothing else scheduled yet.",
-	"today_see_all": "See all plants",
 	"today_dates_note": "Dates move when you log something. A late watering pushes the next check later.",
 	"task_check_soil": "Check soil",
-	"task_water": "Water"
+	"task_water": "Water",
+	"caught_up_heading": "All caught up",
+	"caught_up_done_today": "Everything due today is done.",
+	"caught_up_last_watered": "Last watering {when}.",
+	"caught_up_next": "Next up is {name}, {when}.",
+	"caught_up_nothing_next": "No checks are scheduled.",
+	"when_today": "today",
+	"when_yesterday": "yesterday",
+	"when_tomorrow": "tomorrow",
+	"when_on_weekday": "on {weekday}",
+	"when_on_date": "on {date}",
+	"pill_tomorrow": "Tomorrow",
+	"week_heading": "This week",
+	"week_count": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "1 check",
+				"countPlural=other": "{count} checks"
+			}
+		}
+	],
+	"week_today": "Today",
+	"week_rest": "Rest day",
+	"week_done": "Done",
+	"week_more": "+{count} more",
+	"week_day_none_sr": "{date}: nothing due",
+	"week_day_checks_sr": "{date}: check {names}",
+	"task_check_again": "Check soil again",
+	"today_see_all": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "See your plant",
+				"countPlural=other": "See all {count} plants"
+			}
+		}
+	],
+	"tip_heading_growing": "Growing season",
+	"tip_heading_resting": "Winter care",
+	"tip_growing_1": "Plants drink more in warm weather. Check the soil a little more often.",
+	"tip_growing_2": "Give pots a quarter turn now and then so plants grow evenly.",
+	"tip_growing_3": "Spring is the time to repot: look for roots poking out of the drainage holes.",
+	"tip_growing_4": "Move plants out of harsh midday sun in a south window so the leaves don’t scorch.",
+	"tip_growing_5": "Feed during the growing season, following each plant’s fertilising interval.",
+	"tip_resting_1": "Pots near a radiator dry out faster. Lift them now and then to feel the weight.",
+	"tip_resting_2": "Light is scarce in winter. Move sun-lovers closer to the window, but keep leaves off the cold glass.",
+	"tip_resting_3": "Most plants rest now. Leave the fertiliser until spring.",
+	"tip_resting_4": "Water with room-temperature water. Cold tap water stresses the roots.",
+	"tip_resting_5": "Wipe the dust off broad leaves so they catch what little light there is."
 }

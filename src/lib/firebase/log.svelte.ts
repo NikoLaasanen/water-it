@@ -30,14 +30,25 @@ const KINDS: readonly LogKind[] = [
 	'problem'
 ];
 
+/** A check's `lastAnswer`, if it is one we can read. */
+export function readLastAnswer(data: unknown): CheckSnapshot['lastAnswer'] {
+	if (typeof data !== 'object' || data === null) return undefined;
+	const { kind, on } = data as DocumentData;
+	if (!['watered', 'checked-damp', 'skipped'].includes(kind) || typeof on !== 'string') {
+		return undefined;
+	}
+	return { kind, on };
+}
+
 function snapshotOf(data: unknown): CheckSnapshot | null {
 	if (typeof data !== 'object' || data === null) return null;
-	const { nextDue, intervalDays, snoozedUntil } = data as DocumentData;
+	const { nextDue, intervalDays, snoozedUntil, lastAnswer } = data as DocumentData;
 	if (typeof nextDue !== 'string') return null;
 	return {
 		nextDue,
 		intervalDays: typeof intervalDays === 'number' ? intervalDays : undefined,
-		snoozedUntil: typeof snoozedUntil === 'string' ? snoozedUntil : undefined
+		snoozedUntil: typeof snoozedUntil === 'string' ? snoozedUntil : undefined,
+		lastAnswer: readLastAnswer(lastAnswer)
 	};
 }
 

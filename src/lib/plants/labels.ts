@@ -19,6 +19,7 @@ import type {
 } from '#lib/types/plant.js';
 import type { NextCheck } from './care.js';
 import type { CheckAction } from './schedule.js';
+import type { DayRef } from './today.js';
 import { resolveCare, type CareField, type ResolvedCare } from './care-profile.js';
 
 /** A plant's effective care profile in the current language. */
@@ -348,4 +349,49 @@ export function longDateLabel(date: Date): string {
 		month: 'long'
 	}).format(date);
 	return text.charAt(0).toLocaleUpperCase(getLocale()) + text.slice(1);
+}
+
+/**
+ * A day inside a sentence: "yesterday", "tomorrow", "on Saturday",
+ * "on 25 November". Finnish says the weekday in the essive ("lauantaina"),
+ * which every Finnish weekday forms by adding -na to the name `Intl` gives.
+ */
+export function dayRefPhrase(ref: DayRef): string {
+	switch (ref.kind) {
+		case 'today':
+			return m.when_today();
+		case 'yesterday':
+			return m.when_yesterday();
+		case 'tomorrow':
+			return m.when_tomorrow();
+		case 'weekday': {
+			const name = new Intl.DateTimeFormat(getLocale(), { weekday: 'long' }).format(ref.date);
+			return m.when_on_weekday({ weekday: getLocale() === 'fi' ? `${name}na` : name });
+		}
+		case 'date':
+			return m.when_on_date({
+				date: new Intl.DateTimeFormat(getLocale(), { day: 'numeric', month: 'long' }).format(
+					ref.date
+				)
+			});
+	}
+}
+
+/** A day on its own, for a pill: "Tomorrow", "Mon", "Wed 25". */
+export function dayRefPill(ref: DayRef): string {
+	switch (ref.kind) {
+		case 'today':
+			return m.week_today();
+		case 'tomorrow':
+			return m.pill_tomorrow();
+		case 'yesterday':
+			// Pills only show days ahead; said as a word just in case.
+			return m.when_yesterday();
+		case 'weekday':
+			return new Intl.DateTimeFormat(getLocale(), { weekday: 'short' }).format(ref.date);
+		case 'date':
+			return new Intl.DateTimeFormat(getLocale(), { weekday: 'short', day: 'numeric' }).format(
+				ref.date
+			);
+	}
 }

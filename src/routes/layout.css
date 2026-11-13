@@ -110,6 +110,23 @@
 	--status-skipped-bg: #fbe1de;
 	--status-skipped-fg: #9b1c1c;
 
+	/* Today, nothing due (docs/mockups/today-caught-up): the "This week" day
+	   with a check (labels on it 5.53), the neutral day pill (7.38), the
+	   seasonal tip's text on --chip-sun-bg (11.08). */
+	--week-check-bg: #f2f6fb;
+	--pill-bg: #f0f2ef;
+	--pill-fg: #45514a;
+	--tip-fg: #4a300b;
+	/* The "All caught up" illustration. Decorative (aria-hidden), so no
+	   contrast floor; dark keeps the same plant, lifted. */
+	--illo-bg: #eaf3ec;
+	--illo-stem: #2f6b4f;
+	--illo-leaf-1: #5e9a78;
+	--illo-leaf-2: #2f6b4f;
+	--illo-leaf-3: #4a8564;
+	--illo-pot: #c98a5e;
+	--illo-rim: #b67749;
+
 	/* Behind the leaf glyph where a plant has no photo yet. */
 	--thumb-tint: #dcebdd;
 
@@ -207,6 +224,19 @@
 	--status-damp-fg: #f0d37a;
 	--status-skipped-bg: #3a1f1c;
 	--status-skipped-fg: #f2a39b;
+
+	/* Labels on the week day 5.73; pill 8.12; tip 8.93. */
+	--week-check-bg: #1c2734;
+	--pill-bg: #2a302c;
+	--pill-fg: #c2cbc5;
+	--tip-fg: #e8c98a;
+	--illo-bg: #1f3528;
+	--illo-stem: #8fd3a8;
+	--illo-leaf-1: #5fa97f;
+	--illo-leaf-2: #8fd3a8;
+	--illo-leaf-3: #74c495;
+	--illo-pot: #b07a52;
+	--illo-rim: #9a6640;
 
 	--thumb-tint: #22302a;
 

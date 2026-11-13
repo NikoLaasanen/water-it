@@ -6,7 +6,7 @@ A personal plant-care PWA for a handful of invited users (Niko, Niko's mum, mayb
 
 - `docs/design.md` — the design doc and source of truth: features, data model, Firestore rules sketch, architecture, milestones. Update it when a decision changes.
 - `docs/screens.md` — the chosen UI designs: tokens, components and per-screen spec.
-- `docs/mockups/*.dc.html` — mockup sources: Today, Plants, Plant detail, Add plant (two steps), Edit plant (drawn dark — the reference for dark mode), the sitter view, and iPad versions of Today, Plants and Plant detail. Reference only; they don't run on their own.
+- `docs/mockups/*.dc.html` — mockup sources: Today (and its "nothing due" version), Plants, Plant detail, Add plant (two steps), Edit plant (drawn dark — the reference for dark mode), the sitter view, and iPad versions of Today, Plants and Plant detail. Reference only; they don't run on their own.
 - `docs/open-decisions.md` — technical choices with reasons; anything not yet decided is listed there.
 
 ## Stack (decided)
@@ -36,7 +36,7 @@ A personal plant-care PWA for a handful of invited users (Niko, Niko's mum, mayb
 
 PWA shell (installable, offline) → Firebase wiring + Auth + rules → Plants list, Plant detail (Care tab), Add/Edit plant, bundled species presets (Pilea, Dracaena marginata, tree aloe, Crassula, spineless yucca, generic succulent and tropical foliage). Test sign-in in the installed iPhone app early.
 
-Status 2026-11-13: all of the above is built and live, plus the iPad layouts and Settings (language, appearance). Changing an existing plant's species was added the same day. The Perenual/Trefle lookup spike is postponed (Niko, 2026-11-13). M2 has started: the Today page (phone layout) with Watered / Still damp / Skip and Undo, also on plant detail; iPad layout included. See `docs/design.md` §11 for M2–M5.
+Status 2026-11-13: all of the above is built and live, plus the iPad layouts and Settings (language, appearance). Changing an existing plant's species was added the same day. The Perenual/Trefle lookup spike is postponed (Niko, 2026-11-13). M2 has started: the Today page (phone layout) with Watered / Still damp / Skip and Undo, also on plant detail; iPad layout included, plus the "All caught up" screen for days with nothing due. See `docs/design.md` §11 for M2–M5.
 
 ## Ask before
 

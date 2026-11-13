@@ -255,6 +255,7 @@ type Task = {
   nextDue: string;             // local date, YYYY-MM-DD
   intervalDays?: number;       // recurring
   snoozedUntil?: string;       // local date, YYYY-MM-DD
+  lastAnswer?: { kind: 'watered' | 'checked-damp' | 'skipped'; on: string }; // on = local date; written with each answer, restored by Undo
 };
 
 type LogEntry = {

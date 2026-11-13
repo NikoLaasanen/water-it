@@ -137,22 +137,6 @@ export function todayCards(
 		.map(({ card }) => card);
 }
 
-/** The next check coming up after today, for the "nothing to do" state. */
-export function nextUpcoming(
-	plants: readonly Plant[],
-	tasks: readonly Task[],
-	today: Date
-): { plant: Plant; due: Date } | null {
-	let best: { plant: Plant; due: Date } | null = null;
-	for (const task of tasks) {
-		const due = effectiveDueDate(task);
-		const plant = plants.find((p) => p.id === task.plantId);
-		if (!due || !plant || differenceInCalendarDays(due, today) <= 0) continue;
-		if (!best || due < best.due) best = { plant, due };
-	}
-	return best;
-}
-
 /**
  * The "Coming up" column on iPad (screens.md "Today"): the next checks after
  * today, soonest first. Only water checks exist so far; other task kinds join
@@ -173,4 +157,64 @@ export function comingUp(
 	return rows
 		.sort((a, b) => a.due.getTime() - b.due.getTime() || a.plant.name.localeCompare(b.plant.name))
 		.slice(0, limit);
+}
+
+/** A day said relative to today: "yesterday", "tomorrow", "on Saturday", "on 25 Nov". */
+export type DayRef =
+	| { kind: 'today' }
+	| { kind: 'yesterday' }
+	| { kind: 'tomorrow' }
+	| { kind: 'weekday'; date: Date }
+	| { kind: 'date'; date: Date };
+
+/**
+ * A weekday names one day only within six days either side; past that the
+ * date is said instead, as on the Plants list.
+ */
+export function dayRef(date: Date, today: Date): DayRef {
+	const days = differenceInCalendarDays(date, today);
+	if (days === 0) return { kind: 'today' };
+	if (days === -1) return { kind: 'yesterday' };
+	if (days === 1) return { kind: 'tomorrow' };
+	return Math.abs(days) < 7 ? { kind: 'weekday', date } : { kind: 'date', date };
+}
+
+/** The most recent day any plant was watered, from the checks' `lastAnswer`. */
+export function lastWatered(tasks: readonly Task[]): Date | null {
+	let latest: Date | null = null;
+	for (const task of tasks) {
+		if (task.lastAnswer?.kind !== 'watered') continue;
+		const on = parseLocalDate(task.lastAnswer.on);
+		if (on && (!latest || on > latest)) latest = on;
+	}
+	return latest;
+}
+
+/** One day of the "This week" strip and the plants checked on it. */
+export type WeekDay = { date: Date; plants: Plant[] };
+
+/**
+ * Seven days from today, each with the plants whose next check falls on it.
+ * Only the actual next check, never a guessed repeat (Niko, 2026-11-13):
+ * dates move whenever something is logged, so a projection would mislead.
+ */
+export function weekAhead(
+	plants: readonly Plant[],
+	tasks: readonly Task[],
+	today: Date,
+	locale: string
+): WeekDay[] {
+	const days: WeekDay[] = Array.from({ length: 7 }, (_, offset) => ({
+		date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + offset),
+		plants: []
+	}));
+	for (const task of tasks) {
+		const due = effectiveDueDate(task);
+		const plant = plants.find((p) => p.id === task.plantId);
+		if (!due || !plant) continue;
+		const offset = differenceInCalendarDays(due, today);
+		if (offset >= 0 && offset < 7) days[offset].plants.push(plant);
+	}
+	for (const day of days) day.plants.sort((a, b) => a.name.localeCompare(b.name, locale));
+	return days;
 }

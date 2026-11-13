@@ -7,6 +7,7 @@ Build mobile-first at **390 px** wide (iPhone), then the iPad layouts from the t
 | Mockup | Screen |
 |---|---|
 | `today.dc.html`, `tablet-today.dc.html` | Today, phone and iPad landscape |
+| `today-caught-up.dc.html`, `tablet-today-caught-up.dc.html` | Today with nothing due ("All caught up"), phone and iPad landscape |
 | `plants.dc.html`, `tablet-plants.dc.html` | Plants list |
 | `plant-detail.dc.html`, `tablet-plant-detail.dc.html` | Plant detail (iPad: list + detail side by side) |
 | `add-plant-species.dc.html` | Add plant, step 1: choose a species |
@@ -124,6 +125,18 @@ Built 2026-11-13 (phone layout; `src/routes/(app)/+page.svelte`, `TodayCard.svel
 - Empty states, not designed: no plants → "Your plants' checks will show up here" + Add plant; nothing due → "Nothing to check today." plus "Next up: Pilea, Sat 21 Nov."
 - **iPad**, built the same day: from `md` the cards are a two-column grid (aligned to the top, as drawn) laid out upright, with a wide Watered button at the end of the Still damp / Skip row; answered, the badge, next step and Undo share one row. "Coming up" sits below the cards in portrait and becomes the 300 px right column from `lg`. It lists the next five checks after today — answered plants reappear there at their new date — each "Check soil", or "Water" for a plant on a fixed schedule. Other task kinds join the list when they exist. Phones keep the one-line "Next up" instead.
 - **Not yet:** "Checked, very dry", adaptive suggestions, the cold-night banner.
+
+### Today — nothing due (`today-caught-up.dc.html`, `tablet-today-caught-up.dc.html`)
+
+Niko's design for when nothing is left to answer, which is also what the app opens on most days. Built 2026-11-13:
+
+- Summary "Nothing to water today." (or "All done for today." once something was answered today), then an **"All caught up"** card: a small drawn plant with a check (tokens `--illo-*`, so it follows dark mode), the heading, and "Last watering on Wednesday. Next up is Yucca, tomorrow." — or "Everything due today is done." on a day something was answered.
+- **Answered cards stay under that card until midnight** (Niko, 2026-11-13), so Undo is still in reach; the next morning the screen is the design as drawn.
+- **This week:** seven days from today with a drop on days with a check, a dot on the rest, and the week's count; iPad names the plants under the drop (two, then "+N more"), "Rest day" on empty days, "Done" on today once dealt with. **Only each plant's actual next check**, never a guessed repeat from its interval (Niko, 2026-11-13): dates move with every answer. Each day reads as one sentence to a screen reader.
+- **Coming up:** on the phone a card of rows (thumbnail, name, "Check soil · Kitchen window", a day pill "Tomorrow" / "Mon" / "Wed 25"); on iPad the column's date tiles. Tomorrow is picked out in the water colours. "Check soil again" when the last answer was Still damp; "Water" for a fixed schedule. Rows open the plant.
+- **Seasonal tip:** five bundled tips per season (growing / winter), one a day in turn, in the Paraglide messages (`tip_growing_*`, `tip_resting_*`). Drafted by Claude; Niko to read and edit.
+- **"See all N plants"**: an outlined button on the phone, the link in the iPad column. On iPad the tip replaces the dates note in the column.
+- "Last watering …" and "Check soil again" read the check's `lastAnswer` (design.md §6), written with every answer and restored by Undo. Checks answered before it existed don't have one, and the sentence then just says what's next.
 - Not in v1 mockup but in the design doc: cold-night alert banner. Optional, below the cards.
 - **iPad (`tablet-today.dc.html`):** the cards go into two columns, each card laid out vertically (name and due line, hint, then Still damp / Skip on the left and a wide Watered button on the right). A **"Coming up"** column (300 px) on the right lists the next few tasks of any kind — date block (weekday + day), plant, task ("Turn the pot", "Check soil") — with a "See all plants" link and the note "Dates move when you log something. A late watering pushes the next check later." In portrait it goes below the cards. Built with the Today view in M2.
 

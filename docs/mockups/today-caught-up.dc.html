@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Today — all caught up</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2F6B4F}a:hover{color:#1F4A36}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 1120px; box-sizing: border-box; position: relative; background: #F3F5F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1B241F; overflow: hidden">
+  <div style="padding: 56px 20px 120px; display: flex; flex-direction: column; gap: 16px">
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <div style="font-size: 13px; font-weight: 600; color: #5A665F; letter-spacing: 0.02em">Friday 13 November</div>
+      <h1 style="margin: 0; font-size: 34px; font-weight: 800; letter-spacing: -0.02em">Today</h1>
+      <div style="font-size: 15px; color: #45514A">Nothing to water today.</div>
+    </div>
+
+    <section aria-label="All caught up" style="background: #FFFFFF; border-radius: 18px; padding: 20px 18px 18px; box-shadow: 0 1px 2px rgba(20,40,30,0.06); display: flex; align-items: center; gap: 16px">
+      <svg width="96" height="96" viewBox="0 0 96 96" aria-hidden="true" style="flex: none">
+        <circle cx="48" cy="48" r="46" fill="#EAF3EC"></circle>
+        <path d="M48 58 C48 46 48 38 48 30" stroke="#2F6B4F" stroke-width="3" stroke-linecap="round" fill="none"></path>
+        <path d="M48 44 C38 44 30 38 29 28 C40 27 47 33 48 44 Z" fill="#5E9A78"></path>
+        <path d="M48 38 C58 38 66 31 67 21 C56 20 49 27 48 38 Z" fill="#2F6B4F"></path>
+        <path d="M48 52 C56 52 62 48 63 41 C55 40 49 45 48 52 Z" fill="#4A8564"></path>
+        <path d="M31 58 H65 L61 80 a4 4 0 0 1 -4 3 H39 a4 4 0 0 1 -4 -3 Z" fill="#C98A5E"></path>
+        <rect x="29" y="55" width="38" height="7" rx="3" fill="#B67749"></rect>
+        <circle cx="72" cy="66" r="12" fill="#DDF0E2" stroke="#FFFFFF" stroke-width="3"></circle>
+        <path d="M66.5 66.5 l3.5 3.5 l7 -7" stroke="#1F5A36" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+      </svg>
+      <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+        <h2 style="margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.01em">All caught up</h2>
+        <p style="margin: 0; font-size: 14px; line-height: 1.45; color: #2E3933">Every plant was checked on Wednesday. Next up is the Yucca, tomorrow.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="wk" style="background: #FFFFFF; border-radius: 18px; padding: 14px 12px 12px; box-shadow: 0 1px 2px rgba(20,40,30,0.06); display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 0 4px">
+        <h2 id="wk" style="margin: 0; font-size: 13px; font-weight: 700; color: #5A665F; text-transform: uppercase; letter-spacing: 0.06em">This week</h2>
+        <span style="font-size: 13px; color: #45514A">3 checks</span>
+      </div>
+      <ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px">
+        <sc-for list="{{days}}" as="d" hint-placeholder-count="7">
+          <li style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 0 10px; border-radius: 12px; background: {{d.bg}}; border: 1.5px solid {{d.border}}">
+            <span style="font-size: 11px; font-weight: 700; color: {{d.labelC}}">{{d.dow}}</span>
+            <span style="font-size: 16px; font-weight: 800; color: #1B241F">{{d.num}}</span>
+            <sc-if value="{{d.has}}" hint-placeholder-val="{{ false }}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#2B5F9E" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg>
+            </sc-if>
+            <sc-if value="{{d.none}}" hint-placeholder-val="{{ true }}">
+              <span aria-hidden="true" style="width: 16px; height: 16px; display: flex; align-items: center; justify-content: center"><span style="width: 5px; height: 5px; border-radius: 999px; background: #C9D3CC"></span></span>
+            </sc-if>
+            <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">{{d.sr}}</span>
+          </li>
+        </sc-for>
+      </ol>
+    </section>
+
+    <section aria-labelledby="cu" style="display: flex; flex-direction: column; gap: 8px">
+      <h2 id="cu" style="margin: 6px 4px 0; font-size: 13px; font-weight: 700; color: #5A665F; text-transform: uppercase; letter-spacing: 0.06em">Coming up</h2>
+      <div style="background: #FFFFFF; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,40,30,0.06); display: flex; flex-direction: column; overflow: hidden">
+        <sc-for list="{{coming}}" as="c" hint-placeholder-count="4">
+          <a href="PlantDetail.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 10px 14px 10px 10px; min-height: 64px; box-sizing: border-box; border-top: 1px solid {{c.line}}; text-decoration: none; color: #1B241F">
+            <div style="width: 44px; height: 44px; flex: none; border-radius: 12px; background: {{c.tint}}; display: flex; align-items: center; justify-content: center; color: #2F6B4F"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg></div>
+            <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+              <span style="font-size: 15px; font-weight: 700">{{c.name}}</span>
+              <span style="font-size: 13px; color: #45514A">{{c.what}}</span>
+            </div>
+            <span style="flex: none; padding: 5px 10px; border-radius: 999px; background: {{c.pillBg}}; color: {{c.pillFg}}; font-size: 13px; font-weight: 700">{{c.when}}</span>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-label="Seasonal tip" style="background: #FBF3E4; border-radius: 18px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start">
+      <div style="width: 36px; height: 36px; flex: none; border-radius: 10px; background: #FFFFFF; color: #B7791F; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"></path></svg></div>
+      <div style="display: flex; flex-direction: column; gap: 3px">
+        <span style="font-size: 12px; font-weight: 700; color: #6B4510; text-transform: uppercase; letter-spacing: 0.06em">Winter care</span>
+        <span style="font-size: 14px; line-height: 1.45; color: #4A300B">Pots near a radiator dry out faster. Lift them when you walk past.</span>
+      </div>
+    </section>
+
+    <a href="Plants.dc.html" style="display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 16px; border-radius: 14px; border: 1.5px solid #C9D3CC; text-decoration: none; color: #1B241F; font-size: 14px; font-weight: 700">
+      <span>See all 5 plants</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+    </a>
+  </div>
+
+  <nav aria-label="Main" style="position: absolute; left: 0; right: 0; bottom: 0; height: 84px; box-sizing: border-box; padding: 8px 12px 24px; background: rgba(255,255,255,0.96); border-top: 1px solid #E1E6E2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr))">
+    <a href="TodayCaughtUp.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #2F6B4F; text-decoration: none; font-size: 11px; font-weight: 700">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg>
+      Today
+    </a>
+    <a href="Plants.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #5A665F; text-decoration: none; font-size: 11px; font-weight: 600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>
+      Plants
+    </a>
+    <a href="TodayCaughtUp.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #5A665F; text-decoration: none; font-size: 11px; font-weight: 600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+      Photos
+    </a>
+    <a href="TodayCaughtUp.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #5A665F; text-decoration: none; font-size: 11px; font-weight: 600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      Settings
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1120}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var raw = [
+      ['Fri', '13', 0, 'Friday 13, today: nothing due'],
+      ['Sat', '14', 1, 'Saturday 14: 1 check'],
+      ['Sun', '15', 0, 'Sunday 15: nothing due'],
+      ['Mon', '16', 1, 'Monday 16: 1 check'],
+      ['Tue', '17', 0, 'Tuesday 17: nothing due'],
+      ['Wed', '18', 0, 'Wednesday 18: nothing due'],
+      ['Thu', '19', 1, 'Thursday 19: 1 check']
+    ];
+    var days = raw.map(function (r, i) {
+      var today = i === 0;
+      return {
+        dow: today ? 'Today' : r[0], num: r[1], has: r[2] > 0, none: r[2] === 0, sr: r[3],
+        bg: today ? '#EAF3EC' : (r[2] > 0 ? '#F2F6FB' : '#FFFFFF'),
+        border: today ? '#2F6B4F' : 'transparent',
+        labelC: today ? '#2F6B4F' : '#5A665F'
+      };
+    });
+    var coming = [
+      { name: 'Yucca', what: 'Check soil again · TV stand', when: 'Tomorrow', tint: '#E8E6D6', soon: true },
+      { name: 'Dracaena', what: 'Check soil · rooting cutting', when: 'Mon', tint: '#E3E9D5' },
+      { name: 'Tree aloe', what: 'Check soil · Kitchen window', when: 'Thu', tint: '#E1EBE0' },
+      { name: 'Pilea', what: 'Check soil · Living room window', when: 'Wed 25', tint: '#DCEBDD' }
+    ].map(function (c, i) {
+      return Object.assign({}, c, {
+        line: i === 0 ? 'transparent' : '#E8ECE8',
+        pillBg: c.soon ? '#E6EEF7' : '#F0F2EF',
+        pillFg: c.soon ? '#1D3E63' : '#45514A'
+      });
+    });
+    return { days: days, coming: coming };
+  }
+}
+</script>
+</body>
+</html>

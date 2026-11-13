@@ -16,6 +16,7 @@ import {
 } from 'firebase/firestore';
 import { createContext } from 'svelte';
 import { db } from './client';
+import { readLastAnswer } from './log.svelte.js';
 import { readOverrides } from '#lib/plants/care-profile.js';
 import type {
 	Health,
@@ -81,6 +82,11 @@ function toPlant(id: string, data: DocumentData): Plant | null {
 		careOverrides: readOverrides(data.careOverrides),
 		createdAt: data.createdAt
 	};
+}
+
+/** A stored check, with `lastAnswer` checked: Today builds sentences from it. */
+function toTask(id: string, data: DocumentData): Task {
+	return { ...(data as Omit<Task, 'id'>), id, lastAnswer: readLastAnswer(data.lastAnswer) };
 }
 
 export class PlantsQuery {
@@ -152,7 +158,7 @@ export class PlantsQuery {
 			// One equality filter needs no composite index.
 			query(collection(db, 'users', uid, 'tasks'), where('kind', '==', 'check-water')),
 			(snapshot) => {
-				this.checkTasks = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as Task);
+				this.checkTasks = snapshot.docs.map((doc) => toTask(doc.id, doc.data()));
 				this.#settle('tasks');
 			},
 			this.#onError
@@ -219,9 +225,7 @@ export class PlantQuery {
 				where('plantId', '==', plantId)
 			),
 			(snapshot) => {
-				this.checkTask = snapshot.docs
-					.map((task) => ({ ...task.data(), id: task.id }) as Task)
-					.at(0);
+				this.checkTask = snapshot.docs.map((task) => toTask(task.id, task.data())).at(0);
 				this.#settle('task');
 			},
 			this.#onError

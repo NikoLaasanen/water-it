@@ -1,23 +1,34 @@
 <!--
-  Today — the home screen (docs/mockups/today.dc.html, screens.md "Today").
+  Today — the home screen (screens.md "Today").
 
-  One card per plant whose water check is due, overdue first. Answering a
-  card (Watered / Still damp / Skip) logs it and moves the check; the card
-  stays in place in its answered state, with Undo, for the rest of the day —
-  after a reload too, because the answered state is read from today's log.
+  With checks to answer (docs/mockups/today.dc.html): one card per plant
+  whose water check is due, overdue first. Answering a card (Watered / Still
+  damp / Skip) logs it and moves the check; the card stays in place in its
+  answered state, with Undo, for the rest of the day — after a reload too,
+  because the answered state is read from today's log.
 
-  iPad (docs/mockups/tablet-today.dc.html): from `md` the cards go into two
-  columns and "Coming up" (the next checks after today) sits below them; from
-  `lg` it is a 300 px column on the right. Phones have the one-line "Next up"
-  instead, shown when nothing is left for today.
+  Nothing left to answer (docs/mockups: TodayCaughtUp): an "All caught up"
+  card, then any cards answered today (so Undo stays in reach until
+  midnight), "This week", "Coming up", a seasonal tip and a link to all
+  plants.
+
+  iPad (tablet-today, TabletTodayCaughtUp): from `md` the cards go into two
+  columns and the "Coming up" column sits below; from `lg` it is a 300 px
+  column on the right. On the nothing-due screen the tip moves into that
+  column.
 
   "Today" comes from the shared clock, which moves on at midnight and when the
   app is reopened, so a Home Screen app left open for days doesn't show stale
   checks.
 -->
 <script lang="ts">
+	import ChevronRight from '@lucide/svelte/icons/chevron-right';
 	import { resolve } from '$app/paths';
 	import TodayCard from '#lib/components/plant/TodayCard.svelte';
+	import CaughtUpCard from '#lib/components/today/CaughtUpCard.svelte';
+	import ComingUpList from '#lib/components/today/ComingUpList.svelte';
+	import SeasonTip from '#lib/components/today/SeasonTip.svelte';
+	import WeekStrip from '#lib/components/today/WeekStrip.svelte';
 	import { clock } from '#lib/clock.svelte.js';
 	import { answerCheck, undoAnswer } from '#lib/firebase/check-writes.js';
 	import { LogSince } from '#lib/firebase/log.svelte.js';
@@ -25,9 +36,15 @@
 	import { session } from '#lib/firebase/session.svelte.js';
 	import { m } from '#lib/paraglide/messages.js';
 	import { getLocale } from '#lib/paraglide/runtime.js';
-	import { careOf, longDateLabel, shortDateLabel } from '#lib/plants/labels.js';
+	import { careOf, longDateLabel } from '#lib/plants/labels.js';
 	import { currentIntervalDays, type CheckAction } from '#lib/plants/schedule.js';
-	import { comingUp, nextUpcoming, todayCards, type TodayCard as Card } from '#lib/plants/today.js';
+	import {
+		comingUp,
+		lastWatered,
+		todayCards,
+		weekAhead,
+		type TodayCard as Card
+	} from '#lib/plants/today.js';
 
 	const plants = new PlantsQuery();
 	const log = new LogSince();
@@ -51,13 +68,11 @@
 		todayCards(plants.plants, plants.checkTasks, log.entries, today, getLocale())
 	);
 	const open = $derived(cards.filter((card) => card.state === 'open').length);
-	const upcoming = $derived(
-		open === 0 ? nextUpcoming(plants.plants, plants.checkTasks, today) : null
-	);
+	const caughtUp = $derived(open === 0);
+	const answeredToday = $derived(cards.length > 0);
 	const loading = $derived(plants.loading || log.loading);
 	const upcomingRows = $derived(comingUp(plants.plants, plants.checkTasks, today));
-
-	const weekday = $derived(new Intl.DateTimeFormat(getLocale(), { weekday: 'short' }));
+	const week = $derived(weekAhead(plants.plants, plants.checkTasks, today, getLocale()));
 
 	function answer(card: Card, action: CheckAction) {
 		const uid = session.user?.uid;
@@ -80,7 +95,7 @@
 <main
 	class="flex max-w-3xl flex-col gap-5 px-5 pt-14 pb-10 md:px-8 md:pt-10 lg:max-w-none lg:flex-row lg:items-start lg:gap-6"
 >
-	<div class="flex min-w-0 flex-1 flex-col gap-5">
+	<div class="flex min-w-0 flex-1 flex-col gap-4 md:gap-5">
 		<header class="flex flex-col gap-1">
 			<p class="text-[13px] font-semibold tracking-[0.02em] text-muted-2">
 				{longDateLabel(today)}
@@ -93,7 +108,7 @@
 				<p class="text-[15px] text-muted" role="status">
 					{#if open > 0}
 						{m.today_summary_open({ count: open })}
-					{:else if cards.length > 0}
+					{:else if answeredToday}
 						{m.today_summary_done()}
 					{:else if plants.plants.length > 0}
 						{m.today_summary_none()}
@@ -115,6 +130,15 @@
 				</a>
 			</div>
 		{:else}
+			{#if caughtUp}
+				<CaughtUpCard
+					{today}
+					{answeredToday}
+					lastWatered={lastWatered(plants.checkTasks)}
+					next={upcomingRows[0] ?? null}
+				/>
+			{/if}
+
 			{#if cards.length > 0}
 				<ul
 					class="flex flex-col gap-2.5 md:grid md:grid-cols-2 md:items-start md:gap-3"
@@ -131,10 +155,34 @@
 					{/each}
 				</ul>
 			{/if}
-			{#if upcoming}
-				<p class="text-sm text-muted md:hidden">
-					{m.today_next_up({ name: upcoming.plant.name, when: shortDateLabel(upcoming.due) })}
-				</p>
+
+			{#if caughtUp}
+				<WeekStrip {week} {answeredToday} />
+
+				<!-- Phone only: iPad has these in the column beside or below. -->
+				{#if upcomingRows.length > 0}
+					<section aria-labelledby="coming-up-phone" class="flex flex-col gap-2 md:hidden">
+						<h2
+							id="coming-up-phone"
+							class="mx-1 mt-1.5 text-[13px] font-bold tracking-[0.06em] text-muted-2 uppercase"
+						>
+							{m.today_coming_up()}
+						</h2>
+						<div
+							class="overflow-hidden rounded-[18px] bg-surface shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
+						>
+							<ComingUpList rows={upcomingRows} {today} variant="pill" />
+						</div>
+					</section>
+				{/if}
+				<div class="md:hidden"><SeasonTip {today} /></div>
+				<a
+					href={resolve('/(app)/plants')}
+					class="flex min-h-12 items-center justify-between rounded-[14px] border-[1.5px] border-border px-4 text-sm font-bold text-ink no-underline md:hidden"
+				>
+					<span>{m.today_see_all({ count: plants.plants.length })}</span>
+					<ChevronRight size={18} strokeWidth={2.2} aria-hidden="true" />
+				</a>
 			{/if}
 		{/if}
 	</div>
@@ -156,41 +204,20 @@
 				{#if upcomingRows.length === 0}
 					<p class="py-3 text-sm text-muted">{m.today_coming_up_none()}</p>
 				{:else}
-					<ul class="flex flex-col">
-						{#each upcomingRows as row (row.task.id)}
-							<li class="flex gap-3 border-b py-3" style:border-color="var(--line)">
-								<!-- The date block is drawn for the eye; the sr-only line
-								     gives a screen reader the whole date. -->
-								<span
-									class="flex w-11 flex-none flex-col items-center justify-center rounded-xl bg-bg py-1.5"
-									aria-hidden="true"
-								>
-									<span class="text-[11px] font-bold text-muted-2 uppercase">
-										{weekday.format(row.due)}
-									</span>
-									<span class="text-lg leading-tight font-extrabold text-ink">
-										{row.due.getDate()}
-									</span>
-								</span>
-								<span class="flex min-w-0 flex-col justify-center gap-0.5">
-									<span class="sr-only">{shortDateLabel(row.due)}:</span>
-									<span class="truncate text-[15px] font-bold text-ink">{row.plant.name}</span>
-									<span class="text-[13px] text-muted">
-										{careOf(row.plant).care.fixedSchedule ? m.task_water() : m.task_check_soil()}
-									</span>
-								</span>
-							</li>
-						{/each}
-					</ul>
+					<ComingUpList rows={upcomingRows} {today} variant="tile" />
 				{/if}
 				<a
 					href={resolve('/(app)/plants')}
 					class="flex min-h-12 items-center text-sm font-bold text-link"
 				>
-					{m.today_see_all()}
+					{m.today_see_all({ count: plants.plants.length })}
 				</a>
 			</div>
-			<p class="text-xs leading-[1.45] text-muted-2">{m.today_dates_note()}</p>
+			{#if caughtUp}
+				<div class="mt-2"><SeasonTip {today} /></div>
+			{:else}
+				<p class="text-xs leading-[1.45] text-muted-2">{m.today_dates_note()}</p>
+			{/if}
 		</aside>
 	{/if}
 </main>

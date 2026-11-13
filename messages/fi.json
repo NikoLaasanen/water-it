@@ -274,8 +274,7 @@
 		}
 	],
 	"today_summary_done": "Kaikki tehty tältä päivältä.",
-	"today_summary_none": "Tänään ei ole tarkistettavaa.",
-	"today_next_up": "Seuraavaksi: {name}, {when}.",
+	"today_summary_none": "Tänään ei ole kasteltavaa.",
 	"today_no_plants": "Kasviesi tarkistukset näkyvät tässä.",
 	"today_due_today": "Tänään",
 	"today_overdue": [
@@ -324,8 +323,58 @@
 	"check_undo_aria": "Kumoa ”{status}”: {name}",
 	"today_coming_up": "Tulossa",
 	"today_coming_up_none": "Muuta ei ole vielä aikataulussa.",
-	"today_see_all": "Näytä kaikki kasvit",
 	"today_dates_note": "Päivät siirtyvät, kun kirjaat jotain. Myöhässä tehty kastelu siirtää seuraavaa tarkistusta myöhemmäksi.",
 	"task_check_soil": "Tarkista multa",
-	"task_water": "Kastele"
+	"task_water": "Kastele",
+	"caught_up_heading": "Kaikki hoidettu",
+	"caught_up_done_today": "Kaikki tämän päivän tarkistukset on tehty.",
+	"caught_up_last_watered": "Viimeksi kasteltu {when}.",
+	"caught_up_next": "Seuraavaksi vuorossa {name}, {when}.",
+	"caught_up_nothing_next": "Tarkistuksia ei ole aikataulussa.",
+	"when_today": "tänään",
+	"when_yesterday": "eilen",
+	"when_tomorrow": "huomenna",
+	"when_on_weekday": "{weekday}",
+	"when_on_date": "{date}",
+	"pill_tomorrow": "Huomenna",
+	"week_heading": "Tämä viikko",
+	"week_count": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "1 tarkistus",
+				"countPlural=other": "{count} tarkistusta"
+			}
+		}
+	],
+	"week_today": "Tänään",
+	"week_rest": "Lepopäivä",
+	"week_done": "Tehty",
+	"week_more": "+{count} muuta",
+	"week_day_none_sr": "{date}: ei tarkistuksia",
+	"week_day_checks_sr": "{date}: tarkista {names}",
+	"task_check_again": "Tarkista multa uudelleen",
+	"today_see_all": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "Näytä kasvisi",
+				"countPlural=other": "Näytä kaikki {count} kasvia"
+			}
+		}
+	],
+	"tip_heading_growing": "Kasvukausi",
+	"tip_heading_resting": "Talvihoito",
+	"tip_growing_1": "Lämpimällä säällä kasvit juovat enemmän. Tarkista multa hieman useammin.",
+	"tip_growing_2": "Käännä ruukkua välillä neljänneskierros, niin kasvi kasvaa tasaisesti.",
+	"tip_growing_3": "Kevät on ruukunvaihdon aikaa: katso, työntyvätkö juuret pohjareikien läpi.",
+	"tip_growing_4": "Siirrä kasvit pois eteläikkunan kovasta keskipäivän auringosta, etteivät lehdet pala.",
+	"tip_growing_5": "Lannoita kasvukaudella kunkin kasvin lannoitusvälin mukaan.",
+	"tip_resting_1": "Patterin lähellä ruukut kuivuvat nopeammin. Nosta niitä välillä ja tunnustele painoa.",
+	"tip_resting_2": "Talvella valoa on vähän. Siirrä valoa rakastavat lähemmäs ikkunaa, mutta pidä lehdet irti kylmästä lasista.",
+	"tip_resting_3": "Useimmat kasvit lepäävät nyt. Jätä lannoitus kevääseen.",
+	"tip_resting_4": "Kastele huoneenlämpöisellä vedellä. Kylmä hanavesi rasittaa juuria.",
+	"tip_resting_5": "Pyyhi pölyt leveiltä lehdiltä, jotta ne saavat vähäisestäkin valosta kaiken irti."
 }

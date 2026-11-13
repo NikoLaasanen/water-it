@@ -121,6 +121,12 @@ export type Task = {
 	intervalDays?: number;
 	/** Local calendar date, `YYYY-MM-DD`. */
 	snoozedUntil?: string;
+	/**
+	 * The latest answer to this check and the local day it was given. Kept
+	 * on the check so Today can say "last watered on Wednesday" and "check
+	 * soil again" without reading the log. Older checks may not have it.
+	 */
+	lastAnswer?: { kind: 'watered' | 'checked-damp' | 'skipped'; on: string };
 };
 
 export type LogKind =
@@ -136,7 +142,7 @@ export type LogKind =
 	| 'problem';
 
 /** The water check as it stood before an answer was logged, for Undo. */
-export type CheckSnapshot = Pick<Task, 'nextDue' | 'intervalDays' | 'snoozedUntil'>;
+export type CheckSnapshot = Pick<Task, 'nextDue' | 'intervalDays' | 'snoozedUntil' | 'lastAnswer'>;
 
 export type LogEntry = {
 	id: string;

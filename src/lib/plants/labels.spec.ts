@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { careRows, nextCheckDetailLabel, potChip, provenanceLine, speciesLine } from './labels.js';
+import {
+	careRows,
+	dayRefPhrase,
+	dayRefPill,
+	nextCheckDetailLabel,
+	potChip,
+	provenanceLine,
+	speciesLine
+} from './labels.js';
 import { presetById } from '#lib/presets/index.js';
 import type { CareProfile } from '#lib/types/plant.js';
 
@@ -164,5 +172,19 @@ describe('potChip', () => {
 		expect(potChip({ topLayer: 'gravel' })).toBe('Gravel');
 		expect(potChip({})).toBeNull();
 		expect(potChip(undefined)).toBeNull();
+	});
+});
+
+describe('dayRefPhrase and dayRefPill', () => {
+	const sat = new Date(2026, 10, 14);
+	it('reads naturally in a sentence and on a pill', () => {
+		expect(dayRefPhrase({ kind: 'tomorrow' })).toBe('tomorrow');
+		expect(dayRefPhrase({ kind: 'weekday', date: sat })).toBe('on Saturday');
+		// Day and month order is Intl's for the locale, as on every other date.
+		expect(dayRefPhrase({ kind: 'date', date: new Date(2026, 10, 25) })).toMatch(
+			/^on (25 November|November 25)$/
+		);
+		expect(dayRefPill({ kind: 'tomorrow' })).toBe('Tomorrow');
+		expect(dayRefPill({ kind: 'weekday', date: sat })).toBe('Sat');
 	});
 });

@@ -238,17 +238,25 @@ for (const plant of PLANTS) {
 	// `check-water-<plant>` (checkTaskId in plant-writes.ts). Drop the old one so
 	// a plant doesn't end up with two checks.
 	await remove(`users/${user.localId}/tasks/check-${plant.id}`);
+	// The plant's own interval if it overrides one, else its preset's.
+	const intervalDays = (
+		plant.careOverrides.checkIntervalDays ??
+		presets.find((preset) => preset.id === plant.speciesId).care.checkIntervalDays
+	).growing;
 	await put(
 		`users/${user.localId}/tasks/check-water-${plant.id}`,
 		toFields({
 			plantId: plant.id,
 			kind: 'check-water',
 			nextDue: dayOffset(plant.dueIn),
-			// The plant's own interval if it overrides one, else its preset's.
-			intervalDays: (
-				plant.careOverrides.checkIntervalDays ??
-				presets.find((preset) => preset.id === plant.speciesId).care.checkIntervalDays
-			).growing
+			intervalDays,
+			// What Today's "Last watering on …" and "Check soil again" read.
+			// Watered one interval before the check, except the Crassula, which
+			// was found still damp yesterday.
+			lastAnswer:
+				plant.id === 'crassula'
+					? { kind: 'checked-damp', on: dayOffset(-1) }
+					: { kind: 'watered', on: dayOffset(plant.dueIn - intervalDays) }
 		})
 	);
 }

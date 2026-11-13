@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import type { LogEntry, Plant, Task } from '#lib/types/plant.js';
-import { canUndo, comingUp, latestAnswerFor, nextUpcoming, todayCards } from './today.js';
+import {
+	canUndo,
+	comingUp,
+	dayRef,
+	lastWatered,
+	latestAnswerFor,
+	todayCards,
+	weekAhead
+} from './today.js';
 
 const today = new Date(2026, 10, 13, 9);
 const plant = (id: string, name = id) => ({ id, name }) as Plant;
@@ -100,21 +108,6 @@ describe('todayCards', () => {
 	});
 });
 
-describe('nextUpcoming', () => {
-	it('finds the soonest check after today', () => {
-		const result = nextUpcoming(
-			[plant('a'), plant('b')],
-			[task('a', '2026-11-20'), task('b', '2026-11-15')],
-			today
-		);
-		expect(result?.plant.id).toBe('b');
-	});
-
-	it('is null when nothing is scheduled ahead', () => {
-		expect(nextUpcoming([plant('a')], [task('a', '2026-11-13')], today)).toBeNull();
-	});
-});
-
 describe('latestAnswerFor and canUndo', () => {
 	const log = [
 		answer('a', 'checked-damp', '2026-11-13', '2026-11-16', 1),
@@ -149,5 +142,55 @@ describe('comingUp', () => {
 			2
 		);
 		expect(result.map((row) => row.plant.id)).toEqual(['c', 'a']);
+	});
+});
+
+describe('dayRef', () => {
+	const on = (d: number) => new Date(2026, 10, d);
+	it('names nearby days, weekdays within six days, dates beyond', () => {
+		expect(dayRef(on(13), today).kind).toBe('today');
+		expect(dayRef(on(12), today).kind).toBe('yesterday');
+		expect(dayRef(on(14), today).kind).toBe('tomorrow');
+		expect(dayRef(on(11), today).kind).toBe('weekday');
+		expect(dayRef(on(19), today).kind).toBe('weekday');
+		expect(dayRef(on(20), today).kind).toBe('date');
+		expect(dayRef(on(6), today).kind).toBe('date');
+	});
+});
+
+describe('lastWatered', () => {
+	it('is the latest watering, ignoring other answers and older checks', () => {
+		const result = lastWatered([
+			task('a', '2026-11-20', { lastAnswer: { kind: 'watered', on: '2026-11-09' } }),
+			task('b', '2026-11-20', { lastAnswer: { kind: 'watered', on: '2026-11-11' } }),
+			task('c', '2026-11-20', { lastAnswer: { kind: 'checked-damp', on: '2026-11-12' } }),
+			task('d', '2026-11-20')
+		]);
+		expect(result).toEqual(new Date(2026, 10, 11));
+	});
+
+	it('is null when nothing has been watered yet', () => {
+		expect(lastWatered([task('a', '2026-11-20')])).toBeNull();
+	});
+});
+
+describe('weekAhead', () => {
+	it('puts each plant on the day of its next check, for seven days', () => {
+		const week = weekAhead(
+			[plant('a', 'Aloe'), plant('b', 'Basil'), plant('c', 'Cactus'), plant('d', 'Dracaena')],
+			[
+				task('b', '2026-11-14'),
+				task('a', '2026-11-14'),
+				task('c', '2026-11-19'),
+				task('d', '2026-11-20')
+			],
+			today,
+			'en'
+		);
+		expect(week).toHaveLength(7);
+		expect(week[0].date).toEqual(new Date(2026, 10, 13));
+		expect(week[1].plants.map((p) => p.name)).toEqual(['Aloe', 'Basil']);
+		expect(week[6].plants.map((p) => p.name)).toEqual(['Cactus']);
+		expect(week.flatMap((day) => day.plants)).toHaveLength(3);
 	});
 });

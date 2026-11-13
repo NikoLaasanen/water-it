@@ -13,7 +13,7 @@ import { Timestamp, collection, deleteField, doc, writeBatch } from 'firebase/fi
 import { db } from './client';
 import { checkTaskId } from './plant-writes.js';
 import { withoutUndefined } from './without-undefined.js';
-import { nextDueAfter, type CheckAction } from '#lib/plants/schedule.js';
+import { nextDueAfter, toLocalDateString, type CheckAction } from '#lib/plants/schedule.js';
 import type { CheckAnswer } from '#lib/plants/today.js';
 import type { CheckSnapshot, LogEntry, Task } from '#lib/types/plant.js';
 
@@ -42,8 +42,14 @@ export function answerCheck(
 ): void {
 	const nextDue = nextDueAfter(action, now, intervalDays);
 	const before: CheckSnapshot | null = task
-		? { nextDue: task.nextDue, intervalDays: task.intervalDays, snoozedUntil: task.snoozedUntil }
+		? {
+				nextDue: task.nextDue,
+				intervalDays: task.intervalDays,
+				snoozedUntil: task.snoozedUntil,
+				lastAnswer: task.lastAnswer
+			}
 		: null;
+	const lastAnswer = { kind: action, on: toLocalDateString(now) };
 	const entry: Omit<LogEntry, 'id'> = {
 		plantId,
 		kind: action,
@@ -56,7 +62,14 @@ export function answerCheck(
 	batch.set(doc(collection(db, 'users', uid, 'log')), withoutUndefined(entry));
 	batch.set(
 		doc(db, 'users', uid, 'tasks', checkTaskId(plantId)),
-		{ plantId, kind: 'check-water', nextDue, intervalDays, snoozedUntil: deleteField() },
+		{
+			plantId,
+			kind: 'check-water',
+			nextDue,
+			intervalDays,
+			lastAnswer,
+			snoozedUntil: deleteField()
+		},
 		{ merge: true }
 	);
 	batch.commit().catch(report('logging the check'));
@@ -75,7 +88,8 @@ export function undoAnswer(uid: string, answer: CheckAnswer): void {
 			{
 				nextDue: before.nextDue,
 				intervalDays: before.intervalDays ?? deleteField(),
-				snoozedUntil: before.snoozedUntil ?? deleteField()
+				snoozedUntil: before.snoozedUntil ?? deleteField(),
+				lastAnswer: before.lastAnswer ?? deleteField()
 			},
 			{ merge: true }
 		);
