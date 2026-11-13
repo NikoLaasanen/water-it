@@ -7,8 +7,117 @@
  */
 import { m } from '#lib/paraglide/messages.js';
 import { getLocale } from '#lib/paraglide/runtime.js';
-import type { CareProfile, Health, LightLevel, WaterLevel } from '#lib/types/plant.js';
+import { localText, presetById, type Preset } from '#lib/presets/index.js';
+import type {
+	CareProfile,
+	Health,
+	LightLevel,
+	Plant,
+	PotMaterial,
+	PotTopLayer,
+	WaterLevel
+} from '#lib/types/plant.js';
 import type { NextCheck } from './care.js';
+import { resolveCare, type CareField, type ResolvedCare } from './care-profile.js';
+
+/** A plant's effective care profile in the current language. */
+export function careOf(plant: Pick<Plant, 'speciesId' | 'careOverrides'>): ResolvedCare {
+	return resolveCare(presetById(plant.speciesId), plant.careOverrides, getLocale());
+}
+
+/** A preset's everyday name in the current language: "Pilea". */
+export function presetName(preset: Preset): string {
+	return localText(preset.name, getLocale());
+}
+
+/**
+ * The line under a plant's name: "Chinese money plant · Pilea peperomioides".
+ * The scientific name is returned apart so the caller can italicise it.
+ * Null when there is nothing to add — no preset, or a generic one.
+ */
+export function speciesLine(
+	preset: Preset | undefined
+): { common?: string; scientific?: string } | null {
+	if (!preset || preset.kind === 'generic') return null;
+	const common = preset.commonName ? localText(preset.commonName, getLocale()) : undefined;
+	return common || preset.scientificName ? { common, scientific: preset.scientificName } : null;
+}
+
+/** What each care field is called in the provenance line, lower-cased there. */
+function fieldLabel(field: CareField): string {
+	switch (field) {
+		case 'light':
+		case 'lightLevel':
+			return m.care_light();
+		case 'wateringStyle':
+		case 'checkIntervalDays':
+		case 'fixedSchedule':
+			return m.care_watering();
+		case 'dryDownTest':
+			return m.care_check_test();
+		case 'tempMinC':
+		case 'tempComfortC':
+			return m.care_temperature();
+		case 'fertilize':
+			return m.care_fertilizing();
+		case 'repotIntervalMonths':
+			return m.care_repot();
+		case 'watchOuts':
+			return m.care_watch_out();
+	}
+}
+
+/**
+ * "From the Pilea preset · edited by you: check test" (screens.md, Plant
+ * detail). Null for a plant with no preset, which has nothing to come from.
+ */
+export function provenanceLine(preset: Preset | undefined, edited: CareField[]): string | null {
+	if (!preset) return null;
+	const name = presetName(preset);
+	if (edited.length === 0) return m.plant_care_source({ preset: name });
+	const locale = getLocale();
+	// Several fields map to one row ("light" and "lightLevel" are both Light),
+	// so de-duplicate after labelling.
+	const fields = [...new Set(edited.map((field) => fieldLabel(field).toLocaleLowerCase(locale)))];
+	return m.plant_care_source_edited({
+		preset: name,
+		fields: new Intl.ListFormat(locale, { type: 'conjunction' }).format(fields)
+	});
+}
+
+export function potMaterialLabel(material: PotMaterial): string {
+	switch (material) {
+		case 'plastic':
+			return m.pot_plastic();
+		case 'terracotta':
+			return m.pot_terracotta();
+		case 'glazed':
+			return m.pot_glazed();
+	}
+}
+
+export function potTopLayerLabel(top: PotTopLayer): string {
+	switch (top) {
+		case 'soil':
+			return m.pot_top_soil();
+		case 'pebbles':
+			return m.pot_top_pebbles();
+		case 'gravel':
+			return m.pot_top_gravel();
+	}
+}
+
+/**
+ * The pot chip on plant detail: "Terracotta · clay pebbles". Bare soil is the
+ * default and says nothing, so it is left out. Null when neither is known.
+ */
+export function potChip(pot: Plant['pot']): string | null {
+	const material = pot?.material ? potMaterialLabel(pot.material) : null;
+	const top = pot?.topLayer && pot.topLayer !== 'soil' ? potTopLayerLabel(pot.topLayer) : null;
+	if (material && top) return `${material} · ${top.toLocaleLowerCase(getLocale())}`;
+	// On its own the top layer starts the chip, so it keeps its capital.
+	return material ?? top;
+}
 
 export function healthLabel(health: Health): string {
 	switch (health) {

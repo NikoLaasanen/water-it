@@ -19,6 +19,8 @@
  * Writes go in as the emulator's `owner` principal, which bypasses rules.
  */
 
+import presets from '../src/lib/presets/presets.json' with { type: 'json' };
+
 const PROJECT = 'demo-water-it';
 const FIRESTORE = process.env.FIRESTORE_EMULATOR_HOST ?? '127.0.0.1:8080';
 const AUTH = process.env.FIREBASE_AUTH_EMULATOR_HOST ?? '127.0.0.1:9099';
@@ -35,163 +37,69 @@ function dayOffset(days) {
 	return `${date.getFullYear()}-${month}-${day}`;
 }
 
-const DETAIL = {
-	pilea: {
-		dryDownTest: 'Skewer under the clay pebbles: dry 2–3 cm down.',
-		tempMinC: 10,
-		tempComfortC: [15, 24],
-		fertilize: {
-			intervalDays: 30,
-			growingOnly: true
-		},
-		repotIntervalMonths: 24,
-		watchOuts: [
-			'Overwatering',
-			'Lower leaves shed naturally',
-			'Turn the pot weekly so it grows straight'
-		],
-		pot: {
-			material: 'Terracotta',
-			topLayer: 'clay pebbles',
-			sizeCm: 14
-		},
-		sitterNote:
-			'Left end of the living room window. Water slowly onto the pebbles until it drips into the saucer, then pour the saucer out.'
-	},
-	dracaena: {
-		dryDownTest: 'Top 4–5 cm dry.',
-		tempMinC: 13,
-		tempComfortC: [18, 24],
-		fertilize: {
-			intervalDays: 45,
-			growingOnly: true
-		},
-		repotIntervalMonths: 36,
-		watchOuts: ['Fluoride and salts in tap water brown the tips', 'Cold drafts'],
-		pot: {
-			material: 'Plastic',
-			topLayer: 'bark',
-			sizeCm: 19
-		},
-		sitterNote: 'Only if the soil is dry a finger deep. It would rather be too dry than too wet.'
-	},
-	'tree-aloe': {
-		dryDownTest: 'Soil bone dry all the way down.',
-		tempMinC: 5,
-		tempComfortC: [15, 30],
-		fertilize: {
-			intervalDays: 60,
-			growingOnly: true
-		},
-		repotIntervalMonths: 36,
-		watchOuts: ['Overwatering is the only real risk', 'No water in the rosette'],
-		pot: {
-			material: 'Terracotta',
-			topLayer: 'gravel',
-			sizeCm: 24
-		},
-		sitterNote: 'Skip it. Two weeks without water is nothing to this one.'
-	},
-	crassula: {
-		dryDownTest: 'Leaves slightly soft, soil dry throughout.',
-		tempMinC: 7,
-		tempComfortC: [15, 26],
-		fertilize: {
-			intervalDays: 60,
-			growingOnly: true
-		},
-		repotIntervalMonths: 36,
-		watchOuts: ['Overwatering', 'Leaves drop if moved suddenly into full sun'],
-		pot: {
-			material: 'Terracotta',
-			topLayer: 'gravel',
-			sizeCm: 12
-		},
-		sitterNote: 'Needs nothing for two weeks. Water only if the leaves look wrinkled.'
-	},
-	yucca: {
-		dryDownTest: 'Top 5 cm dry.',
-		tempMinC: 7,
-		tempComfortC: [16, 28],
-		fertilize: {
-			intervalDays: 60,
-			growingOnly: true
-		},
-		repotIntervalMonths: 36,
-		watchOuts: ['Overwatering rots the trunk', 'Lower leaves yellow with age'],
-		pot: {
-			material: 'Plastic',
-			topLayer: 'none',
-			sizeCm: 22
-		},
-		sitterNote: 'Recovering from being too wet, so leave it alone unless the soil is dry 5 cm down.'
-	}
-};
-
+/**
+ * The five mockup plants. Care comes from each one's preset
+ * (src/lib/presets/presets.json); a plant stores only `speciesId` and the
+ * fields it changes (design.md §6, "Care overrides"). The Pilea overrides its
+ * check test, which is what the mockup's "edited by you: check test" shows.
+ */
 const PLANTS = [
 	{
 		id: 'pilea',
 		name: 'Pilea',
 		health: 'thriving',
-		location: 'Living room shelf',
+		location: 'Living room window',
 		speciesId: 'pilea-peperomioides',
-		light: 'Bright indirect light; avoid hot direct sun',
-		lightLevel: 'bright',
-		wateringStyle: 'soak-and-dry',
-		growing: 7,
-		resting: 14,
+		pot: { material: 'terracotta', topLayer: 'pebbles', sizeCm: 14 },
+		careOverrides: { dryDownTest: 'Skewer under the clay pebbles: dry 2–3 cm down' },
+		sitterNote:
+			'Left end of the living room window. Water slowly onto the pebbles until it drips into the saucer, then pour the saucer out.',
 		dueIn: -2 // overdue
 	},
 	{
 		id: 'dracaena',
 		name: 'Dracaena',
 		health: 'recovering',
-		location: 'Bedroom corner',
+		location: 'Bookshelf by the desk lamp',
 		speciesId: 'dracaena-marginata',
-		light: 'Medium to bright indirect; tolerates less',
-		lightLevel: 'medium',
-		wateringStyle: 'soak-and-dry',
-		growing: 10,
-		resting: 21,
+		pot: { material: 'plastic', topLayer: 'soil', sizeCm: 19 },
+		careOverrides: {},
+		sitterNote: 'Only if the soil is dry a finger deep. It would rather be too dry than too wet.',
 		dueIn: 0 // today
 	},
 	{
 		id: 'tree-aloe',
 		name: 'Tree aloe',
 		health: 'thriving',
-		location: 'South window',
-		speciesId: 'tree-aloe',
-		light: 'As much direct sun as it can get',
-		lightLevel: 'bright',
-		wateringStyle: 'sparse',
-		growing: 14,
-		resting: 28,
+		location: 'Bedroom window',
+		speciesId: 'aloidendron-barberae',
+		pot: { material: 'terracotta', topLayer: 'gravel', sizeCm: 24 },
+		careOverrides: {},
+		sitterNote: 'Skip it. Two weeks without water is nothing to this one.',
 		dueIn: 9 // "In 9 days"
 	},
 	{
 		id: 'crassula',
 		name: 'Crassula',
 		health: 'okay',
-		location: 'Kitchen window',
-		speciesId: 'crassula',
-		light: 'Bright, some direct sun',
-		lightLevel: 'bright',
-		wateringStyle: 'sparse',
-		growing: 14,
-		resting: 30,
+		location: 'Bedroom window',
+		speciesId: 'crassula-ovata',
+		pot: { material: 'terracotta', topLayer: 'gravel', sizeCm: 12 },
+		careOverrides: {},
+		sitterNote: 'Needs nothing for two weeks. Water only if the leaves look wrinkled.',
 		dueIn: 4 // a weekday name
 	},
 	{
 		id: 'yucca',
 		name: 'Yucca',
 		health: 'struggling',
-		location: 'Hallway',
-		speciesId: 'yucca-spineless',
-		light: 'Bright; direct sun is fine',
-		lightLevel: 'bright',
-		wateringStyle: 'sparse',
-		growing: 14,
-		resting: 30,
+		location: 'TV stand',
+		speciesId: 'yucca-gigantea',
+		pot: { material: 'plastic', topLayer: 'soil', sizeCm: 22 },
+		// Recovering from overwatering, so checked less often than the preset says.
+		careOverrides: { checkIntervalDays: { growing: 21, resting: 35 } },
+		sitterNote:
+			'Recovering from being too wet, so leave it alone unless the soil is dry 5 cm down.',
 		dueIn: 0 // today
 	}
 ];
@@ -227,27 +135,15 @@ function toFields(object) {
 }
 
 function plantFields(plant) {
-	const detail = DETAIL[plant.id] ?? {};
 	return toFields({
 		name: plant.name,
 		health: plant.health,
 		location: plant.location,
 		speciesId: plant.speciesId,
 		createdAt: new Date(),
-		pot: detail.pot,
-		sitterNote: detail.sitterNote,
-		careProfile: {
-			light: plant.light,
-			lightLevel: plant.lightLevel,
-			wateringStyle: plant.wateringStyle,
-			checkIntervalDays: { growing: plant.growing, resting: plant.resting },
-			dryDownTest: detail.dryDownTest,
-			tempMinC: detail.tempMinC,
-			tempComfortC: detail.tempComfortC,
-			fertilize: detail.fertilize,
-			repotIntervalMonths: detail.repotIntervalMonths,
-			watchOuts: detail.watchOuts
-		}
+		pot: plant.pot,
+		sitterNote: plant.sitterNote,
+		careOverrides: plant.careOverrides
 	});
 }
 
@@ -297,7 +193,7 @@ const users = await emulatorUsers();
 
 if (users.length === 0) {
 	console.error('No users in the Auth emulator yet.');
-	console.error('Sign in once at http://localhost:5173 first, then run this again.');
+	console.error('Sign in once at http://127.0.0.1:5173 first, then run this again.');
 	process.exit(1);
 }
 
@@ -326,7 +222,11 @@ for (const plant of PLANTS) {
 			plantId: plant.id,
 			kind: 'check-water',
 			nextDue: dayOffset(plant.dueIn),
-			intervalDays: plant.growing
+			// The plant's own interval if it overrides one, else its preset's.
+			intervalDays: (
+				plant.careOverrides.checkIntervalDays ??
+				presets.find((preset) => preset.id === plant.speciesId).care.checkIntervalDays
+			).growing
 		})
 	);
 }

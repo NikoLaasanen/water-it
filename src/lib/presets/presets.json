@@ -1,0 +1,214 @@
+[
+	{
+		"id": "pilea-peperomioides",
+		"kind": "species",
+		"name": { "en": "Pilea", "fi": "Pilea" },
+		"commonName": { "en": "Chinese money plant", "fi": "Kiinanpilea" },
+		"scientificName": "Pilea peperomioides",
+		"care": {
+			"light": {
+				"en": "Bright, indirect. Avoid hot afternoon sun.",
+				"fi": "Valoisa, epäsuora valo. Vältä kuumaa iltapäivän aurinkoa."
+			},
+			"lightLevel": "bright",
+			"wateringStyle": "soak-and-dry",
+			"checkIntervalDays": { "growing": 7, "resting": 14 },
+			"dryDownTest": {
+				"en": "Top 2–3 cm of soil dry",
+				"fi": "Mullan pinta kuiva 2–3 cm syvyydeltä"
+			},
+			"tempMinC": 10,
+			"tempComfortC": [15, 24],
+			"fertilize": { "intervalDays": 30, "growingOnly": true },
+			"repotIntervalMonths": 24,
+			"watchOuts": [
+				{ "en": "Overwatering", "fi": "Liikakastelu" },
+				{ "en": "Lower leaves drop naturally", "fi": "Alalehdet putoavat luonnostaan" },
+				{
+					"en": "Turn the pot weekly so it grows straight",
+					"fi": "Käännä ruukkua viikoittain, niin kasvi kasvaa suoraan"
+				}
+			]
+		}
+	},
+	{
+		"id": "dracaena-marginata",
+		"kind": "species",
+		"name": { "en": "Dragon tree", "fi": "Traakkipuu" },
+		"commonName": { "en": "Madagascar dragon tree", "fi": "Reunustraakkipuu" },
+		"scientificName": "Dracaena marginata",
+		"care": {
+			"light": {
+				"en": "Medium to bright, indirect. Copes with less, but grows slowly.",
+				"fi": "Puolivarjoisesta valoisaan, epäsuora valo. Pärjää vähemmälläkin, mutta kasvaa hitaasti."
+			},
+			"lightLevel": "medium",
+			"wateringStyle": "soak-and-dry",
+			"checkIntervalDays": { "growing": 10, "resting": 21 },
+			"dryDownTest": {
+				"en": "Top 4–5 cm of soil dry",
+				"fi": "Mullan pinta kuiva 4–5 cm syvyydeltä"
+			},
+			"tempMinC": 13,
+			"tempComfortC": [18, 24],
+			"fertilize": { "intervalDays": 45, "growingOnly": true },
+			"repotIntervalMonths": 36,
+			"watchOuts": [
+				{
+					"en": "Fluoride and salts in tap water brown the leaf tips",
+					"fi": "Vesijohtoveden fluori ja suolat ruskistavat lehtien kärjet"
+				},
+				{ "en": "Cold drafts", "fi": "Kylmä veto" }
+			]
+		}
+	},
+	{
+		"id": "aloidendron-barberae",
+		"kind": "species",
+		"name": { "en": "Tree aloe", "fi": "Puualoe" },
+		"scientificName": "Aloidendron barberae",
+		"care": {
+			"light": {
+				"en": "As much direct sun as it can get.",
+				"fi": "Niin paljon suoraa aurinkoa kuin mahdollista."
+			},
+			"lightLevel": "bright",
+			"wateringStyle": "sparse",
+			"checkIntervalDays": { "growing": 14, "resting": 28 },
+			"dryDownTest": {
+				"en": "Soil dry all the way down",
+				"fi": "Multa kuiva pohjaan asti"
+			},
+			"tempMinC": 5,
+			"tempComfortC": [15, 30],
+			"fertilize": { "intervalDays": 60, "growingOnly": true },
+			"repotIntervalMonths": 36,
+			"watchOuts": [
+				{ "en": "Overwatering is the main risk", "fi": "Liikakastelu on suurin riski" },
+				{ "en": "Keep water out of the rosette", "fi": "Älä kastele lehtiruusukkeeseen" }
+			]
+		}
+	},
+	{
+		"id": "crassula-ovata",
+		"kind": "species",
+		"name": { "en": "Crassula", "fi": "Rahapuu" },
+		"commonName": { "en": "Jade plant", "fi": "Rahapuu" },
+		"scientificName": "Crassula ovata",
+		"care": {
+			"light": {
+				"en": "Bright, with some direct sun.",
+				"fi": "Valoisa, hieman suoraa aurinkoa."
+			},
+			"lightLevel": "bright",
+			"wateringStyle": "sparse",
+			"checkIntervalDays": { "growing": 14, "resting": 30 },
+			"dryDownTest": {
+				"en": "Soil dry throughout, leaves slightly soft",
+				"fi": "Multa kuiva läpikotaisin, lehdet hieman pehmeät"
+			},
+			"tempMinC": 7,
+			"tempComfortC": [15, 26],
+			"fertilize": { "intervalDays": 60, "growingOnly": true },
+			"repotIntervalMonths": 36,
+			"watchOuts": [
+				{ "en": "Overwatering", "fi": "Liikakastelu" },
+				{
+					"en": "Leaves drop if moved suddenly into full sun",
+					"fi": "Lehdet putoavat, jos kasvi siirretään äkkiä täyteen aurinkoon"
+				}
+			]
+		}
+	},
+	{
+		"id": "yucca-gigantea",
+		"kind": "species",
+		"name": { "en": "Spineless yucca", "fi": "Jukkapalmu" },
+		"scientificName": "Yucca gigantea",
+		"care": {
+			"light": {
+				"en": "Bright. Direct sun is fine.",
+				"fi": "Valoisa. Suora aurinko sopii."
+			},
+			"lightLevel": "bright",
+			"wateringStyle": "sparse",
+			"checkIntervalDays": { "growing": 14, "resting": 30 },
+			"dryDownTest": {
+				"en": "Top 5 cm of soil dry",
+				"fi": "Mullan pinta kuiva 5 cm syvyydeltä"
+			},
+			"tempMinC": 7,
+			"tempComfortC": [16, 28],
+			"fertilize": { "intervalDays": 60, "growingOnly": true },
+			"repotIntervalMonths": 36,
+			"watchOuts": [
+				{ "en": "Overwatering rots the trunk", "fi": "Liikakastelu mädättää rungon" },
+				{ "en": "Lower leaves yellow with age", "fi": "Alalehdet kellastuvat vanhetessaan" }
+			]
+		}
+	},
+	{
+		"id": "generic-succulent",
+		"kind": "generic",
+		"name": { "en": "Succulent", "fi": "Mehikasvi" },
+		"description": {
+			"en": "Thick leaves, dries out fully between waterings",
+			"fi": "Paksut lehdet, kuivuu kokonaan kastelujen välillä"
+		},
+		"care": {
+			"light": {
+				"en": "Bright, with some direct sun.",
+				"fi": "Valoisa, hieman suoraa aurinkoa."
+			},
+			"lightLevel": "bright",
+			"wateringStyle": "sparse",
+			"checkIntervalDays": { "growing": 14, "resting": 28 },
+			"dryDownTest": {
+				"en": "Soil dry all the way down",
+				"fi": "Multa kuiva pohjaan asti"
+			},
+			"tempMinC": 5,
+			"tempComfortC": [15, 28],
+			"fertilize": { "intervalDays": 60, "growingOnly": true },
+			"repotIntervalMonths": 24,
+			"watchOuts": [
+				{ "en": "Overwatering", "fi": "Liikakastelu" },
+				{
+					"en": "Stretching towards the window means it needs more light",
+					"fi": "Jos kasvi venyy kohti ikkunaa, se tarvitsee lisää valoa"
+				}
+			]
+		}
+	},
+	{
+		"id": "generic-tropical-foliage",
+		"kind": "generic",
+		"name": { "en": "Tropical foliage", "fi": "Trooppinen viherkasvi" },
+		"description": {
+			"en": "Leafy, likes the top of the soil to dry a little",
+			"fi": "Lehtevä, pitää siitä, että mullan pinta kuivahtaa hieman"
+		},
+		"care": {
+			"light": {
+				"en": "Medium to bright, indirect. No hot direct sun.",
+				"fi": "Puolivarjoisesta valoisaan, epäsuora valo. Ei kuumaa suoraa aurinkoa."
+			},
+			"lightLevel": "medium",
+			"wateringStyle": "soak-and-dry",
+			"checkIntervalDays": { "growing": 7, "resting": 14 },
+			"dryDownTest": {
+				"en": "Top 2–3 cm of soil dry",
+				"fi": "Mullan pinta kuiva 2–3 cm syvyydeltä"
+			},
+			"tempMinC": 13,
+			"tempComfortC": [18, 26],
+			"fertilize": { "intervalDays": 30, "growingOnly": true },
+			"repotIntervalMonths": 24,
+			"watchOuts": [
+				{ "en": "Overwatering", "fi": "Liikakastelu" },
+				{ "en": "Cold drafts", "fi": "Kylmä veto" },
+				{ "en": "Dry air browns the leaf edges", "fi": "Kuiva ilma ruskistaa lehtien reunat" }
+			]
+		}
+	}
+]

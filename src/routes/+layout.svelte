@@ -15,7 +15,10 @@
 	// come from the plugin rather than being written into app.html.
 	const webManifestLink = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : '');
 
-	const onSignInPage = $derived(page.url.pathname === '/signin');
+	// /signin and /signin/reset: the pages a signed-out user may see.
+	const onSignInPage = $derived(
+		page.url.pathname === '/signin' || page.url.pathname.startsWith('/signin/')
+	);
 	const blocked = $derived(session.user !== null && session.invited === false);
 
 	// Route guard. It waits for `session.ready`, because Firebase restores a
@@ -26,7 +29,7 @@
 		if (!session.user && !onSignInPage) {
 			void goto(resolve('/signin'), { replaceState: true });
 		} else if (session.user && onSignInPage && !blocked) {
-			void goto(resolve('/'), { replaceState: true });
+			void goto(resolve('/(app)'), { replaceState: true });
 		}
 	});
 </script>

@@ -14,24 +14,31 @@ import {
 	type DocumentData,
 	type FirestoreError
 } from 'firebase/firestore';
+import { createContext } from 'svelte';
 import { db } from './client';
+import { readOverrides } from '#lib/plants/care-profile.js';
 import type {
-	CareProfile,
 	Health,
-	LightLevel,
 	Plant,
-	Task,
-	WateringStyle
+	PlantOrigin,
+	PotMaterial,
+	PotTopLayer,
+	Task
 } from '#lib/types/plant.js';
 
 const HEALTH: readonly Health[] = ['thriving', 'okay', 'recovering', 'struggling'];
-const LIGHT_LEVELS: readonly LightLevel[] = ['low', 'medium', 'bright'];
-const WATERING_STYLES: readonly WateringStyle[] = ['soak-and-dry', 'keep-moist', 'sparse'];
+const POT_MATERIALS: readonly PotMaterial[] = ['plastic', 'terracotta', 'glazed'];
+const POT_TOP_LAYERS: readonly PotTopLayer[] = ['soil', 'pebbles', 'gravel'];
+const ORIGINS: readonly PlantOrigin[] = ['bought', 'cutting', 'propagated', 'gift'];
 
-function oneOf<T extends string>(allowed: readonly T[], value: unknown, fallback: T): T {
+function oneOf<T extends string>(allowed: readonly T[], value: unknown): T | undefined {
 	return typeof value === 'string' && (allowed as readonly string[]).includes(value)
 		? (value as T)
-		: fallback;
+		: undefined;
+}
+
+function text(value: unknown): string | undefined {
+	return typeof value === 'string' ? value : undefined;
 }
 
 /**
@@ -42,28 +49,38 @@ function oneOf<T extends string>(allowed: readonly T[], value: unknown, fallback
  * incomplete document should cost its own row some detail, not blank the whole
  * list. Input validation belongs on the Add/Edit form, where someone can still
  * be told what's wrong.
+ *
+ * Fields are picked one by one rather than spread from `data`, so a stray or
+ * mistyped field never reaches the UI looking like part of a `Plant`.
  */
 function toPlant(id: string, data: DocumentData): Plant | null {
 	const name = typeof data.name === 'string' ? data.name.trim() : '';
 	// A row with no name is unidentifiable and untappable in any useful sense.
 	if (!name) return null;
 
-	const stored: DocumentData = typeof data.careProfile === 'object' ? data.careProfile : {};
-	const interval: DocumentData =
-		typeof stored.checkIntervalDays === 'object' ? stored.checkIntervalDays : {};
+	const pot: DocumentData = typeof data.pot === 'object' && data.pot !== null ? data.pot : {};
 
-	const careProfile: CareProfile = {
-		...stored,
-		light: typeof stored.light === 'string' ? stored.light : '',
-		lightLevel: oneOf(LIGHT_LEVELS, stored.lightLevel, 'medium'),
-		wateringStyle: oneOf(WATERING_STYLES, stored.wateringStyle, 'soak-and-dry'),
-		checkIntervalDays: {
-			growing: typeof interval.growing === 'number' ? interval.growing : 7,
-			resting: typeof interval.resting === 'number' ? interval.resting : 14
-		}
+	return {
+		id,
+		name,
+		health: oneOf(HEALTH, data.health) ?? 'okay',
+		speciesId: text(data.speciesId),
+		location: text(data.location),
+		sitterNote: text(data.sitterNote),
+		notes: text(data.notes),
+		acquired: text(data.acquired),
+		origin: oneOf(ORIGINS, data.origin),
+		pot: {
+			material: oneOf(POT_MATERIALS, pot.material),
+			topLayer: oneOf(POT_TOP_LAYERS, pot.topLayer),
+			sizeCm: typeof pot.sizeCm === 'number' ? pot.sizeCm : undefined
+		},
+		dormant: data.dormant === true,
+		underGrowLight: data.underGrowLight === true,
+		coverPhotoId: text(data.coverPhotoId),
+		careOverrides: readOverrides(data.careOverrides),
+		createdAt: data.createdAt
 	};
-
-	return { ...data, id, name, health: oneOf(HEALTH, data.health, 'okay'), careProfile } as Plant;
 }
 
 export class PlantsQuery {
@@ -88,6 +105,15 @@ export class PlantsQuery {
 	 */
 	checkTaskFor(plantId: string): Task | undefined {
 		return this.checkTasks.find((task) => task.plantId === plantId);
+	}
+
+	/**
+	 * The plants sorted by name for `locale`. Sorted here rather than by
+	 * Firestore, which orders strings by byte value and would file Ä after Z —
+	 * wrong in Finnish, where it belongs after A.
+	 */
+	sorted(locale: string): Plant[] {
+		return [...this.plants].sort((a, b) => a.name.localeCompare(b.name, locale));
 	}
 
 	#delivered = { plants: false, tasks: false };
@@ -207,3 +233,12 @@ export class PlantQuery {
 		};
 	}
 }
+
+/**
+ * The plants list, shared by everything under /plants.
+ *
+ * `/plants/+layout.svelte` owns the one `PlantsQuery` and its listeners; the
+ * list page and the iPad side list under plant detail both read it from here,
+ * so moving between them never restarts a listener or flashes "Loading".
+ */
+export const [getPlantsQuery, setPlantsQuery] = createContext<PlantsQuery>();

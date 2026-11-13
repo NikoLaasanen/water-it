@@ -42,18 +42,48 @@ export type CareProfile = {
 	watchOuts?: string[];
 };
 
+/**
+ * What a plant stores about its care: only the fields the owner has changed
+ * from its preset (design.md §6, "Care overrides").
+ *
+ * The effective profile is the preset's text, in the current language, with
+ * these laid over it — see `resolveCare` in `#lib/plants/care-profile.ts`.
+ * Storing a full copy instead would freeze the preset's text in whatever
+ * language the plant was added in, and make "Edited" a guess.
+ *
+ * Each key is all-or-nothing: an override of `checkIntervalDays` holds both
+ * intervals, and "Reset to preset" deletes the key. A plant with no preset
+ * ("Start from a blank profile") keeps its whole profile here.
+ */
+export type CareOverrides = Partial<CareProfile>;
+
+export type PotMaterial = 'plastic' | 'terracotta' | 'glazed';
+
+/** What covers the soil. `soil` means nothing does. */
+export type PotTopLayer = 'soil' | 'pebbles' | 'gravel';
+
+export type PlantOrigin = 'bought' | 'cutting' | 'propagated' | 'gift';
+
 export type Plant = {
 	id: string;
 	name: string;
 	/** Default note shown to plant-sitters (M4). */
 	sitterNote?: string;
-	/** Which bundled preset this was prefilled from. */
+	/**
+	 * The bundled preset this plant starts from (`src/lib/presets`). Preset
+	 * ids are permanent: a plant's care text is read from its preset on every
+	 * render, so renaming or removing one would empty that plant's profile.
+	 */
 	speciesId?: string;
 	location?: string;
-	/** Local calendar date, `YYYY-MM-DD` — never a Timestamp (CLAUDE.md). */
+	/**
+	 * When it arrived, to the month: `YYYY-MM`. Nobody remembers the day they
+	 * bought a plant, and the form asks "e.g. June 2024". A calendar date like
+	 * the due dates, never a Timestamp (CLAUDE.md).
+	 */
 	acquired?: string;
-	origin?: 'bought' | 'cutting' | 'propagated' | 'gift';
-	pot?: { material?: string; sizeCm?: number; topLayer?: string };
+	origin?: PlantOrigin;
+	pot?: { material?: PotMaterial; sizeCm?: number; topLayer?: PotTopLayer };
 	health: Health;
 	/** Seasonal mode, not a health state: pauses feeding, uses the long interval. */
 	dormant?: boolean;
@@ -61,7 +91,7 @@ export type Plant = {
 	underGrowLight?: boolean;
 	notes?: string;
 	coverPhotoId?: string;
-	careProfile: CareProfile;
+	careOverrides: CareOverrides;
 	createdAt: Timestamp;
 };
 

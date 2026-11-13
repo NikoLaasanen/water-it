@@ -40,9 +40,12 @@
    whole point of deciding dark mode up front (design.md 9.1): the dark theme
    is one block in this file rather than an edit to every component.
 
-   The light values are the specified palette. Dark values are picked by hand
-   against the dark surface rather than derived, and every pair is checked:
-   text >= 4.5:1 on whatever it sits on, meaningful icons >= 3:1.
+   The light values are the specified palette. The dark values come from the
+   design's dark example (docs/mockups/edit-plant-dark.dc.html), which is the
+   reference for how dark mode looks; where it has no value (water, chips,
+   overdue) one is picked by hand in the same spirit. Every pair is checked:
+   text >= 4.5:1 on whatever it sits on, field borders and meaningful icons
+   >= 3:1 (WCAG 1.4.11). screens.md "Dark mode" has the measured ratios.
 
    Still absent: the status colours (Watered / Still damp / Skipped), which
    belong to the Today view and are picked when it is built. screens.md records
@@ -98,38 +101,70 @@
 	   selection is also carried by weight, ink colour and `aria-selected`,
 	   never by this edge alone. */
 	--segment-bg: #e3e8e4;
+	--segment-selected: #ffffff;
+
+	/* Form fields. The border must clear 3:1 against both the field and
+	   whatever is around it: sign-in fields sit straight on --bg, form fields
+	   on a card. #7e8a83 is 3.27 on --bg and 3.59 on --surface; the decorative
+	   --border (1.54) would fail, which is why fields don't use it. */
+	--field-bg: #ffffff;
+	--field-border: #7e8a83;
+	--placeholder: #5a665f;
+	/* Links in running text. The same as --primary in light; dark lifts it. */
+	--link: #2f6b4f;
+	/* A chosen option: radio card, chip, the active rail item. */
+	--selected-bg: #eaf3ec;
+	--selected-border: #2f6b4f;
+	/* A switch that is off. On uses --primary. */
+	--switch-off: #7e8a83;
+	--switch-knob: #ffffff;
+	--switch-knob-on: #ffffff;
+	/* "Edited" tag on a care field that differs from its preset. */
+	--edited-bg: #fcefc7;
+	--edited-fg: #6e4b00;
+	/* Destructive actions (Delete plant) and the overdue card border. */
+	--danger: #9b1c1c;
+	--danger-border: #c53030;
+
+	/* Google's sign-in button, in Google's own colours rather than ours: its
+	   branding guidelines fix them (GoogleButton.svelte). Light theme here,
+	   their Dark theme in the dark block. */
+	--google-bg: #ffffff;
+	--google-border: #747775;
+	--google-fg: #1f1f1f;
+	--google-logo-bg: transparent;
 }
 
 @media (prefers-color-scheme: dark) {
 	:root {
-		--bg: #121714;
-		--surface: #1a211d;
-		--ink: #e8ede9;
-		--ink-2: #d3dbd6;
-		--muted: #a8b3ad;
-		--muted-2: #8d9993;
-		--line: #27302b;
-		--border: #3a453f;
+		--bg: #121614;
+		--surface: #1c221f;
+		--ink: #e9eeea;
+		--ink-2: #cdd5d0;
+		--muted: #a3aea8;
+		--muted-2: #97a29c;
+		--line: #2a322e;
+		--border: #3e4843;
 		/* Lightened: the light #2f6b4f and #2b5f9e are too dark to read on a
 		   dark surface. Lightening them flips what can sit on top, hence the
 		   --on-* tokens below — white text on light green would fail. */
-		--primary: #6fbf92;
+		--primary: #74c495;
 		--water: #86b4ea;
-		--on-primary: #0e2419;
+		--on-primary: #0e2a1b;
 		--on-water: #0b1d30;
 
 		/* The light palette inverts here rather than dimming: a pale tint with
 		   dark text would glare, so each badge becomes a deep tint carrying
 		   light text. The hues are kept so a plant reads the same either way —
 		   green thriving, blue recovering, amber struggling. */
-		--health-thriving-bg: #1e3a2a;
-		--health-thriving-fg: #7fd0a0;
-		--health-okay-bg: #2a322d;
-		--health-okay-fg: #b9c4bd;
-		--health-recovering-bg: #1c3049;
-		--health-recovering-fg: #93c0f0;
-		--health-struggling-bg: #3a2415;
-		--health-struggling-fg: #e8a87c;
+		--health-thriving-bg: #1f3528;
+		--health-thriving-fg: #8fd3a8;
+		--health-okay-bg: #2a302c;
+		--health-okay-fg: #c2cbc5;
+		--health-recovering-bg: #1e2c3d;
+		--health-recovering-fg: #a9c8ee;
+		--health-struggling-bg: #3a2716;
+		--health-struggling-fg: #f2b077;
 
 		--chip-sun-bg: #33291a;
 		--chip-sun-fg: #e8c98a;
@@ -138,15 +173,41 @@
 		--chip-water-fg: #a8c8ec;
 		--chip-water-icon: #7faee6;
 
-		--overdue: #e8a87c;
+		--overdue: #f2b077;
 
 		--thumb-tint: #22302a;
 
 		/* Lighter than the page, where light mode goes darker: against a dark
-		   background a recessed track is invisible (1.01 against --bg), so the
-		   track lifts instead. 1.41 against --bg and 1.28 under the selected
-		   tab — both a little clearer than the light design's own 1.13 / 1.24. */
-		--segment-bg: #2b342e;
+		   background a recessed track is invisible, so the track lifts, and the
+		   selected segment lifts again rather than using --surface. Both edges
+		   are quiet (1.29 and 1.40), as in light mode, so the selection is also
+		   carried by weight, ink colour and `aria-selected`. */
+		--segment-bg: #262d29;
+		--segment-selected: #3a443f;
+
+		/* Fields sink below the card. Border 3.71 on --surface, 4.04 on the
+		   field, 4.19 on --bg. */
+		--field-bg: #151a17;
+		--field-border: #6f7c76;
+		--placeholder: #97a29c;
+		--link: #8fd3a8;
+		--selected-bg: #1f3528;
+		--selected-border: #74c495;
+		/* The design's #5e6a64 is 2.87 on the card, under 3:1, so the off
+		   switch borrows the field border (3.71). */
+		--switch-off: #6f7c76;
+		--switch-knob: #e9eeea;
+		--switch-knob-on: #0e2a1b;
+		--edited-bg: #3a3015;
+		--edited-fg: #f0d37a;
+		--danger: #f2a39b;
+		--danger-border: #e5776b;
+
+		--google-bg: #131314;
+		--google-border: #8e918f;
+		--google-fg: #e3e3e3;
+		/* The "G" must sit on white. */
+		--google-logo-bg: #ffffff;
 	}
 }
 
@@ -186,6 +247,24 @@
 	--color-water: var(--water);
 	--color-on-primary: var(--on-primary);
 	--color-on-water: var(--on-water);
+	--color-field: var(--field-bg);
+	--color-field-border: var(--field-border);
+	--color-placeholder: var(--placeholder);
+	--color-link: var(--link);
+	--color-selected: var(--selected-bg);
+	--color-segment: var(--segment-bg);
+	--color-segment-selected: var(--segment-selected);
+	--color-danger: var(--danger);
+}
+
+/* Tailwind v4's preflight gives buttons the browser's default arrow cursor.
+   Put the hand back on anything clickable, app-wide, rather than repeating
+   `cursor-pointer` on every button. Disabled controls keep the arrow. */
+@layer base {
+	button:not(:disabled),
+	[role='button']:not([aria-disabled='true']) {
+		cursor: pointer;
+	}
 }
 
 body {

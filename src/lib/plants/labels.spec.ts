@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { careRows, nextCheckDetailLabel } from './labels.js';
+import { careRows, nextCheckDetailLabel, potChip, provenanceLine, speciesLine } from './labels.js';
+import { presetById } from '#lib/presets/index.js';
 import type { CareProfile } from '#lib/types/plant.js';
 
 // These run against the compiled English messages, so they check the real
@@ -111,5 +112,57 @@ describe('nextCheckDetailLabel', () => {
 		expect(nextCheckDetailLabel({ kind: 'today' })).toBe('Check due today');
 		expect(nextCheckDetailLabel({ kind: 'in-days', days: 9 })).toBe('Next check In 9 days');
 		expect(nextCheckDetailLabel({ kind: 'unscheduled' })).toBe('No check scheduled');
+	});
+});
+
+describe('provenanceLine', () => {
+	const pilea = presetById('pilea-peperomioides');
+
+	it('names the preset, and nothing more for an unedited plant', () => {
+		expect(provenanceLine(pilea, [])).toBe('From the Pilea preset');
+	});
+
+	it('lists edited rows in lower case, once each', () => {
+		expect(provenanceLine(pilea, ['dryDownTest'])).toBe(
+			'From the Pilea preset · edited by you: check test'
+		);
+		// light + lightLevel are one row; so are the three watering fields.
+		expect(
+			provenanceLine(pilea, ['light', 'lightLevel', 'checkIntervalDays', 'fixedSchedule'])
+		).toBe('From the Pilea preset · edited by you: light and watering');
+	});
+
+	it('says nothing for a plant with no preset', () => {
+		expect(provenanceLine(undefined, ['light'])).toBeNull();
+	});
+});
+
+describe('speciesLine', () => {
+	it('gives the common and scientific names of a species', () => {
+		expect(speciesLine(presetById('pilea-peperomioides'))).toEqual({
+			common: 'Chinese money plant',
+			scientific: 'Pilea peperomioides'
+		});
+		expect(speciesLine(presetById('aloidendron-barberae'))).toEqual({
+			common: undefined,
+			scientific: 'Aloidendron barberae'
+		});
+	});
+
+	it('is empty for generic presets and plants without one', () => {
+		expect(speciesLine(presetById('generic-succulent'))).toBeNull();
+		expect(speciesLine(undefined)).toBeNull();
+	});
+});
+
+describe('potChip', () => {
+	it('joins material and top layer, leaving out bare soil', () => {
+		expect(potChip({ material: 'terracotta', topLayer: 'pebbles' })).toBe(
+			'Terracotta · clay pebbles'
+		);
+		expect(potChip({ material: 'plastic', topLayer: 'soil' })).toBe('Plastic');
+		expect(potChip({ topLayer: 'gravel' })).toBe('Gravel');
+		expect(potChip({})).toBeNull();
+		expect(potChip(undefined)).toBeNull();
 	});
 });
