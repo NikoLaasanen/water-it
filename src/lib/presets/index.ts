@@ -74,6 +74,36 @@ export function presetById(id: string | undefined): Preset | undefined {
 	return id ? presets.find((preset) => preset.id === id) : undefined;
 }
 
+/**
+ * The route segment for "Start from a blank profile" on the Add plant flow
+ * (`/plants/new/blank`). Never a preset id — a test holds it to that.
+ */
+export const BLANK_PRESET = 'blank';
+
+/**
+ * Whether a preset matches what was typed on the Add plant picker.
+ *
+ * Searches the short and common names in **both** languages plus the
+ * scientific name: people type the name they know a plant by, which isn't
+ * always the one in the UI language ("money plant" in a Finnish UI).
+ * Case-insensitive, substring, every word must match somewhere.
+ */
+export function matchesPreset(preset: Preset, query: string, locale: Locale): boolean {
+	const words = query.trim().toLocaleLowerCase(locale).split(/\s+/).filter(Boolean);
+	if (words.length === 0) return true;
+	const haystack = [
+		preset.name.en,
+		preset.name.fi,
+		preset.commonName?.en,
+		preset.commonName?.fi,
+		preset.scientificName
+	]
+		.filter((text): text is string => Boolean(text))
+		.join(' ')
+		.toLocaleLowerCase(locale);
+	return words.every((word) => haystack.includes(word));
+}
+
 /** A preset's text in one language. */
 export function localText(text: LocalText, locale: Locale): string {
 	return text[locale];

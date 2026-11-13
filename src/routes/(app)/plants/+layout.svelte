@@ -12,6 +12,7 @@
 -->
 <script lang="ts">
 	import Plus from '@lucide/svelte/icons/plus';
+	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import type { LayoutProps } from './$types';
 	import PlantRow from '#lib/components/PlantRow.svelte';
@@ -49,15 +50,13 @@
 				<h2 class="text-[28px] leading-tight font-extrabold tracking-[-0.02em] text-ink">
 					{m.plants_title()}
 				</h2>
-				<!-- Inert until Add/Edit exists, like the list's Add button. -->
-				<button
-					type="button"
-					disabled
-					aria-label={m.plants_add_soon()}
-					class="flex size-11 flex-none items-center justify-center rounded-[14px] bg-primary text-on-primary disabled:opacity-50"
+				<a
+					href={resolve('/(flow)/plants/new')}
+					aria-label={m.plants_add()}
+					class="flex size-11 flex-none items-center justify-center rounded-[14px] bg-primary text-on-primary"
 				>
 					<Plus size={22} strokeWidth={2.4} aria-hidden="true" />
-				</button>
+				</a>
 			</div>
 			<div class="flex flex-col gap-1">
 				{#each plants as plant (plant.id)}

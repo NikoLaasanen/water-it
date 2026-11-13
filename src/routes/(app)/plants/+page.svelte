@@ -12,6 +12,7 @@
 -->
 <script lang="ts">
 	import Plus from '@lucide/svelte/icons/plus';
+	import { resolve } from '$app/paths';
 	import Search from '@lucide/svelte/icons/search';
 	import PlantRow from '#lib/components/PlantRow.svelte';
 	import { getPlantsQuery } from '#lib/firebase/plants.svelte.js';
@@ -79,18 +80,15 @@
 				</label>
 			{/if}
 
-			<!-- Inert until the Add/Edit view exists. Disabled rather than hidden so
-			     the header keeps its designed shape, and it says why when focused.
-			     A square icon button on phones, labelled from `md`. -->
-			<button
-				type="button"
-				disabled
-				aria-label={m.plants_add_soon()}
-				class="flex size-12 flex-none items-center justify-center gap-2 rounded-2xl bg-primary text-on-primary disabled:opacity-50 md:w-auto md:rounded-[14px] md:px-[18px]"
+			<!-- A square icon button on phones, labelled from `md`. The label is
+			     always there for screen readers, visually hidden on phones. -->
+			<a
+				href={resolve('/(flow)/plants/new')}
+				class="flex size-12 flex-none items-center justify-center gap-2 rounded-2xl bg-primary text-on-primary no-underline md:w-auto md:rounded-[14px] md:px-[18px]"
 			>
 				<Plus size={24} strokeWidth={2.4} aria-hidden="true" />
-				<span class="hidden text-[15px] font-bold md:inline">{m.plants_add()}</span>
-			</button>
+				<span class="sr-only text-[15px] font-bold md:not-sr-only">{m.plants_add()}</span>
+			</a>
 		</div>
 	</header>
 
@@ -106,10 +104,18 @@
 		</p>
 	{:else if plants.length === 0}
 		<!-- Empty states are listed as "not designed yet" in screens.md, so this
-		     follows the tokens and says plainly why the list is empty. -->
+		     follows the tokens and leads straight to adding the first plant
+		     (design.md 9: empty states guide adding the first plant). -->
 		<div class="flex max-w-xl flex-col gap-2 rounded-[18px] bg-surface p-5 text-center">
 			<h2 class="text-lg font-bold text-ink">{m.plants_empty_heading()}</h2>
 			<p class="text-sm text-muted">{m.plants_empty_body()}</p>
+			<a
+				href={resolve('/(flow)/plants/new')}
+				class="mt-2 flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-4 font-bold text-on-primary no-underline"
+			>
+				<Plus size={20} strokeWidth={2.4} aria-hidden="true" />
+				{m.plants_empty_add()}
+			</a>
 		</div>
 	{:else if shown.length === 0}
 		<p class="text-sm text-muted" role="status">{m.plants_search_none({ query: search.trim() })}</p>

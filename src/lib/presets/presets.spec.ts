@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 import { describe, expect, it } from 'vitest';
 import raw from './presets.json';
-import { presetById, presets, PresetsSchema } from './index.js';
+import { BLANK_PRESET, matchesPreset, presetById, presets, PresetsSchema } from './index.js';
 
 // The presets file is hand-edited, and plants read their care text from it on
 // every render, so these guard the two things a typo could break: the shape of
@@ -59,5 +59,34 @@ describe('presetById', () => {
 		expect(presetById('pilea-peperomioides')?.scientificName).toBe('Pilea peperomioides');
 		expect(presetById(undefined)).toBeUndefined();
 		expect(presetById('no-such-plant')).toBeUndefined();
+	});
+});
+
+describe('BLANK_PRESET', () => {
+	it('can never collide with a preset id', () => {
+		expect(presetById(BLANK_PRESET)).toBeUndefined();
+	});
+});
+
+describe('matchesPreset', () => {
+	const pilea = presetById('pilea-peperomioides')!;
+
+	it('matches every preset on an empty query', () => {
+		expect(presets.every((preset) => matchesPreset(preset, '  ', 'en'))).toBe(true);
+	});
+
+	it('finds by short, common or scientific name, ignoring case', () => {
+		expect(matchesPreset(pilea, 'PILEA', 'en')).toBe(true);
+		expect(matchesPreset(pilea, 'money plant', 'en')).toBe(true);
+		expect(matchesPreset(pilea, 'peperomioides', 'en')).toBe(true);
+	});
+
+	it('finds by the name in the other language too', () => {
+		expect(matchesPreset(pilea, 'kiinanpilea', 'en')).toBe(true);
+		expect(matchesPreset(pilea, 'money', 'fi')).toBe(true);
+	});
+
+	it('needs every word to match', () => {
+		expect(matchesPreset(pilea, 'money tree', 'en')).toBe(false);
 	});
 });
