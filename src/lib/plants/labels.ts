@@ -263,3 +263,50 @@ export function careRows(care: CareProfile): CareRow[] {
 
 	return rows.filter((row): row is CareRow => row !== null);
 }
+
+/**
+ * The months each season covers, for the interval steppers: "Apr–Sep" and
+ * "Oct–Mar" with the default growing months. Names come from `Intl`, so
+ * Finnish gets "huhti–syys". Assumes the growing months are one unbroken run,
+ * which is all Settings will offer.
+ */
+export function seasonRanges(growingMonths: readonly number[]): {
+	growing: string;
+	resting: string;
+} {
+	const name = (month: number) =>
+		new Intl.DateTimeFormat(getLocale(), { month: 'short' })
+			.format(new Date(2026, month - 1, 1))
+			.replace(/\.$/, '');
+	const sorted = [...growingMonths].sort((a, b) => a - b);
+	const first = sorted[0] ?? 4;
+	const last = sorted.at(-1) ?? 9;
+	const wrap = (month: number) => ((month + 11) % 12) + 1;
+	return {
+		growing: `${name(first)}–${name(last)}`,
+		resting: `${name(wrap(last + 1))}–${name(wrap(first - 1))}`
+	};
+}
+
+/**
+ * The pot hint under "Top layer" (docs/mockups/add-plant.dc.html): what the
+ * pot means for checking. Null when nothing chosen says anything useful.
+ */
+export function potHint(material?: PotMaterial, top?: PotTopLayer): string | null {
+	const pebbles = top === 'pebbles';
+	if (material === 'terracotta') {
+		return pebbles ? m.pot_hint_terracotta_pebbles() : m.pot_hint_terracotta();
+	}
+	if (pebbles) return m.pot_hint_pebbles();
+	if (material === 'plastic' || material === 'glazed') return m.pot_hint_damp();
+	return null;
+}
+
+/** "Wed 18 Nov": a check date, short, in the current language. */
+export function shortDateLabel(date: Date): string {
+	return new Intl.DateTimeFormat(getLocale(), {
+		weekday: 'short',
+		day: 'numeric',
+		month: 'short'
+	}).format(date);
+}

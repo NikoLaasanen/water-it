@@ -7,27 +7,44 @@
   semantics come for free; the `fieldset`/`legend` names the group. The
   selection is carried by the lifted segment *and* by weight and ink colour,
   never by the quiet track edge alone (screens.md).
+
+  `value` may be undefined — nothing chosen yet, for optional fields like the
+  pot material. With `edited` set it shows the care tag and, when edited,
+  "Reset to preset".
 -->
 <script lang="ts" generics="T extends string">
+	import CareTag from './form/CareTag.svelte';
+	import ResetToPreset from './form/ResetToPreset.svelte';
+
 	let {
 		legend,
 		name,
 		options,
 		value = $bindable(),
-		onchange
+		onchange,
+		edited,
+		onreset
 	}: {
 		/** Visible label for the group. */
 		legend: string;
 		/** Radio group name; unique on the page. */
 		name: string;
 		options: readonly { value: T; label: string }[];
-		value: T;
+		value: T | undefined;
 		onchange?: (value: T) => void;
+		/** Care fields from a preset only. */
+		edited?: boolean;
+		onreset?: () => void;
 	} = $props();
 </script>
 
-<fieldset class="flex flex-col gap-2">
-	<legend class="mb-2 text-sm font-bold text-ink-2">{legend}</legend>
+<fieldset class="flex flex-col">
+	<!-- The legend must be the fieldset's first child to name the group, so
+	     the care tag lives inside it. -->
+	<legend class="mb-1.5 flex w-full items-center justify-between gap-2">
+		<span class="text-sm font-bold text-ink-2">{legend}</span>
+		{#if edited !== undefined}<CareTag {edited} />{/if}
+	</legend>
 	<div
 		class="grid gap-1 rounded-[14px] bg-segment p-1"
 		style:grid-template-columns="repeat({options.length}, minmax(0, 1fr))"
@@ -56,4 +73,5 @@
 			</label>
 		{/each}
 	</div>
+	{#if edited && onreset}<ResetToPreset onclick={onreset} />{/if}
 </fieldset>

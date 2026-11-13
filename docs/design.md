@@ -175,7 +175,7 @@ Security rules: a user can read and write only under `users/{their uid}`. Specie
 - make the Edit form's "Edited" tag a guess (compare against a preset that may have been improved since);
 - keep preset fixes from ever reaching plants already added.
 
-Rules that follow from it: **preset ids are permanent** (a test pins them); each override key is all-or-nothing (`checkIntervalDays` holds both intervals); "Reset to preset" deletes the key, and editing a field back to the preset's value also deletes it. A plant with no preset ("Start from a blank profile") keeps its whole profile in `careOverrides` and shows no "Edited" tags. Text a user types is stored as typed — only preset text is translated.
+Rules that follow from it: **preset ids are permanent** (a test pins them); each override key is all-or-nothing (`checkIntervalDays` holds both intervals); "Reset to preset" deletes the key, and editing a field back to the preset's value also deletes it. A field the owner cleared is stored as `null`, so it shows nothing rather than falling back to the preset (`light`, which is required text, is stored as `''`). A plant with no preset ("Start from a blank profile") keeps its whole profile in `careOverrides` and shows no "Edited" tags. Text a user types is stored as typed — only preset text is translated.
 
 **Shares.** Rules can't read a token from a URL, so the share is designed around that:
 - The share document holds a **snapshot** of what the sitter needs (plant name, location, instructions, sitter note, schedule for the period, thumbnail path), copied from the owner's plants. The owner's app re-writes the snapshot whenever a shared plant is edited during the trip. The sitter never reads `users/...`.

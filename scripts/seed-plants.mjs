@@ -214,10 +214,24 @@ if (!user) {
 	process.exit(1);
 }
 
+/** Deletes a document if it exists; a missing one is fine. */
+async function remove(path) {
+	const url = `http://${FIRESTORE}/v1/projects/${PROJECT}/databases/(default)/documents/${path}`;
+	const response = await fetch(url, { method: 'DELETE', headers: OWNER });
+	if (!response.ok && response.status !== 404) {
+		console.error(`Deleting ${path} failed with ${response.status}: ${await response.text()}`);
+		process.exit(1);
+	}
+}
+
 for (const plant of PLANTS) {
 	await put(`users/${user.localId}/plants/${plant.id}`, plantFields(plant));
+	// Earlier seeds named the task `check-<plant>`; the app now uses
+	// `check-water-<plant>` (checkTaskId in plant-writes.ts). Drop the old one so
+	// a plant doesn't end up with two checks.
+	await remove(`users/${user.localId}/tasks/check-${plant.id}`);
 	await put(
-		`users/${user.localId}/tasks/check-${plant.id}`,
+		`users/${user.localId}/tasks/check-water-${plant.id}`,
 		toFields({
 			plantId: plant.id,
 			kind: 'check-water',

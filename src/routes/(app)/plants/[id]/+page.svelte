@@ -3,11 +3,10 @@
 
   Phone: docs/mockups/plant-detail.dc.html — a 300 px photo header with round
   Back and Edit buttons over it, and a content sheet that overlaps the photo by
-  28 px with a rounded top. Sections stack: next check, care profile, sitter
-  note.
+  28 px with a rounded top. Sections stack: next check, then the care profile.
   iPad (`md`+): docs/mockups/tablet-plant-detail.dc.html — the tabs move up
-  beside the name, and the sections go into two columns: next check and sitter
-  note on the left, the care profile on the right. From `lg` the plant list
+  beside the name, and the sections go into two columns: next check on the left, the care
+  profile on the right. The sitter note from the mockups waits for M4. From `lg` the plant list
   sits beside this page (plants/+layout.svelte), so Back is hidden and the
   photo header drops to 220 px.
 
@@ -24,7 +23,6 @@
 	import HealthFace from '#lib/components/HealthFace.svelte';
 	import CareProfileCard from '#lib/components/plant/CareProfileCard.svelte';
 	import NextCheckCard from '#lib/components/plant/NextCheckCard.svelte';
-	import SitterNoteCard from '#lib/components/plant/SitterNoteCard.svelte';
 	import { PlantQuery } from '#lib/firebase/plants.svelte.js';
 	import { session } from '#lib/firebase/session.svelte.js';
 	import { m } from '#lib/paraglide/messages.js';
@@ -204,17 +202,15 @@
 			</div>
 		</div>
 
-		<!-- One column on phones, in the mockup's order: next check, care
-		     profile, sitter note. From `md` two columns, with next check and the
-		     note on the left. `contents` lets the left column's cards take part
-		     in the phone's single-column order, and `order` puts the care
-		     profile between them there. -->
+		<!-- One column on phones: next check, then care profile. From `md` two
+		     columns, next check on the left. `contents` lets the left column's
+		     cards take part in the phone's single-column order, and `order`
+		     places the care profile among them — which matters again when the
+		     left column gains Recent log (M2) and the sitter note (M4, hidden
+		     until plant-sitting lands). -->
 		<div class="grid gap-5 md:grid-cols-2 md:items-start">
 			<div class="contents md:flex md:flex-col md:gap-5">
 				<div class="order-1"><NextCheckCard {next} /></div>
-				{#if plant.sitterNote?.trim()}
-					<div class="order-3"><SitterNoteCard note={plant.sitterNote} /></div>
-				{/if}
 			</div>
 			<div class="order-2 md:order-none">
 				<CareProfileCard {rows} {provenance} />

@@ -12,6 +12,8 @@ import {
 	getDocs,
 	setDoc,
 	deleteDoc,
+	serverTimestamp,
+	writeBatch,
 	type Firestore
 } from 'firebase/firestore';
 import { afterAll, afterEach, beforeAll, describe, test } from 'vitest';
@@ -106,6 +108,42 @@ describe('users/{uid}: an invited owner', () => {
 		await invite('niko@example.test');
 		const db = as(NIKO, 'Niko@Example.Test');
 		await assertSucceeds(setDoc(doc(db, 'users/' + NIKO), { locale: 'en' }));
+	});
+});
+
+/** The Add plant write (src/lib/firebase/plant-writes.ts): plant + first check, one batch. */
+function addPlantBatch(db: Firestore, uid: string) {
+	const batch = writeBatch(db);
+	batch.set(doc(db, 'users/' + uid + '/plants/new-1'), {
+		name: 'Pilea',
+		health: 'okay',
+		speciesId: 'pilea-peperomioides',
+		careOverrides: { dryDownTest: 'Skewer', tempMinC: null },
+		createdAt: serverTimestamp()
+	});
+	batch.set(doc(db, 'users/' + uid + '/tasks/check-water-new-1'), {
+		plantId: 'new-1',
+		kind: 'check-water',
+		nextDue: '2026-11-27',
+		intervalDays: 14
+	});
+	return batch.commit();
+}
+
+describe('Add plant: the plant and its first check in one batch', () => {
+	test('succeeds for an invited owner', async () => {
+		await invite(NIKO_EMAIL);
+		await assertSucceeds(addPlantBatch(as(NIKO, NIKO_EMAIL), NIKO));
+	});
+
+	test('fails as a whole for an uninvited account, leaving no half-written plant', async () => {
+		await assertFails(addPlantBatch(as(STRANGER, STRANGER_EMAIL), STRANGER));
+	});
+
+	test("fails when written into another user's tree", async () => {
+		await invite(NIKO_EMAIL);
+		await invite(MUM_EMAIL);
+		await assertFails(addPlantBatch(as(MUM, MUM_EMAIL), NIKO));
 	});
 });
 

@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { presetById } from '#lib/presets/index.js';
-import { BLANK_CARE, readOverrides, resolveCare } from './care-profile.js';
+import {
+	BLANK_CARE,
+	diffOverrides,
+	presetCare,
+	readOverrides,
+	resolveCare
+} from './care-profile.js';
 
 const pilea = presetById('pilea-peperomioides')!;
 
@@ -89,5 +95,69 @@ describe('readOverrides', () => {
 		expect(readOverrides(undefined)).toEqual({});
 		expect(readOverrides('pilea')).toEqual({});
 		expect(readOverrides(['light'])).toEqual({});
+	});
+});
+
+describe('diffOverrides', () => {
+	it('stores nothing for an untouched preset profile', () => {
+		expect(diffOverrides(presetCare(pilea, 'fi'), pilea, 'fi')).toEqual({});
+	});
+
+	it('stores only the fields that differ', () => {
+		const edited = {
+			...presetCare(pilea, 'en'),
+			dryDownTest: 'Skewer under the pebbles',
+			checkIntervalDays: { growing: 9, resting: 14 }
+		};
+		expect(diffOverrides(edited, pilea, 'en')).toEqual({
+			checkIntervalDays: { growing: 9, resting: 14 },
+			dryDownTest: 'Skewer under the pebbles'
+		});
+	});
+
+	it('drops an edit that was typed back to the preset value', () => {
+		const edited = { ...presetCare(pilea, 'en'), light: pilea.care.light.en };
+		expect(diffOverrides(edited, pilea, 'en')).toEqual({});
+	});
+
+	it('stores a cleared field so the preset does not come back', () => {
+		const edited = {
+			...presetCare(pilea, 'en'),
+			light: '',
+			tempMinC: undefined,
+			watchOuts: []
+		};
+		const overrides = diffOverrides(edited, pilea, 'en');
+		expect(overrides).toEqual({ light: '', tempMinC: null, watchOuts: null });
+		// …and reading it back shows nothing there.
+		const { care, edited: fields } = resolveCare(pilea, overrides, 'en');
+		expect(care.light).toBe('');
+		expect(care.tempMinC).toBeUndefined();
+		expect(care.watchOuts).toBeUndefined();
+		expect(fields).toEqual(['light', 'tempMinC', 'watchOuts']);
+	});
+
+	it('ignores fixedSchedule off when the preset has none', () => {
+		const edited = { ...presetCare(pilea, 'en'), fixedSchedule: false };
+		expect(diffOverrides(edited, pilea, 'en')).toEqual({});
+	});
+
+	it('stores every filled-in field for a plant without a preset', () => {
+		const own = { ...BLANK_CARE, light: 'North window', dryDownTest: '', watchOuts: [] };
+		expect(diffOverrides(own, undefined, 'en')).toEqual({
+			light: 'North window',
+			lightLevel: 'medium',
+			wateringStyle: 'soak-and-dry',
+			checkIntervalDays: { growing: 7, resting: 14 }
+		});
+	});
+});
+
+describe('readOverrides and null', () => {
+	it('keeps null on optional fields, meaning cleared', () => {
+		expect(readOverrides({ tempMinC: null, watchOuts: null, light: null })).toEqual({
+			tempMinC: null,
+			watchOuts: null
+		});
 	});
 });

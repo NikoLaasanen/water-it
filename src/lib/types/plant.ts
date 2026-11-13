@@ -54,8 +54,15 @@ export type CareProfile = {
  * Each key is all-or-nothing: an override of `checkIntervalDays` holds both
  * intervals, and "Reset to preset" deletes the key. A plant with no preset
  * ("Start from a blank profile") keeps its whole profile here.
+ *
+ * `null` on an optional field means the owner cleared it on purpose: the
+ * plant shows nothing there, rather than falling back to the preset.
  */
-export type CareOverrides = Partial<CareProfile>;
+export type CareOverrides = {
+	[K in keyof CareProfile]?: undefined extends CareProfile[K]
+		? CareProfile[K] | null
+		: CareProfile[K];
+};
 
 export type PotMaterial = 'plastic' | 'terracotta' | 'glazed';
 

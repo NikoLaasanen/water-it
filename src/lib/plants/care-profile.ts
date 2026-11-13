@@ -72,12 +72,80 @@ export function resolveCare(
 	const base = preset ? presetCare(preset, locale) : BLANK_CARE;
 	const care = { ...base } as Record<CareField, unknown>;
 	for (const field of CARE_FIELDS) {
-		if (overrides[field] !== undefined) care[field] = overrides[field];
+		const value = overrides[field];
+		// null = cleared on purpose: show nothing, not the preset's value.
+		if (value !== undefined) care[field] = value === null ? undefined : value;
 	}
 	return {
 		care: care as CareProfile,
 		edited: preset ? CARE_FIELDS.filter((field) => overrides[field] !== undefined) : []
 	};
+}
+
+// --- Writing: which fields are the owner's own ------------------------------
+
+/** Deep equality for the plain values a care field can hold. */
+function sameValue(a: unknown, b: unknown): boolean {
+	if (a === b) return true;
+	if (Array.isArray(a) && Array.isArray(b)) {
+		return a.length === b.length && a.every((item, index) => sameValue(item, b[index]));
+	}
+	if (isObject(a) && isObject(b)) {
+		const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+		return [...keys].every((key) => sameValue(a[key], b[key]));
+	}
+	return false;
+}
+
+/** Empty text, an empty list and `undefined` all mean "nothing to say". */
+function isEmpty(value: unknown): boolean {
+	return (
+		value === undefined ||
+		(typeof value === 'string' && value.trim() === '') ||
+		(Array.isArray(value) && value.length === 0)
+	);
+}
+
+/**
+ * The overrides to store for a care profile as edited on the form.
+ *
+ * With a preset, a field is stored only if it differs from the preset's value
+ * in the language the form showed it in — so editing a field back to the
+ * preset's text removes the override, as design.md §6 says. Untouched fields
+ * are left out and keep following the preset, in whatever language the app
+ * is in later.
+ *
+ * Without a preset, everything with a value is stored: there is nothing else
+ * to read it from.
+ *
+ * A preset field the owner cleared is stored as `null`, so "nothing" stays
+ * nothing rather than falling back to the preset's value.
+ */
+export function diffOverrides(
+	edited: CareProfile,
+	preset: Preset | undefined,
+	locale: Locale
+): CareOverrides {
+	const out: Record<string, unknown> = {};
+	if (!preset) {
+		for (const field of CARE_FIELDS) {
+			if (!isEmpty(edited[field])) out[field] = edited[field];
+		}
+		return out as CareOverrides;
+	}
+	const base = presetCare(preset, locale);
+	for (const field of CARE_FIELDS) {
+		const mine = edited[field];
+		const theirs = base[field];
+		if (isEmpty(mine) && isEmpty(theirs)) continue;
+		if (field === 'fixedSchedule' && !mine && !theirs) continue;
+		if (!sameValue(mine, theirs)) {
+			// Firestore rejects `undefined`; a cleared optional field is stored as
+			// null. `light` is required text, so cleared it is the empty string.
+			out[field] = !isEmpty(mine) ? mine : field === 'light' ? '' : null;
+		}
+	}
+	return out as CareOverrides;
 }
 
 // --- Reading overrides back from Firestore ----------------------------------
@@ -127,6 +195,17 @@ export function readOverrides(data: unknown): CareOverrides {
 		};
 	}
 	if (typeof data.fixedSchedule === 'boolean') out.fixedSchedule = data.fixedSchedule;
+	// Optional fields may be null: cleared on purpose (see `CareOverrides`).
+	for (const field of [
+		'dryDownTest',
+		'tempMinC',
+		'tempComfortC',
+		'fertilize',
+		'repotIntervalMonths',
+		'watchOuts'
+	] as const) {
+		if (data[field] === null) out[field] = null;
+	}
 	if (isText(data.dryDownTest)) out.dryDownTest = data.dryDownTest;
 	if (isNumber(data.tempMinC)) out.tempMinC = data.tempMinC;
 	if (

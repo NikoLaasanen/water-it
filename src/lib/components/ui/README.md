@@ -18,3 +18,9 @@ find src/lib/components/ui -name "*.svelte" -exec sed -i -E 's/ ?dark:[^ "]+//g;
 shadcn's colour names (`background`, `primary-foreground`, `input`, `ring`, …)
 are mapped onto the app's tokens in `src/routes/layout.css`. App code outside
 this folder uses the app's own token names, never shadcn's.
+
+Other local changes, to keep when updating a component:
+
+- `switch`: an `lg` size (52 × 32, from the Add/Edit mockups) and knob colours
+  from `--switch-knob` / `--switch-knob-on` instead of `bg-background`.
+- `button`: an ESLint exception around the `<a>` it renders for `href`.

@@ -181,6 +181,16 @@ Decided 2026-11-13, before building:
 - **"From preset" / "Edited".** A field is "Edited" exactly when it is in the plant's `careOverrides` (design.md §6). Editing a field back to the preset's value removes the override. **Reset to preset** deletes it.
 - Photo and Identify-from-photo are hidden until M3 / M2, not shown disabled: on a form, a control that does nothing is a trap.
 
+Step 2 built 2026-11-13 (`src/routes/(flow)/plants/new/[preset]`, form body `PlantFormFields.svelte`, logic `plant-form.svelte.ts`):
+
+- **Saving** writes the plant and its first `check-water` task (`check-water-<plantId>`) in one batch, then opens the new plant, replacing the form in history so Back can't add it twice. The write lands in the offline cache at once; nothing waits for the server.
+- **First check** = today + the interval for today's season (dormant → winter interval; grow light → growing interval; otherwise the calendar). `src/lib/plants/schedule.ts`, with tests.
+- **Added to the mockup: Water needs** (Little / Moderate / Lots) beside Light under "More care details". Presets supply it, but a blank profile had no way to set the water chip.
+- **Validation** (Valibot) runs on submit: name required (≤ 60), intervals 1–120 days, pot 1–200 cm, temperatures −10…45 °C, comfortable range both-or-neither and lower first, fertilizing 1–365 days, repotting 1–120 months. Errors appear under their field, and focus moves to the first one; "More care details" opens by itself if the problem is inside it.
+- **"From preset" / "Edited"** tags show on every care field when there is a preset (on Add as well as Edit), with **Reset to preset** under edited ones. Clearing a field the preset fills stores it as cleared (`null`), so the preset's text doesn't come back.
+- **No "Note for plant-sitters" yet** (Niko, 2026-11-13): it is left out of the form and off plant detail until plant-sitting lands in M4, though `sitterNote` stays in the data model and Edit carries an existing note through untouched.
+- Form controls: native radios for the segmented controls, health cards and reminder type; shadcn Switch (with a local 52 × 32 size) and Collapsible. Number fields use `inputmode="numeric"`; "When" is `<input type="month">`.
+
 ## Edit plant — `edit-plant-dark.dc.html`
 
 The Add form, prefilled, with three differences: a header with **Cancel** · "Edit plant" · **Save**; edited care fields carry an **Edited** tag (`edited-bg`/`edited-fg`) and a **Reset to preset** link under them; and at the bottom **Save changes** plus an outlined **Delete plant** (`danger`), with "Deleting removes its log and photos too. You'll be asked to confirm." Delete removes the plant's tasks and log entries as well, in one batch.
