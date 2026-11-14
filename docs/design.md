@@ -369,7 +369,7 @@ Notes for B:
 
 ### 7.5 Photos and backup
 - Photos are downscaled on the device (long edge 1600 px + thumbnail), then uploaded to **Cloud Storage** under `users/{uid}/photos/`, with Storage rules matching Firestore's. For plant-sitting, Storage rules also allow reading a plant's thumbnail if an active share lists that plant (Storage rules can look up Firestore documents). Uploads made offline wait in a small local queue (IndexedDB) and upload when back online.
-- Backup: Firestore is the source of truth. Keep an **export to zip** (JSON + photos) in Settings as a personal backup, but it's no longer critical.
+- Backup: Firestore is the source of truth. Settings → Backup saves a personal copy as one JSON file (`water-it-backup-YYYY-MM-DD.json`: settings, plants, tasks, log; timestamps as ISO strings; `format: 1`). Built 2026-11-14 without photos. When photos arrive it becomes a **zip** (JSON + photos), `format: 2`, which needs a zip library (a new dependency, ask first). There is no restore yet; the file is for keeping.
 
 ---
 
@@ -544,8 +544,8 @@ ones; see "Dark mode" there.
 
 **M4 — Plant-sitting, backup and polish**
 - "Going away" flow, share link, sitter view, sitter logs merged into the owner's log
-- Export to zip
-- Persistent storage request, settings, dark mode
+- ~~Export~~ — JSON backup in Settings built 2026-11-14; the zip waits for photos
+- ~~Persistent storage request~~, ~~settings~~, ~~dark mode~~ — built
 - Onboard a second user (mum)
 - Accessibility pass
 

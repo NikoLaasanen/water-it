@@ -441,5 +441,16 @@
 	"tip_resting_2": "Light is scarce in winter. Move sun-lovers closer to the window, but keep leaves off the cold glass.",
 	"tip_resting_3": "Most plants rest now. Leave the fertiliser until spring.",
 	"tip_resting_4": "Water with room-temperature water. Cold tap water stresses the roots.",
-	"tip_resting_5": "Wipe the dust off broad leaves so they catch what little light there is."
+	"tip_resting_5": "Wipe the dust off broad leaves so they catch what little light there is.",
+	"settings_backup": "Backup",
+	"backup_save": "Save a backup",
+	"backup_hint": "Your plants, care log and reminders in one file, to keep wherever you like. Everything is already stored online; this is a copy of your own.",
+	"backup_preparing": "Preparing…",
+	"backup_ready": "Your backup is ready.",
+	"backup_save_file": "Save the file",
+	"backup_downloaded": "Downloaded {file}.",
+	"backup_error": "Couldn’t make the backup. Try again.",
+	"storage_label": "Offline data on this device",
+	"storage_granted": "Kept, even when the device runs low on space.",
+	"storage_not_granted": "The device may clear it when space runs low. Nothing is lost: it downloads again when you’re online."
 }

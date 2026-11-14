@@ -331,6 +331,7 @@ Not on the canvas. Built from the tokens, revised after review on 2026-11-13:
 Not designed. For now:
 
 - **Display**: **Language** (Automatic / English / Suomi) and **Appearance** (Automatic / Light / Dark), each a segmented control (`SegmentedChoice.svelte`, native radios — the same control the Add form will use for pot material and light). Automatic follows the phone. Changing language reloads the app (that is how Paraglide switches). Both are stored per device for now; `Settings.language` moves to Firestore with the settings document.
+- **Backup**: one line on what the file holds, and **Save a backup** (download icon). The tap reads everything under `users/{uid}` and opens the share sheet (Save to Files, AirDrop, Mail…); on a desktop without file sharing it downloads instead. If the browser refuses the share sheet because the tap is too long ago, the button becomes "Your backup is ready" + **Save the file**, whose tap is fresh. Below a divider, **Offline data on this device**: "Kept, even when the device runs low on space" or "The device may clear it… Nothing is lost", from `navigator.storage.persist()` (asked once per launch, silently, in `(app)/+layout.svelte`); hidden where the browser can't tell.
 - **Account**: "Signed in as …" and **Sign out**.
 
 Growing season and notifications join later.

@@ -7,6 +7,7 @@
   #lib/theme.svelte.ts).
 -->
 <script lang="ts">
+	import Download from '@lucide/svelte/icons/download';
 	import SegmentedChoice from '#lib/components/SegmentedChoice.svelte';
 	import { session } from '#lib/firebase/session.svelte.js';
 	import {
@@ -16,6 +17,50 @@
 	} from '#lib/i18n/language.js';
 	import { m } from '#lib/paraglide/messages.js';
 	import { theme, type ThemePreference } from '#lib/theme.svelte.js';
+	import { backupFile, deliverFile } from '#lib/firebase/backup.js';
+	import { storagePersistence } from '#lib/storage-persist.svelte.js';
+
+	/**
+	 * Backup: one tap reads everything and opens the share sheet. If the
+	 * browser says that tap is too old by then, the file is kept and a second
+	 * button hands it over with a fresh tap (#lib/firebase/backup.ts).
+	 */
+	let backup = $state<
+		| { step: 'idle' | 'preparing' | 'error' }
+		| { step: 'ready'; file: File }
+		| { step: 'downloaded'; name: string }
+	>({ step: 'idle' });
+
+	async function hand(file: File) {
+		const result = await deliverFile(file);
+		backup =
+			result === 'blocked'
+				? { step: 'ready', file }
+				: result === 'downloaded'
+					? { step: 'downloaded', name: file.name }
+					: { step: 'idle' };
+	}
+
+	async function saveBackup() {
+		const uid = session.user?.uid;
+		if (!uid || backup.step === 'preparing') return;
+		backup = { step: 'preparing' };
+		try {
+			await hand(await backupFile(uid));
+		} catch (error) {
+			console.error('Making a backup failed', error);
+			backup = { step: 'error' };
+		}
+	}
+
+	async function saveReady(file: File) {
+		try {
+			await hand(file);
+		} catch (error) {
+			console.error('Sharing a backup failed', error);
+			backup = { step: 'error' };
+		}
+	}
 
 	// Changing it reloads the app, so it never has to be reactive afterwards.
 	const language = languagePreference();
@@ -70,6 +115,57 @@
 				/>
 				<p class="text-xs text-muted">{m.settings_theme_hint()}</p>
 			</div>
+		</div>
+	</section>
+
+	<section class="flex flex-col gap-2">
+		<h2 class="text-[13px] font-bold tracking-[0.08em] text-muted-2 uppercase">
+			{m.settings_backup()}
+		</h2>
+		<div
+			class="flex flex-col gap-4 rounded-[18px] border border-card-edge bg-surface p-4 shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
+		>
+			<div class="flex flex-col gap-2.5">
+				<p class="text-sm text-ink-2">{m.backup_hint()}</p>
+				{#if backup.step === 'ready'}
+					{@const file = backup.file}
+					<p class="text-sm font-semibold text-ink" role="status">{m.backup_ready()}</p>
+					<button
+						type="button"
+						class="inline-flex min-h-11 w-fit items-center gap-2 rounded-xl bg-primary px-4 font-bold text-primary-foreground"
+						onclick={() => saveReady(file)}
+					>
+						<Download size={18} aria-hidden="true" />
+						{m.backup_save_file()}
+					</button>
+				{:else}
+					<button
+						type="button"
+						class="inline-flex min-h-11 w-fit items-center gap-2 rounded-xl border border-border px-4 font-bold text-ink disabled:opacity-60"
+						disabled={backup.step === 'preparing'}
+						onclick={saveBackup}
+					>
+						<Download size={18} aria-hidden="true" />
+						{backup.step === 'preparing' ? m.backup_preparing() : m.backup_save()}
+					</button>
+				{/if}
+				<div role="status" aria-live="polite" class="text-sm empty:hidden">
+					{#if backup.step === 'error'}
+						<span class="text-danger">{m.backup_error()}</span>
+					{:else if backup.step === 'downloaded'}
+						<span class="text-muted">{m.backup_downloaded({ file: backup.name })}</span>
+					{/if}
+				</div>
+			</div>
+
+			{#if storagePersistence.state === 'granted' || storagePersistence.state === 'not-granted'}
+				<div class="flex flex-col gap-0.5 border-t border-border pt-3.5">
+					<p class="text-sm font-semibold text-ink">{m.storage_label()}</p>
+					<p class="text-xs text-muted">
+						{storagePersistence.state === 'granted' ? m.storage_granted() : m.storage_not_granted()}
+					</p>
+				</div>
+			{/if}
 		</div>
 	</section>
 

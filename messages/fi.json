@@ -450,5 +450,16 @@
 	"tip_resting_2": "Talvella valoa on vähän. Siirrä valoa rakastavat lähemmäs ikkunaa, mutta pidä lehdet irti kylmästä lasista.",
 	"tip_resting_3": "Useimmat kasvit lepäävät nyt. Jätä lannoitus kevääseen.",
 	"tip_resting_4": "Kastele huoneenlämpöisellä vedellä. Kylmä hanavesi rasittaa juuria.",
-	"tip_resting_5": "Pyyhi pölyt leveiltä lehdiltä, jotta ne saavat vähäisestäkin valosta kaiken irti."
+	"tip_resting_5": "Pyyhi pölyt leveiltä lehdiltä, jotta ne saavat vähäisestäkin valosta kaiken irti.",
+	"settings_backup": "Varmuuskopio",
+	"backup_save": "Tallenna varmuuskopio",
+	"backup_hint": "Kasvisi, hoitoloki ja muistutukset yhdessä tiedostossa, säilytettäväksi minne haluat. Kaikki on jo tallessa verkossa; tämä on oma kopiosi.",
+	"backup_preparing": "Valmistellaan…",
+	"backup_ready": "Varmuuskopio on valmis.",
+	"backup_save_file": "Tallenna tiedosto",
+	"backup_downloaded": "Ladattu: {file}.",
+	"backup_error": "Varmuuskopion tekeminen ei onnistunut. Yritä uudelleen.",
+	"storage_label": "Offline-tiedot tällä laitteella",
+	"storage_granted": "Säilytetään, vaikka laitteen tila kävisi vähiin.",
+	"storage_not_granted": "Laite voi poistaa ne, jos tila käy vähiin. Mitään ei katoa: ne ladataan uudelleen, kun olet verkossa."
 }

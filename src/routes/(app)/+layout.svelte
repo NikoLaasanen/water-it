@@ -18,8 +18,14 @@
 	import { page } from '$app/state';
 	import AppNav from '#lib/components/AppNav.svelte';
 	import HillsBackdrop from '#lib/components/HillsBackdrop.svelte';
+	import { storagePersistence } from '#lib/storage-persist.svelte.js';
 
 	let { children }: LayoutProps = $props();
+
+	// Once per launch, signed in: keep the offline data (design.md §7.1).
+	$effect(() => {
+		if (storagePersistence.state === 'unknown') void storagePersistence.request();
+	});
 
 	// The hills sit behind every screen but Today, which has its header scene,
 	// and plant detail, which draws them inside its content sheet.
