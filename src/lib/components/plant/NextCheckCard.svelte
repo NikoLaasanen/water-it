@@ -1,7 +1,8 @@
 <!--
   The next-check card on plant detail (screens.md "Plant detail").
 
-  The status line ("Check overdue 2 days" / "Next check Sat"), then either
+  The status line ("Check overdue 2 days" / "Next check Sat"), "Last watered
+  25 Oct · winter interval 14 days", then either
   **Watered** and **Still damp**, or — once the check has been answered today —
   the same status badge, next step and Undo as the Today card. The writes are
   the Today view's (check-writes.ts), so the two can't drift apart.
@@ -19,12 +20,21 @@
 	import { session } from '#lib/firebase/session.svelte.js';
 	import { m } from '#lib/paraglide/messages.js';
 	import { nextCheck, parseLocalDate } from '#lib/plants/care.js';
-	import { careOf, nextCheckDetailLabel } from '#lib/plants/labels.js';
-	import { currentIntervalDays, type CheckAction } from '#lib/plants/schedule.js';
+	import { careOf, lastWateredLine, nextCheckDetailLabel } from '#lib/plants/labels.js';
+	import { currentIntervalDays, currentSeason, type CheckAction } from '#lib/plants/schedule.js';
 	import { canUndo, latestAnswerFor } from '#lib/plants/today.js';
 	import type { Plant, Task } from '#lib/types/plant.js';
 
-	let { plant, task }: { plant: Plant; task: Task | undefined } = $props();
+	let {
+		plant,
+		task,
+		lastWatered
+	}: {
+		plant: Plant;
+		task: Task | undefined;
+		/** From the plant's log (or the check's last answer); null if never. */
+		lastWatered: Date | null;
+	} = $props();
 
 	const log = new LogSince();
 	$effect(() => {
@@ -39,6 +49,13 @@
 	const overdue = $derived(next.kind === 'overdue');
 	const answer = $derived(latestAnswerFor(log.entries, plant.id));
 	const nextDue = $derived(answer ? parseLocalDate(answer.check.nextDue) : null);
+	const wateredLine = $derived(
+		lastWateredLine(
+			lastWatered,
+			currentSeason(plant, today),
+			currentIntervalDays(careOf(plant).care, plant, today)
+		)
+	);
 
 	function answerWith(action: CheckAction) {
 		const uid = session.user?.uid;
@@ -63,6 +80,7 @@
 	>
 		{nextCheckDetailLabel(next)}
 	</p>
+	<p class="text-[15px] text-ink-2">{wateredLine}</p>
 
 	{#if answer && nextDue}
 		<CheckStatus

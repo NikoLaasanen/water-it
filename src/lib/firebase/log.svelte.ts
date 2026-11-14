@@ -1,14 +1,16 @@
 /**
- * Live view of the log entries made since a given moment — in practice, since
- * local midnight, for Today's answered cards and their Undo.
+ * Live views of the log: the entries made since a given moment (in practice,
+ * since local midnight, for Today's answered cards and their Undo), and one
+ * plant's entries, newest first, for plant detail's Log tab.
  *
  * Same ownership rule as PlantsQuery: `listen()` returns its own cleanup.
- * A range on one field needs no composite index.
  */
 import {
 	Timestamp,
 	collection,
+	limit,
 	onSnapshot,
+	orderBy,
 	query,
 	where,
 	type DocumentData,
@@ -74,6 +76,7 @@ function toLogEntry(id: string, data: DocumentData): LogEntry | null {
 	};
 }
 
+/** Since a moment; a range on one field needs no composite index. */
 export class LogSince {
 	entries = $state<LogEntry[]>([]);
 	loading = $state(true);
@@ -90,6 +93,51 @@ export class LogSince {
 			},
 			(error: FirestoreError) => {
 				console.error('[log] listener failed', error.code);
+				this.loading = false;
+			}
+		);
+	}
+}
+
+/**
+ * One plant's log, newest first, at most `max` entries. Uses the
+ * `plantId + at desc` index in firestore.indexes.json. One extra entry is
+ * asked for, so the page knows whether "Show older" has anything to show.
+ *
+ * Re-listening with a larger `max` keeps the entries on screen until the
+ * new snapshot arrives (straight from the offline cache), so the list
+ * doesn't flash empty.
+ */
+export class PlantLog {
+	entries = $state<LogEntry[]>([]);
+	loading = $state(true);
+	hasMore = $state(false);
+	#plantId: string | null = null;
+
+	listen(uid: string, plantId: string, max: number): () => void {
+		if (plantId !== this.#plantId) {
+			this.#plantId = plantId;
+			this.entries = [];
+			this.hasMore = false;
+			this.loading = true;
+		}
+		return onSnapshot(
+			query(
+				collection(db, 'users', uid, 'log'),
+				where('plantId', '==', plantId),
+				orderBy('at', 'desc'),
+				limit(max + 1)
+			),
+			(snapshot) => {
+				const entries = snapshot.docs
+					.map((entry) => toLogEntry(entry.id, entry.data()))
+					.filter((entry): entry is LogEntry => entry !== null);
+				this.hasMore = snapshot.docs.length > max;
+				this.entries = entries.slice(0, max);
+				this.loading = false;
+			},
+			(error: FirestoreError) => {
+				console.error('[log] plant log listener failed', error.code);
 				this.loading = false;
 			}
 		);

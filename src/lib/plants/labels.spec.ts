@@ -3,6 +3,9 @@ import {
 	careRows,
 	dayRefPhrase,
 	dayRefPill,
+	lastWateredLine,
+	logNextCheckLabel,
+	monthLabel,
 	nextCheckDetailLabel,
 	potChip,
 	provenanceLine,
@@ -186,5 +189,26 @@ describe('dayRefPhrase and dayRefPill', () => {
 		);
 		expect(dayRefPill({ kind: 'tomorrow' })).toBe('Tomorrow');
 		expect(dayRefPill({ kind: 'weekday', date: sat })).toBe('Sat');
+	});
+});
+
+describe('log labels', () => {
+	it('says when the plant was last watered and which interval applies', () => {
+		expect(lastWateredLine(new Date(2026, 9, 25), 'resting', 14)).toBe(
+			'Last watered Oct 25 · winter interval 14 days'
+		);
+		expect(lastWateredLine(null, 'growing', 7)).toBe('Growing-season interval 7 days');
+	});
+
+	it('gives a check answer its next check, but not a skip or a plain entry', () => {
+		const check = { before: null, nextDue: '2026-11-21', intervalDays: 7 };
+		expect(logNextCheckLabel({ kind: 'watered', check })).toBe('Next check Sat, Nov 21');
+		expect(logNextCheckLabel({ kind: 'skipped', check })).toBeNull();
+		expect(logNextCheckLabel({ kind: 'note' })).toBeNull();
+		expect(logNextCheckLabel({ kind: 'watered', check: { ...check, nextDue: 'bad' } })).toBeNull();
+	});
+
+	it('names the month with a capital letter', () => {
+		expect(monthLabel(new Date(2026, 10, 1))).toBe('November 2026');
 	});
 });

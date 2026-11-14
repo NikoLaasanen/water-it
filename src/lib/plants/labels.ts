@@ -12,13 +12,15 @@ import type {
 	CareProfile,
 	Health,
 	LightLevel,
+	LogEntry,
+	LogKind,
 	Plant,
 	PotMaterial,
 	PotTopLayer,
 	WaterLevel
 } from '#lib/types/plant.js';
-import type { NextCheck } from './care.js';
-import type { CheckAction } from './schedule.js';
+import { parseLocalDate, type NextCheck } from './care.js';
+import type { CheckAction, Season } from './schedule.js';
 import type { DayRef } from './today.js';
 import { resolveCare, type CareField, type ResolvedCare } from './care-profile.js';
 
@@ -394,4 +396,72 @@ export function dayRefPill(ref: DayRef): string {
 				ref.date
 			);
 	}
+}
+
+/** A log entry's badge: "Watered", "Repotted". */
+export function logKindLabel(kind: LogKind): string {
+	switch (kind) {
+		case 'watered':
+			return m.log_kind_watered();
+		case 'checked-damp':
+			return m.log_kind_checked_damp();
+		case 'checked-dry':
+			return m.log_kind_checked_dry();
+		case 'skipped':
+			return m.log_kind_skipped();
+		case 'fertilized':
+			return m.log_kind_fertilized();
+		case 'repotted':
+			return m.log_kind_repotted();
+		case 'pruned':
+			return m.log_kind_pruned();
+		case 'moved':
+			return m.log_kind_moved();
+		case 'note':
+			return m.log_kind_note();
+		case 'problem':
+			return m.log_kind_problem();
+	}
+}
+
+/** A log month heading: "November 2026", "marraskuu 2026" (raised like longDateLabel). */
+export function monthLabel(month: Date): string {
+	const text = new Intl.DateTimeFormat(getLocale(), { month: 'long', year: 'numeric' }).format(
+		month
+	);
+	return text.charAt(0).toLocaleUpperCase(getLocale()) + text.slice(1);
+}
+
+/** "25 Oct": a past day, short, as in the Recent log card and "Last watered". */
+export function dayMonthLabel(date: Date): string {
+	return new Intl.DateTimeFormat(getLocale(), { day: 'numeric', month: 'short' }).format(date);
+}
+
+/** "09:14": when an entry was logged. */
+export function timeLabel(date: Date): string {
+	return new Intl.DateTimeFormat(getLocale(), { hour: '2-digit', minute: '2-digit' }).format(date);
+}
+
+/** The next-check card's second line: "Last watered 25 Oct · winter interval 14 days". */
+export function lastWateredLine(
+	lastWatered: Date | null,
+	season: Season,
+	intervalDays: number
+): string {
+	const interval =
+		season === 'growing'
+			? m.log_interval_growing({ days: intervalDays })
+			: m.log_interval_resting({ days: intervalDays });
+	if (!lastWatered) return interval.charAt(0).toLocaleUpperCase(getLocale()) + interval.slice(1);
+	return `${m.log_last_watered({ date: dayMonthLabel(lastWatered) })} · ${interval}`;
+}
+
+/**
+ * What a check answer did, for its log row: "Next check Sat 21 Nov". Null for
+ * other entries and for Skip, whose next check is simply tomorrow.
+ */
+export function logNextCheckLabel(entry: Pick<LogEntry, 'kind' | 'check'>): string | null {
+	if (!entry.check || entry.kind === 'skipped') return null;
+	const date = parseLocalDate(entry.check.nextDue);
+	return date ? m.log_next_check({ date: shortDateLabel(date) }) : null;
 }

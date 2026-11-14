@@ -161,20 +161,34 @@ Built 2026-11-12, with these decisions:
 
 - Header photo, 300 px tall, with round 44 px Back and Edit buttons on top; content sheet overlaps the photo by 28 px with a rounded top. **The photo stays in place and the sheet scrolls up over it** (Niko, 2026-11-13); Back and Edit stay on top of both.
 - Name (30/800), common + scientific name (italic), chips: health, location, pot ("Terracotta · clay pebbles").
-- Segmented tabs: **Care** / **Log** / **Photos** (Care designed; Log and Photos not yet).
+- **Order on phones (changed 2026-11-14):** name and chips, then the next-check card, then the tabs. Niko: watering is the first thing to look at on a plant, so it comes before the tabs and stays there on every tab, rather than sitting under them on Care only as in the mockup. The iPad keeps the tablet mockup's layout (tabs beside the name, next check opening the Care tab's left column).
+- Segmented tabs: **Care** / **Log** / **Photos** (Care designed; Log is a simple design of its own, below; Photos not yet).
 - Next-check card: "Check overdue 2 days" / "Next check Sat", last watered + interval, **Watered** (water colour) and **Still damp** buttons.
 - **Care profile** list: Light, Watering, Check test, Temperature, Fertilizing, Repot, Watch out. Small provenance line under it ("From the Pilea preset · edited by you: check test").
 - **Note for plant-sitters** card.
 
 Built 2026-11-12 (Care tab), with these decisions:
 
-- **Watered / Still damp** (built with Today, 2026-11-13) use the same writes as the Today cards. Unlike Today they are always offered, due or not — watering early is real and restarts the interval. Once answered today, the card shows the same status badge, next step and Undo as Today. "Last watered" in the mockup waits for the Log tab.
+- **Watered / Still damp** (built with Today, 2026-11-13) use the same writes as the Today cards. Unlike Today they are always offered, due or not — watering early is real and restarts the interval. Once answered today, the card shows the same status badge, next step and Undo as Today. "Last watered 25 Oct · winter interval 14 days" (built with the Log tab, 2026-11-14) comes from the plant's log, or from the check's `lastAnswer` when the watering is older than the log page that's loaded; with no watering on record it shows just the interval. The season is resolved with the default growing months, as on Today.
 - **Care rows with no data are dropped, not shown empty.** A plant added by hand will have only a couple of these filled in, and a column of blank values reads as a broken screen. Asserted in `labels.spec.ts` against the real compiled strings.
 - Watering reads as one sentence built from `wateringStyle` plus the two intervals, and says "Water every N days" instead of "Check every N days" when `fixedSchedule` is set — a different instruction, not different wording. The season is **not** resolved: both intervals are named, because which one applies needs `Settings.growingMonths`, and there is no settings document yet.
-- **Still missing:** the "Latest photo · 2 Nov" caption, which needs M3 photos (the header shows "No photo yet"); and the Log and Photos tabs, which are rendered `disabled` rather than hidden so the shape of the screen is honest.
+- **Still missing:** the "Latest photo · 2 Nov" caption, which needs M3 photos (the header shows "No photo yet"); and the Photos tab, which is rendered `disabled` rather than hidden so the shape of the screen is honest.
 - **Added 2026-11-13, with the presets:** the common + scientific name line ("Chinese money plant · *Pilea peperomioides*"; nothing for generic presets or a blank profile) and the provenance line ("From the Pilea preset · edited by you: check test"), which lists edited rows once each, lower-cased.
-- **iPad (`tablet-plant-detail.dc.html`), built 2026-11-13.** From `md` the Care/Log/Photos tabs (300 px) sit beside the name block, and the content is two columns: next check and the sitter note on the left, the care profile on the right. Edit becomes a labelled pill. From `lg` the plant list sits beside the detail as a 320 px column (compact rows: 48 px thumbnail, name, "health · next check", the open plant highlighted with `selected-bg` and `aria-current`), Back disappears and the photo header drops to 220 px. The "Recent log" card in the left column waits for M2.
+- **iPad (`tablet-plant-detail.dc.html`), built 2026-11-13.** From `md` the Care/Log/Photos tabs (300 px) sit beside the name block, and the content is two columns: next check and the sitter note on the left, the care profile on the right. Edit becomes a labelled pill. From `lg` the plant list sits beside the detail as a 320 px column (compact rows: 48 px thumbnail, name, "health · next check", the open plant highlighted with `selected-bg` and `aria-current`), Back disappears and the photo header drops to 220 px. The "Recent log" card in the left column (built 2026-11-14) shows the latest four entries — badge, note or "Next check …", date — and **Open full log** switches to the Log tab. iPad only, as designed; on a phone the Log tab is one tap away.
 - Each section is its own component (`src/lib/components/plant/`), so the two layouts only rearrange them.
+
+### Log tab (built 2026-11-14, no mockup)
+
+Not a screen people open often, so there is no full mockup (Niko, 2026-11-14); it follows the tokens and the Recent log card.
+
+- The plant's whole log, newest first, as **one card per month** under a section heading ("NOVEMBER 2026"). Each row: the day (number over short weekday), the **kind badge**, a detail line, and the time logged on the right.
+- **Badges** are icon + word. Watered (check), Still damp (clock) and Skipped (×) use the Today status colours; every other kind (fertilised, repotted, note, problem…) is neutral `segment-bg` / `muted`, like the mockup's "Photo" row. Only the three check answers are written today; the rest are ready for later.
+- **Detail line:** for Watered and Still damp, where the check moved ("Next check Sat, Nov 21"); Skip has none (it's simply back tomorrow). An entry's note, if any, shows under it.
+- **30 entries at a time**, with a **Show older** button when there are more. One listener (`PlantLog`, `plantId + at desc` index) feeds the Log tab, Recent log and "Last watered".
+- The open tab is in the URL (`?tab=log`), replaced rather than pushed, so a reload keeps it and Back still leaves the plant. Roving tabindex: Tab reaches the open tab, arrow keys switch.
+- Empty state: "Nothing logged yet. Watered, Still damp and Skip land here."
+- On the iPad the list is one column, at most 640 px wide.
+- Not built: editing or deleting entries (Undo on the day covers mistakes), and adding entries by hand (fertilised, note…), which needs its own small design.
 - The health chip reuses the list's `--health-*` tokens rather than the mockup's one-off `#1F4A36`, so health looks identical on both screens. The outline chips use `--border` rather than the mockup's `#D6DDD8`.
 - New token `--segment-bg` for the tab track. In dark it goes **lighter** than the page where light mode goes darker: a recessed track is invisible on a dark background (1.01 against `--bg`). At `#2B342E` it is 1.41 against the page and 1.28 under the selected tab, slightly clearer than the light design's own 1.13 / 1.24. The selection never rests on that edge alone — weight, ink colour and `aria-selected` all carry it.
 
@@ -329,4 +343,4 @@ edited and danger hues. Each is only drawn on its own background:
 
 ## Not designed yet
 
-Settings beyond the account, Photos tab, Log tab, empty states. Follow the tokens and rules above.
+Settings beyond the account, Photos tab, empty states. Follow the tokens and rules above.
