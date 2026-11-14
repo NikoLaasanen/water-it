@@ -104,7 +104,7 @@
 
 	function leave() {
 		if (cameFromDetail) history.back();
-		else void goto(detailHref, { replaceState: true });
+		else void goto(detailHref, { replace: true });
 	}
 
 	let saving = $state(false);
@@ -146,7 +146,7 @@
 		deleting = true;
 		await deletePlant(uid, plantId);
 		confirmOpen = false;
-		await goto(resolve('/(app)/plants'), { replaceState: true });
+		await goto(resolve('/(app)/plants'), { replace: true });
 	}
 </script>
 

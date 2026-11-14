@@ -73,7 +73,7 @@
 		const plantId = createPlant(uid, form.toPlantData(), firstCheck);
 		// Replace the form in history, so Back from the new plant doesn't
 		// reopen a filled-in form that would add it twice.
-		await goto(resolve('/(app)/plants/[id]', { id: plantId }), { replaceState: true });
+		await goto(resolve('/(app)/plants/[id]', { id: plantId }), { replace: true });
 	}
 </script>
 

@@ -31,9 +31,9 @@
 	$effect(() => {
 		if (!session.ready) return;
 		if (!session.user && !onSignInPage) {
-			void goto(resolve('/signin'), { replaceState: true });
+			void goto(resolve('/signin'), { replace: true });
 		} else if (session.user && onSignInPage && !blocked) {
-			void goto(resolve('/(app)'), { replaceState: true });
+			void goto(resolve('/(app)'), { replace: true });
 		}
 	});
 
