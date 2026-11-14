@@ -12,8 +12,11 @@
 	import { session } from '#lib/firebase/session.svelte.js';
 	import { m } from '#lib/paraglide/messages.js';
 	import { hideSplash } from '#lib/splash.js';
+	import { setupPageTransitions } from '#lib/view-transitions.js';
 
 	let { children }: LayoutProps = $props();
+
+	setupPageTransitions();
 
 	// The manifest's filename is hashed at build time, so the link tag has to
 	// come from the plugin rather than being written into app.html.

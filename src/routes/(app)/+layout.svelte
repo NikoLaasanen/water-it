@@ -38,7 +38,7 @@
 
 <div class="min-h-dvh md:flex">
 	<AppNav />
-	<div class="min-w-0 flex-1 pb-[calc(60px+max(24px,env(safe-area-inset-bottom)))] md:pb-0">
+	<div class="vt-page min-w-0 flex-1 pb-[calc(60px+max(24px,env(safe-area-inset-bottom)))] md:pb-0">
 		{@render children()}
 	</div>
 </div>

@@ -94,6 +94,16 @@ Form and control tokens (from the Add/Edit mockups; `layout.css` has both themes
 
 Accessibility pass (2026-11-14): code review plus a contrast check of every text/background token pair in light, dark and the scene variants (one miss, the dark-day scene eyebrow over the hills, fixed). Fixes: the focus behaviour above, plant-detail tabs 40 → 44 px, search focus rings. Already in place and checked: labels on every icon-only button, decorative art `aria-hidden`, real tablist on plant detail, form errors tied to fields with focus moved to the first, live regions for loading and summaries, `lang` set by Paraglide, pinch zoom allowed, opening animation shortened under Reduce Motion. Not done: an automated axe-core run, and iOS Larger Text (Dynamic Type), which a web app only follows if its type is built on `-apple-system-body`.
 
+## Page transitions
+
+View Transitions API from `onNavigate` (`src/lib/view-transitions.ts`, CSS at the end of `layout.css`). Safari 18+ and Chromium; elsewhere navigation stays instant.
+
+- **Sideways** between Today, Plants and Settings: a crossfade (old page out in 120 ms, new in 200 ms).
+- **Deeper** (Plants → a plant → Edit, Add to log, Add plant): the new page slides in 32 px from the right while fading in, the old one drifts 24 px left and fades (260 / 220 ms). **Back up** is the mirror image. The direction comes from the paths, not history.
+- On `lg` (iPad landscape), the plant list stays beside plant detail, so list ↔ plant crossfades instead.
+- Only the page content moves (`view-transition-name: page`). The tab bar or rail (`app-nav`) and the fixed hills (`hills`) hold still; entering a flow page, the tab bar fades out.
+- None when only the query changes (Care / Log tabs), and none under Reduce Motion.
+
 ## Navigation
 
 `src/lib/components/AppNav.svelte`, one component in two shapes. Four destinations in the same order: **Today** (drop), **Plants** (leaf), **Photos** (camera), **Settings** (gear).

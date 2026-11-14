@@ -51,7 +51,7 @@
 
 <nav
 	aria-label={m.nav_label()}
-	class="fixed inset-x-0 bottom-0 z-20 grid grid-cols-4 border-t border-line bg-surface/95 px-3 pt-2 pb-[max(24px,env(safe-area-inset-bottom))] backdrop-blur md:sticky md:top-0 md:flex md:h-dvh md:w-24 md:flex-none md:flex-col md:items-center md:gap-3 md:border-t-0 md:border-r md:px-0 md:py-7 md:pb-7"
+	class="vt-nav fixed inset-x-0 bottom-0 z-20 grid grid-cols-4 border-t border-line bg-surface/95 px-3 pt-2 pb-[max(24px,env(safe-area-inset-bottom))] backdrop-blur md:sticky md:top-0 md:flex md:h-dvh md:w-24 md:flex-none md:flex-col md:items-center md:gap-3 md:border-t-0 md:border-r md:px-0 md:py-7 md:pb-7"
 >
 	<!-- App mark, rail only: the app icon itself (drop with a sprout), so the
 	     rail matches the Home Screen. The name is announced, as in the mockup. -->

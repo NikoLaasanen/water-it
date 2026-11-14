@@ -14,6 +14,6 @@
 
 <HillsBackdrop />
 
-<div class="mx-auto w-full max-w-xl">
+<div class="vt-page mx-auto w-full max-w-xl">
 	{@render children()}
 </div>

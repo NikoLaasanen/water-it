@@ -564,3 +564,78 @@ body {
 	/* The design's tracking at display sizes (screens.md: title 34/800). */
 	-webkit-font-smoothing: antialiased;
 }
+
+/* Page transitions (screens.md "Page transitions", #lib/view-transitions.ts).
+   Only the page content moves; the tab bar or rail and the hills are named
+   on their own, so they hold still while the page changes over them. */
+.vt-page {
+	view-transition-name: page;
+}
+.vt-nav {
+	view-transition-name: app-nav;
+}
+.vt-hills {
+	view-transition-name: hills;
+}
+::view-transition-group(hills) {
+	z-index: 0;
+}
+::view-transition-group(page) {
+	z-index: 1;
+}
+::view-transition-group(app-nav) {
+	z-index: 2;
+}
+::view-transition-old(*),
+::view-transition-new(*) {
+	animation-duration: 200ms;
+	animation-timing-function: ease-out;
+}
+/* The old page leaves quicker than the new one arrives, so two pages of
+   text never sit on top of each other for long. */
+::view-transition-old(page) {
+	animation-duration: 120ms;
+}
+:root[data-transition='forward']::view-transition-old(page) {
+	animation: 220ms ease-out both vt-out-left;
+}
+:root[data-transition='forward']::view-transition-new(page) {
+	animation: 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both vt-in-right;
+}
+:root[data-transition='back']::view-transition-old(page) {
+	animation: 220ms ease-out both vt-out-right;
+}
+:root[data-transition='back']::view-transition-new(page) {
+	animation: 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both vt-in-left;
+}
+@keyframes vt-in-right {
+	from {
+		opacity: 0;
+		transform: translateX(32px);
+	}
+}
+@keyframes vt-in-left {
+	from {
+		opacity: 0;
+		transform: translateX(-32px);
+	}
+}
+@keyframes vt-out-left {
+	to {
+		opacity: 0;
+		transform: translateX(-24px);
+	}
+}
+@keyframes vt-out-right {
+	to {
+		opacity: 0;
+		transform: translateX(24px);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none !important;
+	}
+}

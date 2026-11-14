@@ -70,7 +70,7 @@
 <div
 	class={[
 		'pointer-events-none bottom-0 -z-10',
-		placement === 'fixed' ? 'fixed inset-x-0' : 'absolute inset-x-0',
+		placement === 'fixed' ? 'vt-hills fixed inset-x-0' : 'absolute inset-x-0',
 		rail && 'md:left-24'
 	]}
 	data-hills
