@@ -83,6 +83,10 @@ export default defineConfig({
 				// works but warns.
 				generateSW: {
 					globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,woff,woff2,webmanifest}'],
+					// The iOS launch images (pwa-splash.config.ts): 40 of them, of
+					// which a device only ever uses one, and iOS fetches that one
+					// itself when the app is added to the Home Screen.
+					globIgnores: ['client/splash/**'],
 					// Firebase's redirect sign-in navigates to `/__/auth/handler` on
 					// *this* origin, and `spa: true` below registers a NavigationRoute
 					// that answers every navigation with the cached 200.html shell.

@@ -35,3 +35,19 @@ pnpm generate-pwa-assets
 That runs `pwa-assets-generator` (configured in `pwa-assets.config.ts`), which
 writes the sized icons next to `app-icon.png` here, then
 `scripts/copy-pwa-icons.mjs` copies the six published ones into `static/`.
+
+## Logo and launch images
+
+`logo.svg` is the logo traced into vector shapes from `app-icon.png`: drop,
+shine and sprout on the green square. It is the source for the iOS launch
+images and the same paths are inlined in `src/app.html` for the opening
+animation (docs/screens.md "Opening animation"). If the icon art changes,
+retrace it and update both.
+
+```
+pnpm generate-splash
+```
+
+That runs the generator with `pwa-splash.config.ts`, then
+`scripts/copy-splash.mjs` copies the 40 `apple-splash-*.png` into
+`static/splash/` and rewrites their link tags in `src/app.html`.

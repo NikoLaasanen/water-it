@@ -15,6 +15,7 @@ design/icons/favicon.ico
 design/icons/apple-touch-icon-*.png
 design/icons/maskable-icon-*.png
 design/icons/pwa-*.png
+design/icons/apple-splash-*.png
 
 # Firebase
 .firebase/

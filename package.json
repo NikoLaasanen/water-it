@@ -23,6 +23,7 @@
 		"seed:dev": "node scripts/seed-emulator.mjs",
 		"seed:plants": "node scripts/seed-plants.mjs",
 		"generate-pwa-assets": "pwa-assets-generator && node scripts/copy-pwa-icons.mjs",
+		"generate-splash": "pwa-assets-generator --config pwa-splash.config.ts && node scripts/copy-splash.mjs && prettier --write src/app.html",
 		"test:unit": "vitest --project server",
 		"test": "vitest run --project server",
 		"test:rules": "firebase emulators:exec --only firestore --project demo-water-it \"vitest run --project rules\"",

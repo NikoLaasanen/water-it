@@ -37,6 +37,7 @@
 	import { m } from '#lib/paraglide/messages.js';
 	import { getLocale } from '#lib/paraglide/runtime.js';
 	import { careOf, longDateLabel } from '#lib/plants/labels.js';
+	import { hideSplash } from '#lib/splash.js';
 	import { currentIntervalDays, type CheckAction } from '#lib/plants/schedule.js';
 	import {
 		comingUp,
@@ -72,6 +73,12 @@
 	const answeredToday = $derived(cards.length > 0);
 	const loading = $derived(plants.loading || log.loading);
 	const upcomingRows = $derived(comingUp(plants.plants, plants.checkTasks, today));
+
+	// Opening animation: open onto Today once its cards are there, not onto
+	// "Loading…".
+	$effect(() => {
+		if (!loading) hideSplash();
+	});
 	const week = $derived(weekAhead(plants.plants, plants.checkTasks, today, getLocale()));
 
 	function answer(card: Card, action: CheckAction) {

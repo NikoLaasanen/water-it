@@ -11,6 +11,7 @@
 	import ReloadPrompt from '#lib/components/ReloadPrompt.svelte';
 	import { session } from '#lib/firebase/session.svelte.js';
 	import { m } from '#lib/paraglide/messages.js';
+	import { hideSplash } from '#lib/splash.js';
 
 	let { children }: LayoutProps = $props();
 
@@ -34,6 +35,20 @@
 		} else if (session.user && onSignInPage && !blocked) {
 			void goto(resolve('/(app)'), { replaceState: true });
 		}
+	});
+
+	// Opening animation (app.html): open onto the app once there is something
+	// to see. Signed out or not invited, that is now. Signed in, Today ends it
+	// itself when its plants have loaded; this is the fallback for a cold start
+	// on any other page.
+	$effect(() => {
+		if (!session.ready) return;
+		if (!session.user || blocked) {
+			hideSplash();
+			return;
+		}
+		const timer = setTimeout(hideSplash, 1000);
+		return () => clearTimeout(timer);
 	});
 </script>
 

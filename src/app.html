@@ -56,9 +56,430 @@
 		<link rel="icon" href="/favicon.ico" sizes="48x48" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
 
+		<!-- iOS launch images: the logo on green, one per screen size. Written
+		     by `pnpm generate-splash` (scripts/copy-splash.mjs) — don't edit
+		     between the markers by hand. -->
+		<!-- splash:links -->
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-2048x2732.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2732x2048.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1668x2388.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2388x1668.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1536x2048.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2048x1536.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1640x2360.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2360x1640.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1668x2224.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2224x1668.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1620x2160.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2160x1620.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1488x2266.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2266x1488.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1320x2868.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2868x1320.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1206x2622.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2622x1206.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 420px) and (device-height: 912px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1260x2736.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 420px) and (device-height: 912px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2736x1260.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1290x2796.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2796x1290.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1179x2556.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2556x1179.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1170x2532.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2532x1170.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1284x2778.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2778x1284.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1125x2436.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2436x1125.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1242x2688.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2688x1242.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-828x1792.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-1792x828.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-1242x2208.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-2208x1242.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-750x1334.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-1334x750.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+			href="/splash/apple-splash-portrait-640x1136.png"
+		/>
+		<link
+			rel="apple-touch-startup-image"
+			media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+			href="/splash/apple-splash-landscape-1136x640.png"
+		/>
+		<!-- /splash:links -->
+
+		<!-- Opening animation, see the comment above #splash below. -->
+		<style>
+			@property --splash-r {
+				syntax: '<length>';
+				inherits: false;
+				initial-value: -2px;
+			}
+			#splash {
+				position: fixed;
+				inset: 0;
+				z-index: 2147483647;
+				background: #316c4d;
+				--splash-r: -2px;
+				--splash-y: 0px;
+				-webkit-mask-image: radial-gradient(
+					circle at 50% calc(50% + var(--splash-y)),
+					transparent var(--splash-r),
+					#000 calc(var(--splash-r) + 1px)
+				);
+				mask-image: radial-gradient(
+					circle at 50% calc(50% + var(--splash-y)),
+					transparent var(--splash-r),
+					#000 calc(var(--splash-r) + 1px)
+				);
+			}
+			#splash .splash-logo {
+				position: absolute;
+				left: 50%;
+				top: calc(50% + var(--splash-y));
+				width: var(--splash-size, 65vmin);
+				height: var(--splash-size, 65vmin);
+				translate: -50% -50%;
+			}
+			#splash svg {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			#splash .splash-ring {
+				position: absolute;
+				inset: 30%;
+				border: 2px solid #f8f7f4;
+				border-radius: 50%;
+				opacity: 0;
+			}
+			#splash.play svg {
+				animation: splash-pulse 0.45s 0.08s both;
+			}
+			#splash.play .splash-ring {
+				animation: splash-ring 0.6s 0.28s both;
+			}
+			#splash.play .splash-ring + .splash-ring {
+				animation: splash-ring-2 0.65s 0.42s both;
+			}
+			#splash.out {
+				pointer-events: none;
+				transition:
+					--splash-r 0.6s cubic-bezier(0.6, 0, 0.4, 1),
+					opacity 0.15s 0.5s;
+				--splash-r: 150vmax;
+				opacity: 0;
+			}
+			#splash.out .splash-logo {
+				transition:
+					scale 0.4s ease-in,
+					opacity 0.3s;
+				scale: 1.5;
+				opacity: 0;
+			}
+			@keyframes splash-pulse {
+				0% {
+					scale: 1;
+				}
+				27% {
+					scale: 0.9;
+				}
+				58% {
+					scale: 1.06;
+				}
+				100% {
+					scale: 1;
+				}
+			}
+			@keyframes splash-ring {
+				0% {
+					scale: 0.7;
+					opacity: 0;
+				}
+				10% {
+					opacity: 0.7;
+				}
+				100% {
+					scale: 2.6;
+					opacity: 0;
+				}
+			}
+			@keyframes splash-ring-2 {
+				0% {
+					scale: 0.7;
+					opacity: 0;
+				}
+				10% {
+					opacity: 0.5;
+				}
+				100% {
+					scale: 3.2;
+					opacity: 0;
+				}
+			}
+			@media (prefers-reduced-motion: reduce) {
+				#splash.out {
+					transition: opacity 0.25s;
+					--splash-r: -2px;
+				}
+				#splash.out .splash-logo {
+					transition: none;
+					scale: 1;
+					opacity: 1;
+				}
+			}
+		</style>
+
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
+		<!--
+		  Opening animation (the "Ripple reveal" draft). iOS shows a launch
+		  image while the Home Screen app starts: the logo on green, from
+		  pwa-splash.config.ts. This picks up from that exact frame, so the
+		  hand-over can't be seen: the logo pulses once, two rings spread out,
+		  and once the app is ready (#lib/splash.ts) a hole opens from the
+		  centre onto it.
+
+		  - The intro takes ~0.5 s and never holds the app back: if the app is
+		    ready sooner, the reveal starts right after the intro; if it is
+		    slower, the logo waits. After 4 s it opens regardless.
+		  - Only in the installed app, on a cold start (a page load). Never in a
+		    browser tab, unless the URL has `?splash`, for trying it out.
+		  - Reduce Motion: no pulse or rings; the splash fades out instead.
+		  - The logo paths are design/icons/logo.svg, inlined. Its size and
+		    centre are set from the screen to match the launch image exactly.
+		-->
+		<div id="splash" aria-hidden="true">
+			<div class="splash-logo">
+				<span class="splash-ring"></span>
+				<span class="splash-ring"></span>
+				<svg viewBox="0 0 100 100">
+					<path
+						fill="#f8f7f4"
+						d="M49.8 14.7C52.1 12.1 50 14.7 50 14.7C50 14.7 49.7 14.3 50.4 15.1C51.2 16 52.7 17.9 54.4 19.8C56.1 21.8 59.2 25 60.7 26.8C62.2 28.5 62.6 28.9 63.6 30.2C64.6 31.4 65.9 33 66.8 34.4C67.8 35.8 68.6 36.9 69.6 38.5C70.6 40.1 71.9 42.3 72.7 43.9C73.5 45.6 74.1 47.1 74.6 48.1C75 49.2 75 49.3 75.2 50.1C75.5 50.9 75.8 51.9 76 53C76.3 54.2 76.5 55.6 76.6 57C76.7 58.5 76.6 60.6 76.5 61.8C76.4 63 76.3 63.5 76.1 64.2C76 64.9 75.8 65.3 75.6 66C75.4 66.7 75.2 67.4 74.9 68.3C74.5 69.1 74 70.2 73.6 71C73.2 71.8 72.8 72.5 72.3 73.1C71.9 73.8 71.4 74.4 70.9 75C70.5 75.6 70.1 76 69.6 76.6C69 77.1 68.3 77.8 67.7 78.4C67.1 78.9 66.5 79.3 65.9 79.7C65.3 80.2 64.7 80.6 64 81C63.2 81.4 62.3 81.9 61.5 82.3C60.8 82.6 60.3 82.8 59.4 83.2C58.4 83.5 56.8 83.9 56 84.1C55.1 84.3 54.5 84.4 54.5 84.4C54.5 84.4 54.7 84.5 54.7 84.5C54.7 84.5 54.7 84.7 54.7 84.7C54.7 84.7 49.7 84.8 48.1 84.7C46.6 84.7 46.5 84.6 45.6 84.4C44.7 84.3 43.7 84 42.9 83.8C42 83.6 41.5 83.5 40.6 83.2C39.8 82.8 38.7 82.4 37.9 82C37.1 81.6 36.5 81.3 35.6 80.8C34.8 80.3 33.5 79.4 32.7 78.8C31.9 78.1 31.3 77.5 30.7 76.9C30 76.2 29.5 75.7 29 75C28.4 74.3 27.8 73.4 27.3 72.7C26.8 71.9 26.4 71.2 26 70.4C25.6 69.6 25.3 68.9 25 68C24.6 67 24.2 65.8 24 64.8C23.7 63.9 23.6 63.1 23.5 62.3C23.4 61.5 23.3 61.1 23.3 60.3C23.3 59.4 23.3 58.3 23.3 57.4C23.3 56.6 23.4 56 23.5 55.3C23.6 54.5 23.7 53.9 23.9 53C24.1 52.1 24.4 50.9 24.7 50C24.9 49.1 25.1 48.6 25.4 47.8C25.8 46.9 26.1 46 26.7 44.8C27.3 43.7 27.9 42.4 28.9 40.8C29.8 39.3 31.1 37.3 32.4 35.5C33.6 33.8 33.5 33.8 36.4 30.4C39.3 26.9 47.6 17.4 49.8 14.7Z"
+					/>
+					<path
+						fill="#316c4d"
+						d="M57.1 29.2C57.3 29.2 57.5 29.2 57.6 29.2C57.8 29.2 57.5 28.9 58.1 29.4C58.7 30 60.2 31.6 61 32.5C61.9 33.5 62.4 34.1 63.2 35.2C64 36.2 65 37.8 65.7 38.9C66.3 40 66.7 40.8 67.1 41.7C67.5 42.6 67.8 43.5 67.9 44C68 44.6 68 44.6 67.9 44.8C67.9 45.1 67.9 45.3 67.8 45.5C67.7 45.7 67.6 45.9 67.5 46.1C67.4 46.3 67.2 46.4 67 46.5C66.8 46.6 66.5 46.7 66.2 46.8C66 46.8 65.7 46.8 65.4 46.7C65.2 46.6 65.1 46.6 64.8 46.4C64.6 46.2 64.5 46.4 64.1 45.6C63.8 44.8 63.4 42.8 62.9 41.6C62.5 40.4 62.1 39.5 61.5 38.2C60.8 36.9 59.7 35.1 58.9 33.9C58.1 32.6 56.9 31.3 56.5 30.7C56.1 30.1 56.4 30.4 56.4 30.3C56.4 30.1 56.4 29.9 56.4 29.8C56.5 29.6 56.6 29.5 56.7 29.4C56.9 29.3 57 29.2 57.1 29.2Z"
+					/>
+					<path
+						fill="#316c4d"
+						d="M30.7 45.7C30.8 45.4 30.3 45.4 30.9 45.6C31.5 45.9 32.7 46.7 34.3 47.4C35.9 48 38.9 48.9 40.5 49.6C42.1 50.2 43.1 50.6 43.9 51.1C44.8 51.5 45.1 51.8 45.6 52.1C46.1 52.4 46.3 52.6 46.7 53C47.1 53.3 47.5 53.8 47.9 54.2C48.3 54.6 48.6 55 49 55.7C49.3 56.3 49.8 57.2 50.1 58.1C50.4 59 50.7 60 50.8 61C51 62 51 63 50.9 64.1C50.8 65.1 50.4 67.4 50.4 67.4C50.4 67.4 49 64.7 48.3 63.6C47.5 62.4 46.5 61.1 45.8 60.4C45.2 59.6 45 59.5 44.5 59C44 58.5 43.4 57.9 42.8 57.4C42.1 56.9 41.2 56.2 40.6 55.8C40.1 55.5 39.5 55.3 39.5 55.3C39.5 55.3 41.2 56.7 41.9 57.5C42.7 58.3 43.4 59.1 44.1 60C44.8 60.8 45.5 61.8 46.1 62.8C46.8 63.8 47.4 64.9 47.9 65.8C48.4 66.8 48.7 67.5 49.2 68.6C49.6 69.6 50.1 71.2 50.4 72.2C50.7 73.1 50.8 73.3 51 74.3C51.2 75.3 51.8 78.2 51.8 78.2C51.8 78.2 53.4 74 54 72.6C54.6 71.2 54.9 70.7 55.3 69.8C55.8 68.9 56.2 68.2 56.9 67.2C57.6 66.2 58.9 64.5 59.5 63.7C60.2 62.8 60.4 62.7 60.9 62.2C61.4 61.7 62.6 60.7 62.6 60.7C62.6 60.7 62.3 60.8 61.8 61.1C61.4 61.4 60.7 61.8 60 62.4C59.2 63 58.2 63.9 57.4 64.7C56.6 65.6 55.9 66.5 55.1 67.6C54.4 68.7 52.9 71.3 52.9 71.3C52.9 71.3 52.6 69.3 52.6 68.6C52.5 67.8 52.6 67.3 52.6 66.7C52.7 66.1 52.7 65.6 52.9 64.8C53.1 64.1 53.5 62.8 53.8 62.1C54.1 61.4 54.3 61 54.6 60.6C54.9 60.1 55 59.9 55.3 59.5C55.7 59 56.3 58.4 56.8 57.9C57.2 57.5 57.6 57.2 58.1 56.8C58.6 56.5 59.1 56.1 59.7 55.8C60.2 55.5 60.8 55.2 61.5 54.9C62.3 54.7 63.3 54.3 64.1 54.1C64.8 53.9 65.2 53.8 66.1 53.6C67 53.4 68.6 53.1 69.4 53C70.3 52.9 71.1 52.9 71.1 52.9C71.1 52.9 71.1 54.4 71.1 55.1C71.1 55.8 71.1 56.4 71 57.2C70.9 58.1 70.8 59.3 70.5 60.3C70.3 61.2 70 62.2 69.7 63.2C69.3 64.1 68.8 65.1 68.3 66C67.7 66.9 67.1 67.8 66.4 68.5C65.8 69.2 65.1 69.7 64.4 70.2C63.6 70.8 63.2 71 62 71.6C60.8 72.2 58.2 73.2 57.2 73.6C56.2 74.1 56.4 74.1 56.1 74.4C55.7 74.7 55.4 74.9 55.1 75.3C54.9 75.7 54.6 76 54.3 76.7C54 77.3 53.6 78.3 53.3 79.1C53 80 52.8 80.9 52.6 81.7C52.4 82.6 52.1 84.4 52.1 84.4C52.1 84.4 49.9 84.4 49.9 84.4C49.9 84.4 50 81.5 49.9 80.3C49.9 79 49.7 77.8 49.5 76.9C49.4 75.9 49.1 75.2 48.9 74.5C48.6 73.9 48.2 73.4 47.9 72.9C47.6 72.5 47.2 72.3 46.9 72C46.5 71.8 47 71.9 45.9 71.4C44.8 71 41.9 69.9 40.5 69.3C39.1 68.6 38.3 68.2 37.4 67.5C36.5 66.9 35.6 65.9 34.9 65.3C34.3 64.7 34.1 64.4 33.8 63.9C33.4 63.4 33.2 63.1 32.8 62.3C32.4 61.6 31.8 60.1 31.5 59.4C31.2 58.6 31.2 58.5 31.1 57.8C30.9 57.1 30.7 56 30.6 55.2C30.4 54.4 30.4 53.8 30.3 53C30.3 52.2 30.3 51.4 30.3 50.5C30.3 49.6 30.4 48.6 30.4 47.8C30.5 47 30.7 46.1 30.7 45.7ZM49.9 84.1H52.1V85H49.9Z"
+					/>
+				</svg>
+			</div>
+		</div>
+		<script>
+			(function () {
+				var el = document.getElementById('splash');
+				var standalone =
+					navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
+				if (!standalone && !/[?&]splash\b/.test(location.search)) {
+					el.remove();
+					return;
+				}
+				var PADDING = 0.35; // pwa-splash.config.ts SPLASH_PADDING
+				var GREEN = '#316c4d';
+				var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+				var start = Date.now();
+				var INTRO_MS = reduce ? 0 : 560;
+
+				// Match the launch image: iOS draws it over the whole screen, but the
+				// page may start below an opaque status bar. iOS reports `screen` in
+				// portrait whatever the orientation.
+				var landscape = innerWidth > innerHeight;
+				var sw = Math.min(screen.width, screen.height);
+				var sh = Math.max(screen.width, screen.height);
+				var screenH = landscape ? sw : sh;
+				var top = screenH - innerHeight;
+				if (top < 0 || top > 80) top = 0;
+				el.style.setProperty('--splash-size', (1 - PADDING) * Math.min(sw, sh) + 'px');
+				el.style.setProperty('--splash-y', -top / 2 + 'px');
+
+				// Green status bar while the splash is up; restored as it opens.
+				var metas = document.querySelectorAll('meta[name="theme-color"]');
+				var saved = [];
+				for (var i = 0; i < metas.length; i++) {
+					saved.push(metas[i].content);
+					metas[i].content = GREEN;
+				}
+
+				if (!reduce) el.classList.add('play');
+
+				var done = false;
+				window.__hideSplash = function () {
+					if (done) return;
+					done = true;
+					setTimeout(
+						function () {
+							for (var i = 0; i < metas.length; i++) metas[i].content = saved[i];
+							el.classList.add('out');
+							setTimeout(function () {
+								el.remove();
+								window.__hideSplash = undefined;
+							}, 800);
+						},
+						Math.max(0, INTRO_MS - (Date.now() - start))
+					);
+				};
+				setTimeout(window.__hideSplash, 4000);
+			})();
+		</script>
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
 </html>

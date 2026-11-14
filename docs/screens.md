@@ -232,6 +232,16 @@ Built 2026-11-13 (`src/routes/(flow)/plants/[id]/edit`):
 - **Delete plant** opens a confirmation dialog ("Delete Pilea?" · Delete / Keep it). Confirming removes the plant, its tasks and its log entries in one batch and returns to the Plants list. The confirm button uses `--danger-fill` / `--on-danger`: white text on dark mode's `#E5776B` is only 2.92, so dark mode puts dark text on it (6.13).
 - **Change species** (built 2026-11-13): **Change** on the species row opens the same picker as Add step 1 (`SpeciesPicker.svelte`) over the form, with the current choice ticked, under "Change species" and a note on what happens. It is a shallow-routing entry, so Back or the iOS swipe returns to the form. Picking a preset restarts the care fields from it (old overrides are dropped) and keeps name, health, pot, location and notes; a name still equal to the old preset's default follows the new one. Picking blank keeps the current care as the plant's own profile. Nothing is written until Save, so Cancel discards the change; on Save the next check moves if the interval changed, as with any edit.
 
+## Opening animation
+
+Chosen 2026-11-14 from four drafts ("Ripple reveal"). Installed app only, on a cold start:
+
+1. iOS shows its launch image: the logo on `#316C4D` green, sized to 65 % of the screen's shorter side (`pwa-splash.config.ts`, 40 images in `static/splash/`). One version for light and dark.
+2. `src/app.html` takes over from that exact frame: the logo pulses once and two rings spread out (~0.5 s).
+3. When the app is ready (Today has its plants, or the sign-in page is up; `#lib/splash.ts`), a circle opens from the centre onto it. The intro never adds waiting, and after 4 s it opens regardless.
+
+Reduce Motion: no pulse or rings, just a fade. Try it in a browser with `?splash` on any URL. The logo is `design/icons/logo.svg`, a vector trace of `app-icon.png`; regenerate the launch images with `pnpm generate-splash`.
+
 ## Sign-in
 
 Not on the canvas. Built from the tokens, revised after review on 2026-11-13:

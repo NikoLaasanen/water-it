@@ -15,6 +15,11 @@ declare global {
 		}
 		// interface Platform {}
 	}
+
+	interface Window {
+		/** Set by the opening-animation script in app.html (#lib/splash.ts). */
+		__hideSplash?: () => void;
+	}
 }
 
 export {};
