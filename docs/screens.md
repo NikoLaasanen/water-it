@@ -95,13 +95,25 @@ Form and control tokens (from the Add/Edit mockups; `layout.css` has both themes
 `src/lib/components/AppNav.svelte`, one component in two shapes. Four destinations in the same order: **Today** (drop), **Plants** (leaf), **Photos** (camera), **Settings** (gear).
 
 - **Phone: bottom tab bar.** Fixed, 84 px tall incl. safe area (24 px or the home-indicator inset, whichever is larger), `surface` with a top `line` border. Active tab `primary` and bold; inactive `muted-2`. Label 11 px under a 24 px icon.
-- **iPad (`md`+): side rail**, 96 px wide, full height, right border. App mark (48 px `primary` square with the drop) at the top, then the four items: 24 px icon on a 56 × 32 pill, 12 px label, 64 px tall. The active item's pill is `selected-bg`.
+- **iPad (`md`+): side rail**, 96 px wide, full height, right border. App mark at the top: the app icon itself (`AppLogo`, the white drop with a sprout on `#316C4D`, from design/icons/logo.svg), 48 px with 14 px corners — not a plain Lucide drop, which is what it showed until 2026-11-14, then the four items: 24 px icon on a 56 × 32 pill, 12 px label, 64 px tall. The active item's pill is `selected-bg`.
 - Photos is M3, so it is shown disabled ("Not built yet") rather than left out: the bar keeps its designed shape.
 - The tab bar stays on plant detail too, unlike the phone detail mockup, which draws no bar. One way out of every screen beats a Back button that is the only exit.
 
 ## Today (home) — `docs/mockups/today.dc.html`
 
-- Header: date line ("Wednesday 11 November", `muted-2`, 13/600), title "Today", summary line ("4 to check · tap the drop when watered" / "All done for today.").
+- Header: greeting line ("Good afternoon, Niko · Wed, Nov 11" on phones, the long date on the iPad; 13/600), title "Today", summary line ("4 to check · tap the drop when watered" / "All done for today."). At least 150 px tall so the cards start below the scene's ground line; on phones the text keeps 120 px clear on the right for the cacti. The name is the first word of the account's display name; email/password accounts have none, so it's just "Good afternoon · …". Morning 5–12, afternoon 12–18, evening 18–5 (`part-of-day.ts`).
+- Cards on the phone get a second, softer shadow (`--shadow-raised`, Main board); the iPad cards keep the single one, as on TabletToday.
+- **"Coming up"** headings carry a calendar icon (phone caught-up list and the iPad column). On the iPad (`lg`) the column's top padding is 138 px, so the list's top lines up with the first card (138 + 20 heading + 12 gap = 150 header + 20 gap).
+
+### Today header scene (2026-11-14) — `today.dc.html`, `tablet-today.dc.html`, `today-evening*.dc.html`, `today-dark.dc.html`
+
+A little scene behind the top of Today, both with checks and "All caught up": a pale sky band, the sun with a halo, three rounded cacti (two with "eyes") and a terracotta pot with a sprouting plant on a soft ground line that melts into the page, plus a couple of sprouts. `src/lib/components/today/TodayScene.svelte`, decorative (`aria-hidden`).
+
+- **Evening** (from 18:00, with "Good evening"): deep green sky, crescent moon, stars, darker cacti, no sprouts; the header text turns light (`--sc-eyebrow`/`--sc-title`/`--sc-summary`).
+- **Dark theme:** day is a muted slate-blue sky with a warm sun and two faint clouds; evening a near-black green. Colours from the boards, as tokens on `data-scene` in layout.css.
+- **Phone:** 270 px band, the cluster anchored to the right edge at its designed size. **iPad:** 250 px band laid out as on the 1084 px board from the content's left edge (cluster in the middle, a cloud on the right in daytime). The tablet evening isn't drawn; it uses the tablet layout with the evening colours and the phone's stars tiled across.
+- Built in layers so no shape stretches: the sky is the container's background, the ground a full-width path (never narrower than the board, so the plant stays on the line), the sun, cacti and plant fixed-size SVG on top.
+
 - One **card per plant due** (overdue first), vertical list:
   - Left column: 44 px rounded thumbnail, plant name (16/700), due line (12/700): "Today" in `#1D3E63`, or **"Overdue N days"** in `#9B1C1C` with a warning-triangle icon. Below: one-line check hint (13 px), e.g. "Skewer under the pebbles. Water if dry 2–3 cm down." Then two small buttons: **Still damp** (outlined) and **Skip** (text).
   - Right: a big **84 × 84 square Watered button**, `water` background, white filled drop icon (34 px) with a small "Watered" label. `aria-label="Watered <plant name>"`. This is the primary, fastest action.
@@ -139,6 +151,15 @@ Niko's design for when nothing is left to answer, which is also what the app ope
 - "Last watering …" and "Check soil again" read the check's `lastAnswer` (design.md §6), written with every answer and restored by Undo. Checks answered before it existed don't have one, and the sentence then just says what's next.
 - Not in v1 mockup but in the design doc: cold-night alert banner. Optional, below the cards.
 - **iPad (`tablet-today.dc.html`):** the cards go into two columns, each card laid out vertically (name and due line, hint, then Still damp / Skip on the left and a wide Watered button on the right). A **"Coming up"** column (300 px) on the right lists the next few tasks of any kind — date block (weekday + day), plant, task ("Turn the pot", "Check soil") — with a "See all plants" link and the note "Dates move when you log something. A late watering pushes the next check later." In portrait it goes below the cards. Built with the Today view in M2.
+
+## Backdrops (2026-11-14) — `plants.dc.html`, `tablet-plants.dc.html`
+
+Every signed-in screen except Today (which has its scene) and the sign-in screens gets the **rolling hills** at the bottom: soft rounded hills ("cacti") in two shades, a ground band and a few sprouts. `src/lib/components/HillsBackdrop.svelte`, decorative.
+
+- Fixed to the bottom of the viewport behind the page (`z-index: -1`), so it stays put while the list scrolls over it: Plants, Settings, Add/Edit plant. From `md` it starts right of the rail. Phone drawing 390 × 430, iPad 1084 × 340, scaled to cover the width and anchored to the bottom.
+- **Plant detail** draws them inside its content sheet instead, whose opaque background would hide the fixed one; the sheet reaches at least the bottom of the screen so they sit there on a short page too.
+- **Dark:** not drawn in the design. Same shapes a few steps above the dark page background, so they stay quiet.
+- **Cards get a 1 px edge** (`--card-edge`: `#d3dcd5` light, `#34403a` dark) on every screen with the hills — plant cards, Settings, Add/Edit plant, the species picker — because over the hills a card barely stands out: white on the pale hills is about 1.2:1, and in dark the card (`#1c221f`) and the hills (`#1e2822`) are nearly the same colour (Niko, 2026-11-14).
 
 ## Plants — `docs/mockups/plants.dc.html`
 

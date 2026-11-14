@@ -47,7 +47,7 @@
 			{m.settings_display()}
 		</h2>
 		<div
-			class="flex flex-col gap-5 rounded-[18px] bg-surface p-4 shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
+			class="flex flex-col gap-5 rounded-[18px] border border-card-edge bg-surface p-4 shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
 		>
 			<div class="flex flex-col gap-1.5">
 				<SegmentedChoice
@@ -78,7 +78,7 @@
 			{m.settings_account()}
 		</h2>
 		<div
-			class="flex flex-col gap-3 rounded-[18px] bg-surface p-4 shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
+			class="flex flex-col gap-3 rounded-[18px] border border-card-edge bg-surface p-4 shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
 		>
 			<p class="text-sm break-words text-ink-2">
 				{m.signed_in_as({ email: session.user?.email ?? '' })}

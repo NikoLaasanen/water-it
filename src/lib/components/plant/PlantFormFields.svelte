@@ -375,7 +375,7 @@
 
 <Collapsible.Root bind:open={moreOpen}>
 	<Collapsible.Trigger
-		class="flex w-full items-center justify-between gap-3 rounded-[18px] bg-surface p-4 text-left shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
+		class="flex w-full items-center justify-between gap-3 rounded-[18px] border border-card-edge bg-surface p-4 text-left shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
 	>
 		<span class="flex flex-col gap-0.5">
 			<span class="text-[15px] font-bold text-ink">{m.form_more()}</span>

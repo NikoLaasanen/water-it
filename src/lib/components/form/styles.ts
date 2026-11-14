@@ -10,6 +10,6 @@ export const fieldTextarea = `${fieldInput} min-h-24 py-3 leading-[1.4]`;
 
 /** A white form card, as in the mockups. */
 export const formCard =
-	'flex flex-col gap-4 rounded-[18px] bg-surface p-4 shadow-[0_1px_2px_rgba(20,40,30,0.06)]';
+	'flex flex-col gap-4 rounded-[18px] border border-card-edge bg-surface p-4 shadow-[0_1px_2px_rgba(20,40,30,0.06)]';
 
 export const sectionHeading = 'text-[13px] font-bold tracking-[0.08em] text-muted-2 uppercase';

@@ -69,6 +69,9 @@
 	--muted: #45514a;
 	--muted-2: #5a665f;
 	--line: #e8ece8;
+	/* A card's edge, so cards stay distinct over the hills backdrop
+	   (screens.md "Backdrops"): white on the pale hills is only ~1.2:1. */
+	--card-edge: #d3dcd5;
 	--border: #c9d3cc;
 	--primary: #2f6b4f;
 	--water: #2b5f9e;
@@ -185,6 +188,8 @@
 	--muted: #a3aea8;
 	--muted-2: #97a29c;
 	--line: #2a322e;
+	/* The dark card (#1c221f) and hills (#1e2822) are nearly the same. */
+	--card-edge: #34403a;
 	--border: #3e4843;
 	/* Lightened: the light #2f6b4f and #2b5f9e are too dark to read on a
 	   dark surface. Lightening them flips what can sit on top, hence the
@@ -310,6 +315,142 @@
 	--status-fg: var(--status-skipped-fg);
 }
 
+/* Today's header scene (screens.md "Today header scene"): day or evening,
+   each in light and dark, colours from the design boards (Main,
+   TodayIdeaEvening, TodayIdeaSunnyDark, TodayIdeaEveningDark). Resolved once
+   on the scene's container, like health. The ground is always the page
+   background, so the scene melts into the page. */
+[data-scene] {
+	--sc-ground: var(--bg);
+	--sc-stem: #2f6b4f;
+	--sc-leaf-1: #5e9a78;
+	--sc-leaf-2: #2f6b4f;
+	--sc-leaf-3: #4a8564;
+	--sc-pot: #c98a5e;
+	--sc-rim: #b67749;
+}
+[data-scene='day'] {
+	--sc-sky: #eef3ea;
+	--sc-sun: #fbebc8;
+	--sc-halo-fill: transparent;
+	--sc-halo-line: #fbf3e4;
+	--sc-cloud: #ffffff;
+	/* The phone's light day sky has no clouds; the tablet's has one. */
+	--sc-cloud-phone: 0;
+	--sc-cloud-tablet: 0.75;
+	--sc-a: #dce7d8;
+	--sc-a-line: #ccdcc8;
+	--sc-a-mark: #c8d8c4;
+	--sc-b: #e3ece0;
+	--sc-b-line: #d3e0d0;
+	--sc-b-mark: #cfddcb;
+	--sc-c: #d3e2cf;
+	--sc-c-line: #c3d6bf;
+	--sc-ground-line: #dce6d9;
+	--sc-sprout: #b9cdb5;
+	--sc-eyebrow: #4e5a53;
+	--sc-title: var(--ink);
+	--sc-summary: #3d4842;
+}
+[data-scene='evening'] {
+	--sc-sky: #24402f;
+	--sc-sun: #f6e7b8;
+	--sc-star: #f3f5f1;
+	--sc-a: #2e4f3c;
+	--sc-a-line: #365a45;
+	--sc-a-mark: #3d634d;
+	--sc-b: #2a4837;
+	--sc-b-line: #335541;
+	--sc-b-mark: #39604a;
+	--sc-c: #335744;
+	--sc-c-line: #3c6350;
+	--sc-ground-line: transparent;
+	--sc-eyebrow: #cfe0d5;
+	--sc-title: #ffffff;
+	--sc-summary: #e3ede6;
+}
+:root[data-theme='dark'] [data-scene] {
+	--sc-stem: #4e9070;
+	--sc-leaf-2: #3f7d5e;
+	--sc-pot: #a8724d;
+	--sc-rim: #93613e;
+}
+/* A muted slate-blue day with a warm sun and two faint clouds, so it still
+   reads as daytime (canvas note on the dark boards). */
+:root[data-theme='dark'] [data-scene='day'] {
+	--sc-sky: #2e434a;
+	--sc-sun: #e8c774;
+	--sc-halo-fill: #3b4c4a;
+	--sc-halo-line: transparent;
+	--sc-cloud: #3e555d;
+	--sc-cloud-phone: 1;
+	--sc-cloud-tablet: 1;
+	--sc-a: #3a5a47;
+	--sc-a-line: #456a54;
+	--sc-a-mark: #4c735c;
+	--sc-b: #33503f;
+	--sc-b-line: #3e5f4b;
+	--sc-b-mark: #456852;
+	--sc-c: #41644f;
+	--sc-c-line: #4b705a;
+	--sc-ground-line: #2c3a33;
+	--sc-sprout: #3c5446;
+	--sc-eyebrow: #c9d6d2;
+	--sc-title: #f2f5f3;
+	--sc-summary: #dce5e2;
+}
+:root[data-theme='dark'] [data-scene='evening'] {
+	--sc-sky: #15231b;
+	--sc-sun: #e6d3a0;
+	--sc-star: #e9eeea;
+	--sc-a: #1d3226;
+	--sc-a-line: #243b2e;
+	--sc-a-mark: #2a4434;
+	--sc-b: #1a2d22;
+	--sc-b-line: #21362a;
+	--sc-b-mark: #273f31;
+	--sc-c: #223a2d;
+	--sc-c-line: #2a4536;
+	--sc-ground-line: #1f2b24;
+	--sc-eyebrow: #b9ccbf;
+	--sc-title: #f2f5f3;
+	--sc-summary: #d5e2d9;
+}
+
+/* The rolling hills at the bottom of the other screens (Plants boards).
+   Dark isn't drawn in the design; these follow the dark scene: the same
+   shapes a few steps above the page background, so they stay quiet. */
+[data-hills] {
+	--hl-back: #e3ebe0;
+	--hl-back-line: #d5e0d2;
+	--hl-back-mark: #d2decf;
+	--hl-front: #d8e5d5;
+	--hl-front-line: #c9d9c6;
+	--hl-front-mark: #c5d6c2;
+	--hl-ground: #ccdcc9;
+	--hl-ground-line: #bccfb9;
+	--hl-sprout: #a9c2a5;
+}
+:root[data-theme='dark'] [data-hills] {
+	--hl-back: #1a221e;
+	--hl-back-line: #212a25;
+	--hl-back-mark: #26302a;
+	--hl-front: #1e2822;
+	--hl-front-line: #26312a;
+	--hl-front-mark: #2b372f;
+	--hl-ground: #212c25;
+	--hl-ground-line: #2b382f;
+	--hl-sprout: #34463b;
+}
+
+/* Lifted cards on Today's phone layout: a soft second shadow, as in Main. */
+:root {
+	--shadow-raised: 0 1px 2px rgba(20, 40, 30, 0.06), 0 6px 16px rgba(20, 40, 30, 0.05);
+}
+:root[data-theme='dark'] {
+	--shadow-raised: 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 20px rgba(0, 0, 0, 0.28);
+}
+
 /* Expose the tokens as Tailwind utilities (bg-surface, text-ink, ...).
    `inline` so the utilities resolve to the var(), which keeps the theme
    switching at runtime rather than being baked in at build time. */
@@ -332,6 +473,7 @@
 	--color-link: var(--link);
 	--color-selected: var(--selected-bg);
 	--color-segment: var(--segment-bg);
+	--color-card-edge: var(--card-edge);
 	--color-segment-selected: var(--segment-selected);
 	--color-danger: var(--danger);
 

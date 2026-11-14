@@ -105,7 +105,9 @@
 		<!-- Empty states are listed as "not designed yet" in screens.md, so this
 		     follows the tokens and leads straight to adding the first plant
 		     (design.md 9: empty states guide adding the first plant). -->
-		<div class="flex max-w-xl flex-col gap-2 rounded-[18px] bg-surface p-5 text-center">
+		<div
+			class="flex max-w-xl flex-col gap-2 rounded-[18px] border border-card-edge bg-surface p-5 text-center"
+		>
 			<h2 class="text-lg font-bold text-ink">{m.plants_empty_heading()}</h2>
 			<p class="text-sm text-muted">{m.plants_empty_body()}</p>
 			<a

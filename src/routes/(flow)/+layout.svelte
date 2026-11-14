@@ -7,9 +7,12 @@
 -->
 <script lang="ts">
 	import type { LayoutProps } from './$types';
+	import HillsBackdrop from '#lib/components/HillsBackdrop.svelte';
 
 	let { children }: LayoutProps = $props();
 </script>
+
+<HillsBackdrop />
 
 <div class="mx-auto w-full max-w-xl">
 	{@render children()}

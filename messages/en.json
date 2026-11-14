@@ -294,6 +294,10 @@
 	],
 	"today_summary_done": "All done for today.",
 	"today_summary_none": "Nothing to water today.",
+	"today_greeting_morning": "Good morning",
+	"today_greeting_afternoon": "Good afternoon",
+	"today_greeting_evening": "Good evening",
+	"today_greeting_named": "{greeting}, {name}",
 	"today_no_plants": "Your plants’ checks will show up here.",
 	"today_due_today": "Today",
 	"today_overdue": [

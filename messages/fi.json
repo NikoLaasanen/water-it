@@ -303,6 +303,10 @@
 	],
 	"today_summary_done": "Kaikki tehty tältä päivältä.",
 	"today_summary_none": "Tänään ei ole kasteltavaa.",
+	"today_greeting_morning": "Hyvää huomenta",
+	"today_greeting_afternoon": "Hyvää iltapäivää",
+	"today_greeting_evening": "Hyvää iltaa",
+	"today_greeting_named": "{greeting}, {name}",
 	"today_no_plants": "Kasviesi tarkistukset näkyvät tässä.",
 	"today_due_today": "Tänään",
 	"today_overdue": [

@@ -96,7 +96,7 @@
 	<a
 		href={resolve('/(app)/plants/[id]', { id: plant.id })}
 		data-health={plant.health}
-		class="flex items-center gap-3.5 rounded-[18px] bg-surface p-3 no-underline shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
+		class="flex items-center gap-3.5 rounded-[18px] border border-card-edge bg-surface p-3 no-underline shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
 	>
 		<!-- Photo placeholder. Real photos arrive in M3, so for now every plant
 		     gets the tinted square and leaf from the spec. -->

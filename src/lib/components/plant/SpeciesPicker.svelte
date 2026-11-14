@@ -83,12 +83,15 @@
 		{m.add_presets_heading()}
 	</h2>
 	{#if species.length === 0}
-		<p class="rounded-[18px] bg-surface px-4 py-3.5 text-sm text-muted" role="status">
+		<p
+			class="rounded-[18px] border border-card-edge bg-surface px-4 py-3.5 text-sm text-muted"
+			role="status"
+		>
 			{m.add_search_none({ query: search.trim() })}
 		</p>
 	{:else}
 		<ul
-			class="flex flex-col rounded-[18px] bg-surface px-3.5 shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
+			class="flex flex-col rounded-[18px] border border-card-edge bg-surface px-3.5 shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
 		>
 			{#each species as preset, index (preset.id)}
 				{@const light = lightLabel(preset.care.lightLevel)}
@@ -148,7 +151,7 @@
 			{/snippet}
 			{@render choice(
 				preset.id,
-				'flex flex-col gap-1 rounded-[18px] bg-surface p-3.5 text-ink no-underline text-left shadow-[0_1px_2px_rgba(20,40,30,0.06)]',
+				'flex flex-col gap-1 rounded-[18px] border border-card-edge bg-surface p-3.5 text-ink no-underline text-left shadow-[0_1px_2px_rgba(20,40,30,0.06)]',
 				card
 			)}
 		{/each}

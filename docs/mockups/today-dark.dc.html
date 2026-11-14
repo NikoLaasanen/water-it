@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Today — B sunny header, dark theme</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#8FD3A8}a:hover{color:#9AD9B2}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 1080px; box-sizing: border-box; position: relative; background: #121614; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #E9EEEA; overflow: hidden">
+  <svg aria-hidden="true" width="390" height="270" viewBox="0 0 390 270" style="position: absolute; left: 0; top: 0; z-index: 0; pointer-events: none">
+    <rect width="390" height="270" fill="#2E434A"></rect>
+    <circle cx="300" cy="92" r="58" fill="#3B4C4A"></circle>
+    <circle cx="300" cy="92" r="40" fill="#E8C774"></circle>
+    <g fill="#3E555D">
+      <rect x="150" y="54" width="70" height="18" rx="9"></rect><circle cx="172" cy="54" r="12"></circle><circle cx="194" cy="50" r="15"></circle>
+      <rect x="20" y="128" width="56" height="14" rx="7"></rect><circle cx="38" cy="128" r="9"></circle><circle cx="55" cy="125" r="11"></circle>
+    </g>
+    <rect x="236" y="120" width="74" height="220" rx="37.0" fill="#3A5A47" stroke="#456A54" stroke-width="2"></rect><rect x="274.88" y="153.3" width="4" height="10" rx="2" fill="#4C735C"></rect><rect x="284.88" y="153.3" width="4" height="10" rx="2" fill="#4C735C"></rect>
+    <rect x="330" y="96" width="82" height="240" rx="41.0" fill="#33503F" stroke="#3E5F4B" stroke-width="2"></rect><rect x="373.84" y="132.9" width="4" height="10" rx="2" fill="#456852"></rect><rect x="383.84" y="132.9" width="4" height="10" rx="2" fill="#456852"></rect>
+    <rect x="290" y="150" width="64" height="200" rx="32.0" fill="#41644F" stroke="#4B705A" stroke-width="2"></rect>
+    <path d="M0 236 C70 214 150 216 220 226 S330 214 390 200 V270 H0 Z" fill="#121614"></path>
+    <path d="M0 236 C70 214 150 216 220 226 S330 214 390 200" fill="none" stroke="#2C3A33" stroke-width="2"></path>
+    <g transform="translate(322 176) scale(0.95)">
+      <path d="M0 14 C0 6 0 0 0 -8" stroke="#4E9070" stroke-width="2.4" stroke-linecap="round" fill="none"></path>
+      <path d="M0 4 C-8 4 -14 -1 -15 -9 C-6 -10 -1 -5 0 4 Z" fill="#5E9A78"></path>
+      <path d="M0 -1 C8 -1 14 -7 15 -15 C6 -16 1 -10 0 -1 Z" fill="#3F7D5E"></path>
+      <path d="M0 10 C6 10 11 7 12 1 C5 0 1 4 0 10 Z" fill="#4A8564"></path>
+      <path d="M-13 14 H13 L10 31 a3 3 0 0 1 -3 2.4 H-7 a3 3 0 0 1 -3 -2.4 Z" fill="#A8724D"></path>
+      <rect x="-15" y="12" width="30" height="5.5" rx="2.5" fill="#93613E"></rect>
+    </g>
+    <g transform="translate(250 224)" fill="#3C5446"><path d="M0 0 V-9" stroke="#3C5446" stroke-width="2" stroke-linecap="round"></path><path d="M0 -6 C-5 -6 -8 -9 -8 -13 C-3 -13 0 -10 0 -6 Z"></path><path d="M0 -8 C5 -8 8 -11 8 -15 C3 -15 0 -12 0 -8 Z"></path></g><g transform="translate(372 203)" fill="#3C5446"><path d="M0 0 V-9" stroke="#3C5446" stroke-width="2" stroke-linecap="round"></path><path d="M0 -6 C-5 -6 -8 -9 -8 -13 C-3 -13 0 -10 0 -6 Z"></path><path d="M0 -8 C5 -8 8 -11 8 -15 C3 -15 0 -12 0 -8 Z"></path></g>
+  </svg>
+  <div style="position: relative; z-index: 1; padding: 56px 20px 120px; display: flex; flex-direction: column; gap: 20px">
+    <div style="display: flex; flex-direction: column; gap: 4px; padding-right: 120px; min-height: 150px">
+      <div style="font-size: 13px; font-weight: 600; color: #C9D6D2; letter-spacing: 0.02em">Good afternoon, Niko · Wed 11 Nov</div>
+      <h1 style="margin: 0; font-size: 34px; font-weight: 800; letter-spacing: -0.02em; color: #F2F5F3">Today</h1>
+      <div style="font-size: 15px; line-height: 1.4; color: #DCE5E2">{{summary}}</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <sc-for list="{{items}}" as="item" hint-placeholder-count="4">
+        <div style="background: #1C221F; border-radius: 18px; padding: 10px; border: 2px solid {{item.borderC}}; display: flex; gap: 12px; align-items: stretch; box-shadow: 0 1px 0 rgba(255,255,255,0.03), 0 8px 20px rgba(0,0,0,0.28)">
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+            <div style="display: flex; gap: 10px; align-items: center">
+              <div style="width: 44px; height: 44px; flex: none; border-radius: 12px; background: {{item.tint}}; display: flex; align-items: center; justify-content: center; color: #8FD3A8"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg></div>
+              <div style="display: flex; flex-direction: column; gap: 1px; min-width: 0">
+                <div style="font-size: 16px; font-weight: 700">{{item.name}}</div>
+                <div style="display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: {{item.dueFg}}">
+                  <sc-if value="{{item.overdue}}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></sc-if>
+                  <span>{{item.due}}</span>
+                </div>
+              </div>
+            </div>
+            <sc-if value="{{item.open}}" hint-placeholder-val="{{ true }}">
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <div style="font-size: 13px; line-height: 1.4; color: #CDD5D0">{{item.hint}}</div>
+                <div style="display: flex; gap: 4px">
+                  <button type="button" onClick="{{item.damp}}" style="min-height: 36px; padding: 0 12px; border: 1.5px solid #4A5650; border-radius: 10px; background: #1C221F; color: #E9EEEA; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Still damp</button>
+                  <button type="button" onClick="{{item.skip}}" style="min-height: 36px; padding: 0 10px; border: none; border-radius: 10px; background: transparent; color: #A3AEA8; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Skip</button>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{item.done}}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start">
+                <span style="display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 999px; background: {{item.sBg}}; color: {{item.sFg}}; font-size: 13px; font-weight: 700">{{item.sLabel}}</span>
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #A3AEA8">
+                  <span>{{item.sNext}}</span>
+                  <button type="button" onClick="{{item.undo}}" style="min-height: 36px; border: none; background: transparent; color: #E9EEEA; font-family: inherit; font-size: 13px; font-weight: 700; text-decoration: underline; cursor: pointer">Undo</button>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+          <sc-if value="{{item.open}}" hint-placeholder-val="{{ true }}">
+            <button type="button" onClick="{{item.water}}" aria-label="Watered {{item.name}}" style="width: 84px; flex: none; min-height: 84px; border: none; border-radius: 18px; background: #356BB0; color: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer"><svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg><span>Watered</span></button>
+          </sc-if>
+          <sc-if value="{{item.done}}" hint-placeholder-val="{{ false }}">
+            <div style="width: 84px; flex: none; min-height: 84px; border-radius: 18px; background: {{item.sBg}}; color: {{item.sFg}}; display: flex; align-items: center; justify-content: center">
+              <sc-if value="{{item.isWater}}" hint-placeholder-val="{{ true }}"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if>
+              <sc-if value="{{item.isDamp}}" hint-placeholder-val="{{ false }}"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></sc-if>
+              <sc-if value="{{item.isSkip}}" hint-placeholder-val="{{ false }}"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <nav aria-label="Main" style="position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 84px; box-sizing: border-box; padding: 8px 12px 24px; background: rgba(24,29,26,0.96); border-top: 1px solid #2A322E; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr))">
+    <a href="TodayIdeaSunnyDark.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #8FD3A8; text-decoration: none; font-size: 11px; font-weight: 700">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg>
+      Today
+    </a>
+    <a href="Plants.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #97A29C; text-decoration: none; font-size: 11px; font-weight: 600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>
+      Plants
+    </a>
+    <a href="TodayIdeaSunnyDark.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #97A29C; text-decoration: none; font-size: 11px; font-weight: 600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+      Photos
+    </a>
+    <a href="TodayIdeaSunnyDark.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #97A29C; text-decoration: none; font-size: 11px; font-weight: 600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      Settings
+    </a>
+  </nav>
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1080}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { logged: {} }; }
+  renderVals() {
+    var self = this;
+    var base = [
+      { id: 'pilea', name: 'Pilea', tint: '#22332A', due: 'Overdue 2 days', overdue: true,
+        hint: 'Skewer under the pebbles. Water if dry 2–3 cm down.' },
+      { id: 'dracaena', name: 'Dracaena', tint: '#2A3326', due: 'Today', overdue: false,
+        hint: 'Keep lightly moist while rooting. Never soggy.' },
+      { id: 'yucca', name: 'Yucca', tint: '#302F26', due: 'Today', overdue: false,
+        hint: 'Lift the pot. If it feels light, water until the saucer fills.' },
+      { id: 'crassula', name: 'Crassula', tint: '#283325', due: 'Today', overdue: false,
+        hint: 'Only water when the soil is fully dry.' }
+    ];
+    var ST = {
+      water: { label: 'Watered', next: 'Next check in 14 days', bg: '#1F3B2A', fg: '#9AD9B2' },
+      damp: { label: 'Still damp', next: 'Checking again in 3 days', bg: '#3D3214', fg: '#F3CF73' },
+      skip: { label: 'Skipped', next: 'Back on the list tomorrow', bg: '#3E1F1D', fg: '#F4A3A0' }
+    };
+    var logged = this.state.logged;
+    var items = base.map(function (p) {
+      var k = logged[p.id];
+      function set(v) { return function () { var n = Object.assign({}, self.state.logged); if (v) { n[p.id] = v; } else { delete n[p.id]; } self.setState({ logged: n }); }; }
+      var st = k ? ST[k] : null;
+      return Object.assign({}, p, {
+        open: !k, done: !!k,
+        borderC: (p.overdue && !k) ? '#E5675F' : 'transparent',
+        dueFg: p.overdue ? '#F4A3A0' : '#A9C8EE',
+        sLabel: st ? st.label : '', sNext: st ? st.next : '', sBg: st ? st.bg : '#1C221F', sFg: st ? st.fg : '#E9EEEA',
+        isWater: k === 'water', isDamp: k === 'damp', isSkip: k === 'skip',
+        water: set('water'), damp: set('damp'), skip: set('skip'), undo: set(null)
+      });
+    });
+    var left = items.filter(function (i) { return i.open; }).length;
+    return { items: items, summary: left === 0 ? 'All done for today.' : left + ' to check · tap the drop when watered' };
+  }
+}
+</script>
+</body>
+</html>

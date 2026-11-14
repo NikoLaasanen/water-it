@@ -27,6 +27,7 @@
 	import { MediaQuery } from 'svelte/reactivity';
 	import { resolve } from '$app/paths';
 	import HealthFace from '#lib/components/HealthFace.svelte';
+	import HillsBackdrop from '#lib/components/HillsBackdrop.svelte';
 	import CareProfileCard from '#lib/components/plant/CareProfileCard.svelte';
 	import LogList from '#lib/components/plant/LogList.svelte';
 	import IntervalSuggestionCard from '#lib/components/plant/IntervalSuggestionCard.svelte';
@@ -194,9 +195,13 @@
 	</div>
 
 	<main
-		class="relative z-10 -mt-7 flex flex-col gap-5 rounded-t-[28px] bg-bg px-5 pt-6 pb-10 md:px-8 md:pb-8"
+		class="relative z-10 -mt-7 flex min-h-[calc(100dvh-332px-max(24px,env(safe-area-inset-bottom)))] flex-col gap-5 overflow-hidden rounded-t-[28px] bg-bg px-5 pt-6 pb-10 md:min-h-[calc(100dvh-272px)] md:px-8 md:pb-8 lg:min-h-[calc(100dvh-192px)]"
 		data-health={plant.health}
 	>
+		<!-- The hills go inside the sheet: its opaque background would hide the
+		     fixed backdrop the other screens use. The sheet reaches at least the
+		     bottom of the screen, so they sit there on a short page too. -->
+		<HillsBackdrop placement="inside" />
 		<div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
 			<header class="flex min-w-0 flex-col gap-1.5">
 				<h1 class="text-[30px] leading-tight font-extrabold tracking-[-0.02em] text-ink">

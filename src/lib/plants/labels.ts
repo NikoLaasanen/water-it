@@ -22,6 +22,7 @@ import type {
 import { parseLocalDate, type NextCheck } from './care.js';
 import type { CheckAction, Season } from './schedule.js';
 import type { DayRef } from './today.js';
+import type { PartOfDay } from './part-of-day.js';
 import { resolveCare, type CareField, type ResolvedCare } from './care-profile.js';
 
 /** A plant's effective care profile in the current language. */
@@ -464,4 +465,34 @@ export function logNextCheckLabel(entry: Pick<LogEntry, 'kind' | 'check'>): stri
 	if (!entry.check || entry.kind === 'skipped') return null;
 	const date = parseLocalDate(entry.check.nextDue);
 	return date ? m.log_next_check({ date: shortDateLabel(date) }) : null;
+}
+
+/**
+ * Today's eyebrow: "Good afternoon, Niko · Wed, Nov 11" on phones, with the
+ * long date ("Wednesday 11 November") on the iPad. The name is the first word
+ * of the account's display name; email accounts have none, so it's left out.
+ */
+export function greetingLine(
+	part: PartOfDay,
+	displayName: string | null | undefined,
+	date: Date,
+	length: 'short' | 'long'
+): string {
+	const greeting =
+		part === 'morning'
+			? m.today_greeting_morning()
+			: part === 'afternoon'
+				? m.today_greeting_afternoon()
+				: m.today_greeting_evening();
+	const name = displayName?.trim().split(/\s+/)[0];
+	const hello = name ? m.today_greeting_named({ greeting, name }) : greeting;
+	const day =
+		length === 'long'
+			? longDateLabel(date)
+			: new Intl.DateTimeFormat(getLocale(), {
+					weekday: 'short',
+					day: 'numeric',
+					month: 'short'
+				}).format(date);
+	return `${hello} · ${day}`;
 }

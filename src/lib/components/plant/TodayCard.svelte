@@ -46,7 +46,7 @@
 </script>
 
 <article
-	class="flex items-stretch gap-3 rounded-[18px] border-2 bg-surface p-2.5 shadow-[0_1px_2px_rgba(20,40,30,0.06)] md:py-3 md:pr-3 md:pl-3.5"
+	class="flex items-stretch gap-3 rounded-[18px] border-2 bg-surface p-2.5 shadow-[var(--shadow-raised)] md:py-3 md:pr-3 md:pl-3.5 md:shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
 	style:border-color={overdue ? 'var(--danger-border)' : 'transparent'}
 	aria-label={name}
 >

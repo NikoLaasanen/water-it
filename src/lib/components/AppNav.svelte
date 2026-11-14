@@ -15,6 +15,7 @@
 	import Leaf from '@lucide/svelte/icons/leaf';
 	import Settings from '@lucide/svelte/icons/settings';
 	import type { Component } from 'svelte';
+	import AppLogo from './AppLogo.svelte';
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import { m } from '#lib/paraglide/messages.js';
@@ -52,14 +53,10 @@
 	aria-label={m.nav_label()}
 	class="fixed inset-x-0 bottom-0 z-20 grid grid-cols-4 border-t border-line bg-surface/95 px-3 pt-2 pb-[max(24px,env(safe-area-inset-bottom))] backdrop-blur md:sticky md:top-0 md:flex md:h-dvh md:w-24 md:flex-none md:flex-col md:items-center md:gap-3 md:border-t-0 md:border-r md:px-0 md:py-7 md:pb-7"
 >
-	<!-- App mark, rail only. Decorative for sighted users; the name is still
-	     announced, as in the mockup. -->
-	<div
-		role="img"
-		aria-label="Water.it"
-		class="mb-4 hidden size-12 items-center justify-center rounded-[14px] bg-primary text-on-primary md:flex"
-	>
-		<Droplet size={24} strokeWidth={2} aria-hidden="true" />
+	<!-- App mark, rail only: the app icon itself (drop with a sprout), so the
+	     rail matches the Home Screen. The name is announced, as in the mockup. -->
+	<div class="mb-4 hidden overflow-hidden rounded-[14px] md:block">
+		<AppLogo size={48} />
 	</div>
 
 	{#each items as item (item.label)}
