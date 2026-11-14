@@ -132,6 +132,11 @@ export type Task = {
 	 * suggestion. Answers up to that day no longer count towards one.
 	 */
 	suggestionKeptOn?: string;
+	/**
+	 * Fertilise and repot reminders only: the local date (`YYYY-MM-DD`) it was
+	 * last done. Their `nextDue` is worked out from it (reminders.ts).
+	 */
+	lastDone?: string;
 };
 
 export type LogKind =
@@ -163,4 +168,10 @@ export type LogEntry = {
 	 * back from any device, after a reload too; `nextDue` is where it moved.
 	 */
 	check?: { before: CheckSnapshot | null; nextDue: string; intervalDays: number };
+	/**
+	 * For Fertilised / Repotted: the reminder as it was before this entry
+	 * (null if there was nothing stored), so Undo and deleting the entry can
+	 * put it back. reminders.ts.
+	 */
+	reminder?: { before: { lastDone?: string; snoozedUntil?: string } | null };
 };

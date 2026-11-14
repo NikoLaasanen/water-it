@@ -4,12 +4,28 @@
   day (number over weekday), the badge, what the entry did ("Next check
   Sat 21 Nov") or its note, and the time it was logged. "Show older" asks for
   the next page; most plants will never need it.
+
+  "Add to log" at the top opens the hand-logging flow. Hand-added entries
+  have a delete button (with a confirmation) where check answers show their
+  time: those are taken back with Undo instead, and a hand-added entry's time
+  isn't shown, because one logged for an earlier day has no real time.
 -->
 <script lang="ts">
+	import { resolve } from '$app/paths';
+	import Plus from '@lucide/svelte/icons/plus';
+	import Trash from '@lucide/svelte/icons/trash-2';
+	import * as AlertDialog from '#lib/components/ui/alert-dialog/index.js';
 	import { getLocale } from '#lib/paraglide/runtime.js';
 	import { m } from '#lib/paraglide/messages.js';
-	import { logNextCheckLabel, monthLabel, shortDateLabel, timeLabel } from '#lib/plants/labels.js';
+	import {
+		logKindLabel,
+		logNextCheckLabel,
+		monthLabel,
+		shortDateLabel,
+		timeLabel
+	} from '#lib/plants/labels.js';
 	import { groupByMonth } from '#lib/plants/log.js';
+	import { isManualEntry } from '#lib/plants/manual-log.js';
 	import type { LogEntry } from '#lib/types/plant.js';
 	import LogKindBadge from './LogKindBadge.svelte';
 
@@ -17,13 +33,32 @@
 		entries,
 		loading,
 		hasMore,
-		onmore
+		onmore,
+		plantId,
+		ondelete
 	}: {
 		entries: LogEntry[];
 		loading: boolean;
 		hasMore: boolean;
 		onmore: () => void;
+		/** For the Add to log link. */
+		plantId: string;
+		ondelete: (entry: LogEntry) => void;
 	} = $props();
+
+	/** The entry waiting for its delete confirmation. */
+	let pending = $state<LogEntry | null>(null);
+	let confirmOpen = $state(false);
+
+	function askDelete(entry: LogEntry) {
+		pending = entry;
+		confirmOpen = true;
+	}
+
+	function confirmDelete() {
+		if (pending) ondelete(pending);
+		confirmOpen = false;
+	}
 
 	const months = $derived(groupByMonth(entries));
 
@@ -33,6 +68,14 @@
 </script>
 
 <section class="flex flex-col gap-5 md:max-w-[640px]" aria-label={m.log_heading()}>
+	<a
+		href={resolve('/(flow)/plants/[id]/log/new', { id: plantId })}
+		class="flex min-h-12 items-center justify-center gap-2 rounded-xl border-[1.5px] border-border bg-surface px-4 text-[15px] font-bold text-ink no-underline"
+	>
+		<Plus size={18} strokeWidth={2.4} aria-hidden="true" />
+		{m.log_add()}
+	</a>
+
 	{#if loading}
 		<p class="text-sm text-muted" role="status">{m.log_loading()}</p>
 	{:else if months.length === 0}
@@ -70,7 +113,21 @@
 									<span class="text-[13px] leading-[1.4] text-ink-2">{entry.note}</span>
 								{/if}
 							</span>
-							<span class="shrink-0 text-[13px] font-semibold text-muted-2">{timeLabel(at)}</span>
+							{#if isManualEntry(entry)}
+								<button
+									type="button"
+									onclick={() => askDelete(entry)}
+									aria-label={m.log_delete_aria({
+										kind: logKindLabel(entry.kind),
+										date: shortDateLabel(at)
+									})}
+									class="-mr-2 flex size-11 shrink-0 items-center justify-center rounded-full text-muted-2"
+								>
+									<Trash size={18} strokeWidth={2} aria-hidden="true" />
+								</button>
+							{:else}
+								<span class="shrink-0 text-[13px] font-semibold text-muted-2">{timeLabel(at)}</span>
+							{/if}
 						</li>
 					{/each}
 				</ol>
@@ -88,3 +145,35 @@
 		{/if}
 	{/if}
 </section>
+
+<AlertDialog.Root bind:open={confirmOpen}>
+	<AlertDialog.Content class="max-w-[calc(100%-2.5rem)] rounded-[18px] p-5 sm:max-w-sm">
+		<AlertDialog.Header>
+			<AlertDialog.Title class="text-lg font-bold text-ink"
+				>{m.log_delete_title()}</AlertDialog.Title
+			>
+			{#if pending}
+				<AlertDialog.Description class="text-sm leading-[1.45] text-muted">
+					{m.log_delete_body({
+						kind: logKindLabel(pending.kind),
+						date: shortDateLabel(pending.at.toDate())
+					})}
+				</AlertDialog.Description>
+			{/if}
+		</AlertDialog.Header>
+		<AlertDialog.Footer class="mx-0 mb-0 flex-col gap-2 border-0 bg-transparent p-0">
+			<AlertDialog.Action
+				class="min-h-12 w-full rounded-xl text-base font-bold"
+				style="background: var(--danger-fill); color: var(--on-danger)"
+				onclick={confirmDelete}
+			>
+				{m.log_delete_confirm()}
+			</AlertDialog.Action>
+			<AlertDialog.Cancel
+				class="min-h-12 w-full rounded-xl border-[1.5px] border-border bg-surface text-base font-semibold text-ink"
+			>
+				{m.log_delete_keep()}
+			</AlertDialog.Cancel>
+		</AlertDialog.Footer>
+	</AlertDialog.Content>
+</AlertDialog.Root>

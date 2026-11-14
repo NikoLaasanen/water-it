@@ -34,6 +34,7 @@
 	import NextCheckCard from '#lib/components/plant/NextCheckCard.svelte';
 	import RecentLogCard from '#lib/components/plant/RecentLogCard.svelte';
 	import { PlantLog } from '#lib/firebase/log.svelte.js';
+	import { deleteManualEntry } from '#lib/firebase/log-writes.js';
 	import { PlantQuery } from '#lib/firebase/plants.svelte.js';
 	import { session } from '#lib/firebase/session.svelte.js';
 	import { m } from '#lib/paraglide/messages.js';
@@ -45,10 +46,12 @@
 		provenanceLine,
 		speciesLine
 	} from '#lib/plants/labels.js';
-	import { parseLocalDate } from '#lib/plants/care.js';
+	import { effectiveDueDate, parseLocalDate } from '#lib/plants/care.js';
 	import { lastWateredAt } from '#lib/plants/log.js';
+	import { kindOfDone, reminderTasks } from '#lib/plants/reminders.js';
+	import { clock } from '#lib/clock.svelte.js';
 	import { presetById } from '#lib/presets/index.js';
-	import type { Plant } from '#lib/types/plant.js';
+	import type { LogEntry, Plant } from '#lib/types/plant.js';
 
 	const query = new PlantQuery();
 	// Tailwind's `md` (48rem): where the next-check card moves into the Care tab.
@@ -77,6 +80,17 @@
 		if (!uid || !id) return;
 		return log.listen(uid, id, logMax);
 	});
+
+	function deleteEntry(entry: LogEntry) {
+		const uid = session.user?.uid;
+		if (!uid) return;
+		const kind = kindOfDone(entry);
+		deleteManualEntry(
+			uid,
+			entry,
+			query.reminders.find((r) => r.kind === kind)
+		);
+	}
 
 	function showOlder() {
 		older = { plantId: page.params.id ?? '', max: logMax + LOG_PAGE };
@@ -118,7 +132,17 @@
 	});
 	const preset = $derived(presetById(plant?.speciesId));
 	const resolved = $derived(plant ? careOf(plant) : null);
-	const rows = $derived(resolved ? careRows(resolved.care) : []);
+	// "Next: 1 Apr 2027" on the Fertilising and Repot rows, from the reminders.
+	const nextCare = $derived.by(() => {
+		if (!plant) return {};
+		const tasks = reminderTasks([plant], query.reminders, (p) => careOf(p).care);
+		const due = (kind: string) => {
+			const task = tasks.find((t) => t.kind === kind);
+			return task ? effectiveDueDate(task) : null;
+		};
+		return { fertilize: due('fertilize'), repot: due('repot'), today: clock.today };
+	});
+	const rows = $derived(resolved ? careRows(resolved.care, nextCare) : []);
 	const provenance = $derived(resolved ? provenanceLine(preset, resolved.edited) : null);
 	const species = $derived(speciesLine(preset));
 	const pot = $derived(potChip(plant?.pot));
@@ -316,6 +340,8 @@
 					loading={log.loading}
 					hasMore={log.hasMore}
 					onmore={showOlder}
+					plantId={plant.id}
+					ondelete={deleteEntry}
 				/>
 			{:else}
 				<div class="grid gap-5 md:grid-cols-2 md:items-start">
@@ -325,7 +351,12 @@
 						{/if}
 						<!-- iPad only, as designed: on a phone the Log tab is one tap away. -->
 						<div class="hidden md:block">
-							<RecentLogCard entries={log.entries} onopen={() => openTab('log')} />
+							<RecentLogCard
+								entries={log.entries}
+								onopen={() => openTab('log')}
+								plantId={plant.id}
+								name={plant.name}
+							/>
 						</div>
 					</div>
 					<div class="order-2 md:order-none">

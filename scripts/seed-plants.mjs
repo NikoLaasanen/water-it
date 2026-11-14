@@ -79,7 +79,9 @@ const PLANTS = [
 		location: 'Bookshelf by the desk lamp',
 		speciesId: 'dracaena-marginata',
 		pot: { material: 'plastic', topLayer: 'soil', sizeCm: 19 },
-		careOverrides: {},
+		// Fed all year (an edit from the preset), so a fertilise reminder can
+		// come due in winter for testing; see the reminders below.
+		careOverrides: { fertilize: { intervalDays: 45, growingOnly: false } },
 		sitterNote: 'Only if the soil is dry a finger deep. It would rather be too dry than too wet.',
 		dueIn: 0 // today
 	},
@@ -277,6 +279,23 @@ for (const plant of PLANTS) {
 		})
 	);
 }
+
+// Fertilise and repot reminders (reminders.ts): the Dracaena was last fed
+// 50 days ago on a 45-day interval, and the Yucca last repotted in April 2023
+// on a 36-month one, so both are due on Today. Old reminder documents from
+// testing are cleared first.
+for (const plant of PLANTS) {
+	for (const kind of ['fertilize', 'repot'])
+		await remove(`users/${user.localId}/tasks/${kind}-${plant.id}`);
+}
+await put(
+	`users/${user.localId}/tasks/fertilize-dracaena`,
+	toFields({ plantId: 'dracaena', kind: 'fertilize', lastDone: dayOffset(-50) })
+);
+await put(
+	`users/${user.localId}/tasks/repot-yucca`,
+	toFields({ plantId: 'yucca', kind: 'repot', lastDone: '2023-04-10' })
+);
 
 // Log history for the Pilea: three rounds of "Still damp, then watered",
 // all under this season's interval, ending one interval before its check.

@@ -59,6 +59,8 @@ function toLogEntry(id: string, data: DocumentData): LogEntry | null {
 	if (typeof data.plantId !== 'string' || !(data.at instanceof Timestamp)) return null;
 	if (!KINDS.includes(data.kind)) return null;
 	const check = data.check as DocumentData | undefined;
+	const reminder = data.reminder as DocumentData | undefined;
+	const before = reminder?.before as DocumentData | null | undefined;
 	return {
 		id,
 		plantId: data.plantId,
@@ -71,6 +73,19 @@ function toLogEntry(id: string, data: DocumentData): LogEntry | null {
 						before: snapshotOf(check.before),
 						nextDue: check.nextDue,
 						intervalDays: check.intervalDays
+					}
+				: undefined,
+		reminder:
+			reminder && typeof reminder === 'object'
+				? {
+						before:
+							before && typeof before === 'object'
+								? {
+										lastDone: typeof before.lastDone === 'string' ? before.lastDone : undefined,
+										snoozedUntil:
+											typeof before.snoozedUntil === 'string' ? before.snoozedUntil : undefined
+									}
+								: null
 					}
 				: undefined
 	};

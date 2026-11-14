@@ -1,5 +1,6 @@
 /**
- * Live view of one user's plants and their water checks.
+ * Live view of one user's plants, their water checks and their stored
+ * fertilise/repot reminders (reminders.ts).
  *
  * Owned by the component that renders them: `listen()` returns its own cleanup
  * so it can be handed straight back from an `$effect`. A module-level
@@ -18,6 +19,7 @@ import { createContext } from 'svelte';
 import { db } from './client';
 import { readLastAnswer } from './log.svelte.js';
 import { readOverrides } from '#lib/plants/care-profile.js';
+import type { ReminderKind, StoredReminder } from '#lib/plants/reminders.js';
 import type {
 	Health,
 	Plant,
@@ -84,6 +86,19 @@ function toPlant(id: string, data: DocumentData): Plant | null {
 	};
 }
 
+/** A stored fertilise/repot reminder, or null for anything else. */
+function toReminder(id: string, data: DocumentData): StoredReminder | null {
+	if (data.kind !== 'fertilize' && data.kind !== 'repot') return null;
+	if (typeof data.plantId !== 'string') return null;
+	return {
+		id,
+		plantId: data.plantId,
+		kind: data.kind as ReminderKind,
+		lastDone: typeof data.lastDone === 'string' ? data.lastDone : undefined,
+		snoozedUntil: typeof data.snoozedUntil === 'string' ? data.snoozedUntil : undefined
+	};
+}
+
 /** A stored check, with `lastAnswer` checked: Today builds sentences from it. */
 function toTask(id: string, data: DocumentData): Task {
 	return {
@@ -99,6 +114,9 @@ export class PlantsQuery {
 
 	/** Only `check-water` tasks: the list shows nothing else. */
 	checkTasks = $state<Task[]>([]);
+
+	/** Stored fertilise/repot reminders: only the ones the owner has acted on. */
+	reminders = $state<StoredReminder[]>([]);
 
 	/** True until both collections have answered once. */
 	loading = $state(true);
@@ -127,11 +145,13 @@ export class PlantsQuery {
 		return [...this.plants].sort((a, b) => a.name.localeCompare(b.name, locale));
 	}
 
-	#delivered = { plants: false, tasks: false };
+	#delivered = { plants: false, tasks: false, reminders: false };
 
-	#settle(which: 'plants' | 'tasks') {
+	#settle(which: 'plants' | 'tasks' | 'reminders') {
 		this.#delivered[which] = true;
-		if (this.#delivered.plants && this.#delivered.tasks) this.loading = false;
+		if (this.#delivered.plants && this.#delivered.tasks && this.#delivered.reminders) {
+			this.loading = false;
+		}
 	}
 
 	#onError = (error: FirestoreError) => {
@@ -169,9 +189,22 @@ export class PlantsQuery {
 			this.#onError
 		);
 
+		const stopReminders = onSnapshot(
+			// `in` on one field: still a single-field index.
+			query(collection(db, 'users', uid, 'tasks'), where('kind', 'in', ['fertilize', 'repot'])),
+			(snapshot) => {
+				this.reminders = snapshot.docs
+					.map((doc) => toReminder(doc.id, doc.data()))
+					.filter((reminder): reminder is StoredReminder => reminder !== null);
+				this.#settle('reminders');
+			},
+			this.#onError
+		);
+
 		return () => {
 			stopPlants();
 			stopTasks();
+			stopReminders();
 		};
 	}
 }
@@ -188,6 +221,9 @@ export class PlantQuery {
 
 	/** This plant's `check-water` task. */
 	checkTask = $state<Task | undefined>(undefined);
+
+	/** This plant's stored fertilise/repot reminders. */
+	reminders = $state<StoredReminder[]>([]);
 
 	loading = $state(true);
 
@@ -223,14 +259,19 @@ export class PlantQuery {
 			this.#onError
 		);
 
+		// All of this plant's tasks in one listener: the water check and the
+		// stored reminders are told apart by kind.
 		const stopTask = onSnapshot(
-			query(
-				collection(db, 'users', uid, 'tasks'),
-				where('kind', '==', 'check-water'),
-				where('plantId', '==', plantId)
-			),
+			query(collection(db, 'users', uid, 'tasks'), where('plantId', '==', plantId)),
 			(snapshot) => {
-				this.checkTask = snapshot.docs.map((task) => toTask(task.id, task.data())).at(0);
+				const docs = snapshot.docs;
+				this.checkTask = docs
+					.filter((task) => task.data().kind === 'check-water')
+					.map((task) => toTask(task.id, task.data()))
+					.at(0);
+				this.reminders = docs
+					.map((task) => toReminder(task.id, task.data()))
+					.filter((reminder): reminder is StoredReminder => reminder !== null);
 				this.#settle('task');
 			},
 			this.#onError

@@ -109,7 +109,7 @@ Form and control tokens (from the Add/Edit mockups; `layout.css` has both themes
 
 A little scene behind the top of Today, both with checks and "All caught up": a pale sky band, the sun with a halo, three rounded cacti (two with "eyes") and a terracotta pot with a sprouting plant on a soft ground line that melts into the page, plus a couple of sprouts. `src/lib/components/today/TodayScene.svelte`, decorative (`aria-hidden`).
 
-- **Evening** (from 18:00, with "Good evening"): deep green sky, crescent moon, stars, darker cacti, no sprouts; the header text turns light (`--sc-eyebrow`/`--sc-title`/`--sc-summary`).
+- **Evening** (from 18:00, with "Good evening"; fixed clock times on purpose, not real sunset, which would need the location — the scene is there to feel welcoming, not to be accurate. Niko, 2026-11-14): deep green sky, crescent moon, stars, darker cacti, no sprouts; the header text turns light (`--sc-eyebrow`/`--sc-title`/`--sc-summary`).
 - **Dark theme:** day is a muted slate-blue sky with a warm sun and two faint clouds; evening a near-black green. Colours from the boards, as tokens on `data-scene` in layout.css.
 - **Phone:** 270 px band, the cluster anchored to the right edge at its designed size. **iPad:** 250 px band laid out as on the 1084 px board from the content's left edge (cluster in the middle, a cloud on the right in daytime). The tablet evening isn't drawn; it uses the tablet layout with the evening colours and the phone's stars tiled across.
 - Built in layers so no shape stretches: the sky is the container's background, the ground a full-width path (never narrower than the board, so the plant stays on the line), the sun, cacti and plant fixed-size SVG on top.
@@ -151,6 +151,20 @@ Niko's design for when nothing is left to answer, which is also what the app ope
 - "Last watering …" and "Check soil again" read the check's `lastAnswer` (design.md §6), written with every answer and restored by Undo. Checks answered before it existed don't have one, and the sentence then just says what's next.
 - Not in v1 mockup but in the design doc: cold-night alert banner. Optional, below the cards.
 - **iPad (`tablet-today.dc.html`):** the cards go into two columns, each card laid out vertically (name and due line, hint, then Still damp / Skip on the left and a wide Watered button on the right). A **"Coming up"** column (300 px) on the right lists the next few tasks of any kind — date block (weekday + day), plant, task ("Turn the pot", "Check soil") — with a "See all plants" link and the note "Dates move when you log something. A late watering pushes the next check later." In portrait it goes below the cards. Built with the Today view in M2.
+
+## Fertilise and repot reminders (2026-11-14, no mockup)
+
+Niko asked for both, each with its own colour and icon on Today.
+
+- **Colours and icons:** fertilising is **violet** with a **flask** (liquid feed; `flask-conical`), repotting **terracotta** — the scene's pot — with a **plant pot** (`plant-pot`). Tokens `--rm-bg/fg/icon/fill` and `--on-rm` on `data-reminder`, light and dark; text 7:1+, the solid Done fill 6:1+, icons 4.3:1+. The log's Fertilised / Repotted badges use the same.
+- **When:** worked out, not stored (`src/lib/plants/reminders.ts`, tested): from the care profile and the last time it was done (`lastDone` on a `fertilize-<plant>` / `repot-<plant>` task), or from the day the plant was added. So editing the profile, the season or dormancy apply at once, with nothing to migrate.
+  - **Fertilise:** last time + interval. "Growing season only" moves a date outside the growing months to the first day of the next growing month — no winter reminders (all presets are growing-only, so the first ones arrive on 1 April). None while dormant; under a grow light all year.
+  - **Repot:** last time + months, moved forward into spring (April–May), never earlier.
+- **Today:** due reminders get their own cards after the water cards, laid out like them: icon tile in the reminder tint, name, "Fertilise · Due since Nov 9", the profile's rhythm ("Every 45 days."), **Later**, and a big **Done** square in the reminder fill (a wide Done button on the iPad). No red overdue border. Done logs Fertilised / Repotted now; the card then shows the badge, "Next on December 29" and **Undo** for the rest of the day. **Later** puts it off a week (repotting two). The summary says "N things to do today" when only reminders are left; the "All caught up" screen waits for both.
+- **Coming up** lists reminders due within 14 days, with the reminder tile (phone) or a small icon on the "Fertilise · …" line (iPad). The week strip stays water-only.
+- **Plant detail:** the Fertilizing and Repot rows end with "Next: Apr 1, 2027", or "Due since Apr 10." when it's already due.
+- **Add to log** with Fertilised / Repotted resets the reminder too (to that day, unless something later was already logged). Every such entry keeps the reminder as it was (`reminder.before`), so Undo — or deleting the entry from the log, while nothing has changed it since — puts it back.
+- `pnpm seed:plants` makes the Dracaena's fertilising (fed all year) and the Yucca's repotting due, for testing.
 
 ## Backdrops (2026-11-14) — `plants.dc.html`, `tablet-plants.dc.html`
 
@@ -221,7 +235,20 @@ Not a screen people open often, so there is no full mockup (Niko, 2026-11-14); i
 - The open tab is in the URL (`?tab=log`), replaced rather than pushed, so a reload keeps it and Back still leaves the plant. Roving tabindex: Tab reaches the open tab, arrow keys switch.
 - Empty state: "Nothing logged yet. Watered, Still damp and Skip land here."
 - On the iPad the list is one column, at most 640 px wide.
-- Not built: editing or deleting entries (Undo on the day covers mistakes), and adding entries by hand (fertilised, note…), which needs its own small design.
+- **Add to log** button at the top of the tab (and **+ Add** in the iPad Recent log card) opens the hand-logging flow below.
+- **Hand-added entries** show a delete button (trash, 44 px, with a confirmation dialog: "Delete this entry?") where check answers show their time. Check answers are taken back with Undo instead. A hand-added entry's time isn't shown: one logged for an earlier day is stored at midday and has no real time.
+- Not built: editing an entry (delete and add it again).
+
+### Add to log (built 2026-11-14, no mockup)
+
+Care done by hand. `src/routes/(flow)/plants/[id]/log/new`, a full-screen flow like Edit plant; Niko asked for a simple design.
+
+- Header: **Cancel** · "Add to log" with "For Pilea" under it · **Save**. One form card, then a big **Add to log** button.
+- **What did you do?** — chips: Fertilised, Repotted, Pruned, Moved, Note, Problem. **Watering isn't offered**: it goes through the check buttons, so the schedule has one way in.
+- **When** — a date input, today by default, no future days. Today's entries get the current time; an earlier day is stored at 12:00.
+- **Note** — optional, except for Note. Problem gets the hint "What does it look like? Yellow leaves, pests, a soft stem…". Up to 500 characters.
+- **Moved** asks "Where did it go?" instead, prefilled with the plant's current spot, with the other spots as chips; saving also changes the plant's location, in the same batch. The new spot is stored as the entry's note (followed by any note typed).
+- Rules in `src/lib/plants/manual-log.ts` (tested), writes in `log-writes.ts`.
 - The health chip reuses the list's `--health-*` tokens rather than the mockup's one-off `#1F4A36`, so health looks identical on both screens. The outline chips use `--border` rather than the mockup's `#D6DDD8`.
 - New token `--segment-bg` for the tab track. In dark it goes **lighter** than the page where light mode goes darker: a recessed track is invisible on a dark background (1.01 against `--bg`). At `#2B342E` it is 1.41 against the page and 1.28 under the selected tab, slightly clearer than the light design's own 1.13 / 1.24. The selection never rests on that edge alone — weight, ink colour and `aria-selected` all carry it.
 

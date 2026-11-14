@@ -315,6 +315,40 @@
 	--status-fg: var(--status-skipped-fg);
 }
 
+/* Fertilise and repot reminders (screens.md "Fertilise and repot
+   reminders"): violet for feeding, terracotta — the scene's pot — for
+   repotting, so neither reads as a water check. Resolved once on the card or
+   badge, like health. Text on its tint is 7:1 or better; the solid fill
+   carries white (light) or dark ink (dark), 6:1 or better; icons 4.3:1+. */
+[data-reminder='fertilize'] {
+	--rm-bg: #eee9f8;
+	--rm-fg: #4b3577;
+	--rm-icon: #6a4fa3;
+	--rm-fill: #5b4392;
+	--on-rm: #ffffff;
+}
+[data-reminder='repot'] {
+	--rm-bg: #f8eae0;
+	--rm-fg: #7a3b17;
+	--rm-icon: #a8592b;
+	--rm-fill: #9a4e22;
+	--on-rm: #ffffff;
+}
+:root[data-theme='dark'] [data-reminder='fertilize'] {
+	--rm-bg: #2a2339;
+	--rm-fg: #cdbdf2;
+	--rm-icon: #b39deb;
+	--rm-fill: #b39deb;
+	--on-rm: #1e1530;
+}
+:root[data-theme='dark'] [data-reminder='repot'] {
+	--rm-bg: #36261c;
+	--rm-fg: #f0be98;
+	--rm-icon: #e39c6b;
+	--rm-fill: #e39c6b;
+	--on-rm: #2b160a;
+}
+
 /* Today's header scene (screens.md "Today header scene"): day or evening,
    each in light and dark, colours from the design boards (Main,
    TodayIdeaEvening, TodayIdeaSunnyDark, TodayIdeaEveningDark). Resolved once

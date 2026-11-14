@@ -17,6 +17,10 @@
   column on the right. On the nothing-due screen the tip moves into that
   column.
 
+  Fertilise and repot reminders that are due get their own cards after the
+  water checks (screens.md "Fertilise and repot reminders"), and join
+  "Coming up". The nothing-due screen only shows once both are done.
+
   "Today" comes from the shared clock, which moves on at midnight and when the
   app is reopened, so a Home Screen app left open for days doesn't show stale
   checks.
@@ -29,10 +33,16 @@
 	import CaughtUpCard from '#lib/components/today/CaughtUpCard.svelte';
 	import ComingUpList from '#lib/components/today/ComingUpList.svelte';
 	import SeasonTip from '#lib/components/today/SeasonTip.svelte';
+	import ReminderCard from '#lib/components/today/ReminderCard.svelte';
 	import TodayScene from '#lib/components/today/TodayScene.svelte';
 	import WeekStrip from '#lib/components/today/WeekStrip.svelte';
 	import { clock } from '#lib/clock.svelte.js';
 	import { answerCheck, undoAnswer } from '#lib/firebase/check-writes.js';
+	import {
+		completeReminder,
+		deleteManualEntry,
+		postponeReminder
+	} from '#lib/firebase/log-writes.js';
 	import { LogSince } from '#lib/firebase/log.svelte.js';
 	import { PlantsQuery } from '#lib/firebase/plants.svelte.js';
 	import { session } from '#lib/firebase/session.svelte.js';
@@ -41,7 +51,14 @@
 	import { careOf, greetingLine } from '#lib/plants/labels.js';
 	import { partOfDay } from '#lib/plants/part-of-day.js';
 	import { hideSplash } from '#lib/splash.js';
-	import { currentIntervalDays, type CheckAction } from '#lib/plants/schedule.js';
+	import {
+		LATER_DAYS,
+		reminderCards,
+		reminderTasks,
+		soonReminders,
+		type ReminderCard as Reminder
+	} from '#lib/plants/reminders.js';
+	import { checkDateAfter, currentIntervalDays, type CheckAction } from '#lib/plants/schedule.js';
 	import {
 		comingUp,
 		lastWatered,
@@ -88,10 +105,19 @@
 		todayCards(plants.plants, plants.checkTasks, log.entries, today, getLocale())
 	);
 	const open = $derived(cards.filter((card) => card.state === 'open').length);
-	const caughtUp = $derived(open === 0);
-	const answeredToday = $derived(cards.length > 0);
+	const remTasks = $derived(
+		reminderTasks(plants.plants, plants.reminders, (plant) => careOf(plant).care)
+	);
+	const reminders = $derived(
+		reminderCards(plants.plants, remTasks, plants.reminders, log.entries, today, getLocale())
+	);
+	const openReminders = $derived(reminders.filter((card) => card.state === 'open').length);
+	const caughtUp = $derived(open === 0 && openReminders === 0);
+	const answeredToday = $derived(cards.length > 0 || reminders.length > 0);
 	const loading = $derived(plants.loading || log.loading);
-	const upcomingRows = $derived(comingUp(plants.plants, plants.checkTasks, today));
+	const upcomingRows = $derived(
+		comingUp(plants.plants, [...plants.checkTasks, ...soonReminders(remTasks, today)], today)
+	);
 
 	// Opening animation: open onto Today once its cards are there, not onto
 	// "Loading…".
@@ -106,6 +132,26 @@
 		const now = new Date();
 		const interval = currentIntervalDays(careOf(card.plant).care, card.plant, now);
 		answerCheck(uid, card.plant.id, card.task, action, interval, now);
+	}
+
+	const storedFor = (card: Reminder) =>
+		plants.reminders.find((r) => r.plantId === card.plant.id && r.kind === card.kind);
+
+	function done(card: Reminder) {
+		const uid = session.user?.uid;
+		if (uid) completeReminder(uid, card.plant.id, card.kind, storedFor(card));
+	}
+
+	function later(card: Reminder) {
+		const uid = session.user?.uid;
+		if (uid) {
+			postponeReminder(uid, card.plant.id, card.kind, checkDateAfter(today, LATER_DAYS[card.kind]));
+		}
+	}
+
+	function undoReminder(card: Reminder) {
+		const uid = session.user?.uid;
+		if (uid && card.state === 'done') deleteManualEntry(uid, card.entry, storedFor(card));
 	}
 
 	function undo(card: Card) {
@@ -146,6 +192,8 @@
 					<p class="text-[15px] leading-[1.4]" style:color="var(--sc-summary)" role="status">
 						{#if open > 0}
 							{m.today_summary_open({ count: open })}
+						{:else if openReminders > 0}
+							{m.today_summary_todo({ count: openReminders })}
 						{:else if answeredToday}
 							{m.today_summary_done()}
 						{:else if plants.plants.length > 0}
@@ -188,6 +236,25 @@
 									{card}
 									onanswer={(action) => answer(card, action)}
 									onundo={() => undo(card)}
+								/>
+							</li>
+						{/each}
+					</ul>
+				{/if}
+
+				{#if reminders.length > 0}
+					<ul
+						class="flex flex-col gap-2.5 md:grid md:grid-cols-2 md:items-start md:gap-3"
+						aria-label={m.reminders_label()}
+					>
+						{#each reminders as card (`${card.kind}-${card.plant.id}`)}
+							<li>
+								<ReminderCard
+									{card}
+									{today}
+									ondone={() => done(card)}
+									onlater={() => later(card)}
+									onundo={() => undoReminder(card)}
 								/>
 							</li>
 						{/each}

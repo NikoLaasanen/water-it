@@ -212,3 +212,26 @@ describe('log labels', () => {
 		expect(monthLabel(new Date(2026, 10, 1))).toBe('November 2026');
 	});
 });
+
+describe('care rows with the next fertilising / repotting', () => {
+	const care: CareProfile = {
+		...minimal,
+		fertilize: { intervalDays: 30, growingOnly: true },
+		repotIntervalMonths: 24
+	};
+	const today = new Date(2026, 10, 14);
+	const value = (label: string, next: Parameters<typeof careRows>[1]) =>
+		careRows(care, next).find((row) => row.label === label)?.value;
+
+	it('adds the next date, or says it is due already', () => {
+		expect(value('Fertilizing', { fertilize: new Date(2027, 3, 1), today })).toBe(
+			'Every 30 days in the growing season, none when resting. Next: Apr 1, 2027'
+		);
+		expect(value('Repot', { repot: new Date(2026, 3, 10), today })).toBe(
+			'Every 24 months. Due since Apr 10.'
+		);
+		expect(value('Repot', { repot: new Date(2026, 10, 14), today })).toBe(
+			'Every 24 months. Due today.'
+		);
+	});
+});

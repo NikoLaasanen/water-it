@@ -23,6 +23,7 @@ import { parseLocalDate, type NextCheck } from './care.js';
 import type { CheckAction, Season } from './schedule.js';
 import type { DayRef } from './today.js';
 import type { PartOfDay } from './part-of-day.js';
+import type { ReminderKind } from './reminders.js';
 import { resolveCare, type CareField, type ResolvedCare } from './care-profile.js';
 
 /** A plant's effective care profile in the current language. */
@@ -238,8 +239,22 @@ function temperatureValue(care: CareProfile): string | null {
  * Rows with nothing to say are dropped rather than shown empty: a plant added
  * by hand may have only a couple of these filled in, and a column of blank
  * values reads as something broken.
+ *
+ * `next` adds when the next fertilising / repotting is due ("Next: 1 Apr
+ * 2027"), from the reminders, when the caller knows it.
  */
-export function careRows(care: CareProfile): CareRow[] {
+export function careRows(
+	care: CareProfile,
+	next: { fertilize?: Date | null; repot?: Date | null; today?: Date } = {}
+): CareRow[] {
+	const today = next.today ?? new Date();
+	const withNext = (value: string, date: Date | null | undefined) =>
+		!date
+			? value
+			: date < new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
+				? // Due already: say so, as the Today card does, not "Next" with a past date.
+					`${value} ${reminderDueLabel(date, today)}.`
+				: `${value} ${m.care_next({ date: dateLabel(date, today) })}`;
 	const rows: (CareRow | null)[] = [
 		care.light.trim() ? { label: m.care_light(), value: care.light } : null,
 		{ label: m.care_watering(), value: wateringValue(care) },
@@ -251,13 +266,19 @@ export function careRows(care: CareProfile): CareRow[] {
 		care.fertilize
 			? {
 					label: m.care_fertilizing(),
-					value: care.fertilize.growingOnly
-						? m.care_fertilize_growing({ days: care.fertilize.intervalDays })
-						: m.care_fertilize_always({ days: care.fertilize.intervalDays })
+					value: withNext(
+						care.fertilize.growingOnly
+							? m.care_fertilize_growing({ days: care.fertilize.intervalDays })
+							: m.care_fertilize_always({ days: care.fertilize.intervalDays }),
+						next.fertilize
+					)
 				}
 			: null,
 		typeof care.repotIntervalMonths === 'number'
-			? { label: m.care_repot(), value: m.care_repot_months({ months: care.repotIntervalMonths }) }
+			? {
+					label: m.care_repot(),
+					value: withNext(m.care_repot_months({ months: care.repotIntervalMonths }), next.repot)
+				}
 			: null,
 		care.watchOuts && care.watchOuts.length > 0
 			? // Joined into a sentence: the design shows one paragraph, not a nested
@@ -495,4 +516,38 @@ export function greetingLine(
 					month: 'short'
 				}).format(date);
 	return `${hello} · ${day}`;
+}
+
+/** A reminder's name: "Fertilise", "Repot". */
+export function reminderLabel(kind: ReminderKind): string {
+	return kind === 'fertilize' ? m.reminder_fertilize() : m.reminder_repot();
+}
+
+/** "14 Dec", or "1 Apr 2027" when it isn't this year. */
+export function dateLabel(date: Date, today: Date): string {
+	return new Intl.DateTimeFormat(getLocale(), {
+		day: 'numeric',
+		month: 'short',
+		year: date.getFullYear() === today.getFullYear() ? undefined : 'numeric'
+	}).format(date);
+}
+
+/** A due reminder's line: "Due today" / "Due since 1 Nov". */
+export function reminderDueLabel(due: Date, today: Date): string {
+	return due.getTime() >= new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime()
+		? m.reminder_due_today()
+		: m.reminder_due_since({ date: dateLabel(due, today) });
+}
+
+/** What the profile says about it, under the card's title. */
+export function reminderHint(kind: ReminderKind, care: CareProfile): string | null {
+	if (kind === 'fertilize') {
+		if (!care.fertilize) return null;
+		return care.fertilize.growingOnly
+			? m.care_fertilize_growing({ days: care.fertilize.intervalDays })
+			: m.care_fertilize_always({ days: care.fertilize.intervalDays });
+	}
+	return typeof care.repotIntervalMonths === 'number'
+		? m.reminder_repot_hint({ months: care.repotIntervalMonths })
+		: null;
 }
