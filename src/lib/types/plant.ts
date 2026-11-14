@@ -127,6 +127,11 @@ export type Task = {
 	 * soil again" without reading the log. Older checks may not have it.
 	 */
 	lastAnswer?: { kind: 'watered' | 'checked-damp' | 'skipped'; on: string };
+	/**
+	 * Local date (`YYYY-MM-DD`) the owner last pressed "Keep" on an interval
+	 * suggestion. Answers up to that day no longer count towards one.
+	 */
+	suggestionKeptOn?: string;
 };
 
 export type LogKind =

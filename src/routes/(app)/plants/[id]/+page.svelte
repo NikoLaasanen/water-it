@@ -29,6 +29,7 @@
 	import HealthFace from '#lib/components/HealthFace.svelte';
 	import CareProfileCard from '#lib/components/plant/CareProfileCard.svelte';
 	import LogList from '#lib/components/plant/LogList.svelte';
+	import IntervalSuggestionCard from '#lib/components/plant/IntervalSuggestionCard.svelte';
 	import NextCheckCard from '#lib/components/plant/NextCheckCard.svelte';
 	import RecentLogCard from '#lib/components/plant/RecentLogCard.svelte';
 	import { PlantLog } from '#lib/firebase/log.svelte.js';
@@ -46,6 +47,7 @@
 	import { parseLocalDate } from '#lib/plants/care.js';
 	import { lastWateredAt } from '#lib/plants/log.js';
 	import { presetById } from '#lib/presets/index.js';
+	import type { Plant } from '#lib/types/plant.js';
 
 	const query = new PlantQuery();
 	// Tailwind's `md` (48rem): where the next-check card moves into the Care tab.
@@ -120,6 +122,18 @@
 	const species = $derived(speciesLine(preset));
 	const pot = $derived(potChip(plant?.pot));
 </script>
+
+<!-- The watering block: next check, and an interval suggestion when the log
+     supports one. Placed above the tabs on phones, in the Care tab's left
+     column from `md`. -->
+{#snippet watering(plant: Plant)}
+	<div class="flex flex-col gap-5">
+		<NextCheckCard {plant} task={query.checkTask} {lastWatered} />
+		{#if query.checkTask && !log.loading}
+			<IntervalSuggestionCard {plant} task={query.checkTask} entries={log.entries} />
+		{/if}
+	</div>
+{/snippet}
 
 <svelte:head>
 	<title>{plant ? `${plant.name} · Water.it` : 'Water.it'}</title>
@@ -239,7 +253,7 @@
 			     it opens the Care tab's left column instead, as in the tablet
 			     mockup. One instance either way, chosen by the media query. -->
 			{#if !wide.current}
-				<NextCheckCard {plant} task={query.checkTask} {lastWatered} />
+				{@render watering(plant)}
 			{/if}
 
 			<!-- Care / Log / Photos. A real tablist, so Photos, which doesn't
@@ -302,7 +316,7 @@
 				<div class="grid gap-5 md:grid-cols-2 md:items-start">
 					<div class="contents md:flex md:flex-col md:gap-5">
 						{#if wide.current}
-							<NextCheckCard {plant} task={query.checkTask} {lastWatered} />
+							{@render watering(plant)}
 						{/if}
 						<!-- iPad only, as designed: on a phone the Log tab is one tap away. -->
 						<div class="hidden md:block">

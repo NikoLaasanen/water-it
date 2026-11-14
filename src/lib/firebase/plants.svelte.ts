@@ -86,7 +86,12 @@ function toPlant(id: string, data: DocumentData): Plant | null {
 
 /** A stored check, with `lastAnswer` checked: Today builds sentences from it. */
 function toTask(id: string, data: DocumentData): Task {
-	return { ...(data as Omit<Task, 'id'>), id, lastAnswer: readLastAnswer(data.lastAnswer) };
+	return {
+		...(data as Omit<Task, 'id'>),
+		id,
+		lastAnswer: readLastAnswer(data.lastAnswer),
+		suggestionKeptOn: typeof data.suggestionKeptOn === 'string' ? data.suggestionKeptOn : undefined
+	};
 }
 
 export class PlantsQuery {

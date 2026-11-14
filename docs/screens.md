@@ -124,7 +124,7 @@ Built 2026-11-13 (phone layout; `src/routes/(app)/+page.svelte`, `TodayCard.svel
 - The thumbnail and name link to the plant. Still damp and Skip are 44 px tall rather than the mockup's 36 (touch target rule).
 - Empty states, not designed: no plants → "Your plants' checks will show up here" + Add plant; nothing due → "Nothing to check today." plus "Next up: Pilea, Sat 21 Nov."
 - **iPad**, built the same day: from `md` the cards are a two-column grid (aligned to the top, as drawn) laid out upright, with a wide Watered button at the end of the Still damp / Skip row; answered, the badge, next step and Undo share one row. "Coming up" sits below the cards in portrait and becomes the 300 px right column from `lg`. It lists the next five checks after today — answered plants reappear there at their new date — each "Check soil", or "Water" for a plant on a fixed schedule. Other task kinds join the list when they exist. Phones keep the one-line "Next up" instead.
-- **Not yet:** "Checked, very dry", adaptive suggestions, the cold-night banner.
+- **Not yet:** "Checked, very dry", the cold-night banner. Interval suggestions are on plant detail (below), not on Today.
 
 ### Today — nothing due (`today-caught-up.dc.html`, `tablet-today-caught-up.dc.html`)
 
@@ -176,6 +176,18 @@ Built 2026-11-12 (Care tab), with these decisions:
 - **Added 2026-11-13, with the presets:** the common + scientific name line ("Chinese money plant · *Pilea peperomioides*"; nothing for generic presets or a blank profile) and the provenance line ("From the Pilea preset · edited by you: check test"), which lists edited rows once each, lower-cased.
 - **iPad (`tablet-plant-detail.dc.html`), built 2026-11-13.** From `md` the Care/Log/Photos tabs (300 px) sit beside the name block, and the content is two columns: next check and the sitter note on the left, the care profile on the right. Edit becomes a labelled pill. From `lg` the plant list sits beside the detail as a 320 px column (compact rows: 48 px thumbnail, name, "health · next check", the open plant highlighted with `selected-bg` and `aria-current`), Back disappears and the photo header drops to 220 px. The "Recent log" card in the left column (built 2026-11-14) shows the latest four entries — badge, note or "Next check …", date — and **Open full log** switches to the Log tab. iPad only, as designed; on a phone the Log tab is one tap away.
 - Each section is its own component (`src/lib/components/plant/`), so the two layouts only rearrange them.
+
+### Interval suggestions (built 2026-11-14, no mockup)
+
+design.md §4.3 "Adaptive tuning". A card under the next-check card (so above the tabs on phones, in the Care tab's left column on the iPad), coloured like the seasonal tip (`chip-sun-*`): advice, not a warning. Lightbulb + "SUGGESTION", one sentence, **Change to N days** (primary) and **Keep N days** (outlined), and "You can change it later in Edit."
+
+- **Longer:** "The soil was still damp before each of the last 3 waterings. Check every 17 days in winter, instead of 14?" — when each of the last 3 rounds (watering to watering) had at least one Still damp.
+- **Shorter:** "You watered early the last 3 times. Check every 5 days in the growing season, instead of 7?" — when each of the last 3 waterings came before its check was due, with no damp answer. "Checked, very dry" isn't built, so watering early is the evidence used.
+- The suggested interval is the **median real gap** between those waterings. Bounds 2–120 days.
+- Only answers given under the current season's interval count, so a season change, an edit or an accepted suggestion starts the count over. **Keep** stores the day on the check (`suggestionKeptOn`); answers up to then no longer count, so it comes back only after 3 new rounds say the same. Fixed-schedule plants get none.
+- **Change** writes the new interval for the current season into `careOverrides.checkIntervalDays` (removed again if it equals the preset's, as in Edit) and, if the plant was last watered, moves the check by the difference; after a Still damp or Skip the snooze stays and the new interval starts at the next watering. The Edit form then shows the interval as Edited.
+- **Plant detail only, not Today:** Today would need every plant's recent log, a few hundred extra reads each time the app opens, against the Spark plan's daily quota. Plant detail already loads the plant's log for the Log tab.
+- Logic in `src/lib/plants/interval-suggestion.ts`, tested. `pnpm seed:plants` gives the Pilea a history that triggers a "longer" suggestion.
 
 ### Log tab (built 2026-11-14, no mockup)
 

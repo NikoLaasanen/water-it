@@ -37,6 +37,22 @@ function dayOffset(days) {
 	return `${date.getFullYear()}-${month}-${day}`;
 }
 
+/** A Date N days from today at a given local hour, for log entries' `at`. */
+function dateAt(days, hour = 10) {
+	const date = new Date();
+	date.setDate(date.getDate() + days);
+	date.setHours(hour, 0, 0, 0);
+	return date;
+}
+
+/** The season the app uses today: April–September unless dormant (schedule.ts). */
+function seasonOf(plant) {
+	if (plant.dormant) return 'resting';
+	if (plant.underGrowLight) return 'growing';
+	const month = new Date().getMonth() + 1;
+	return month >= 4 && month <= 9 ? 'growing' : 'resting';
+}
+
 /**
  * The five mockup plants. Care comes from each one's preset
  * (src/lib/presets/presets.json); a plant stores only `speciesId` and the
@@ -238,11 +254,12 @@ for (const plant of PLANTS) {
 	// `check-water-<plant>` (checkTaskId in plant-writes.ts). Drop the old one so
 	// a plant doesn't end up with two checks.
 	await remove(`users/${user.localId}/tasks/check-${plant.id}`);
-	// The plant's own interval if it overrides one, else its preset's.
-	const intervalDays = (
-		plant.careOverrides.checkIntervalDays ??
-		presets.find((preset) => preset.id === plant.speciesId).care.checkIntervalDays
-	).growing;
+	// The plant's own interval if it overrides one, else its preset's, for
+	// the season the app is in today (what an answer would write).
+	const intervalDays = (plant.careOverrides.checkIntervalDays ??
+		presets.find((preset) => preset.id === plant.speciesId).care.checkIntervalDays)[
+		seasonOf(plant)
+	];
 	await put(
 		`users/${user.localId}/tasks/check-water-${plant.id}`,
 		toFields({
@@ -261,5 +278,48 @@ for (const plant of PLANTS) {
 	);
 }
 
+// Log history for the Pilea: three rounds of "Still damp, then watered",
+// all under this season's interval, ending one interval before its check.
+// That is what makes plant detail suggest a longer interval
+// (interval-suggestion.ts), so the suggestion card can be tried at once.
+{
+	const pilea = PLANTS.find((plant) => plant.id === 'pilea');
+	const interval = presets.find((preset) => preset.id === pilea.speciesId).care.checkIntervalDays[
+		seasonOf(pilea)
+	];
+	const snooze = Math.max(2, Math.floor(interval / 4)); // dampSnoozeDays
+	const gap = interval + snooze;
+	const lastWatering = pilea.dueIn - interval;
+	const waterings = [3, 2, 1, 0].map((back) => lastWatering - back * gap);
+	const entry = (kind, day, beforeDue, nextDue) =>
+		toFields({
+			plantId: 'pilea',
+			kind,
+			at: dateAt(day),
+			by: { kind: 'owner' },
+			check: {
+				before: { nextDue: dayOffset(beforeDue) },
+				nextDue: dayOffset(nextDue),
+				intervalDays: interval
+			}
+		});
+	let n = 0;
+	for (const [i, day] of waterings.entries()) {
+		const prev = waterings[i - 1];
+		if (prev !== undefined) {
+			await put(
+				`users/${user.localId}/log/seed-pilea-${n++}`,
+				entry('checked-damp', prev + interval, prev + interval, prev + interval + snooze)
+			);
+		}
+		await put(
+			`users/${user.localId}/log/seed-pilea-${n++}`,
+			entry('watered', day, day, day + interval)
+		);
+	}
+}
+
 console.log(`Seeded ${PLANTS.length} plants for ${user.email ?? user.localId}.`);
-console.log('Open / for Today, or /plants for the list. The care log was cleared.');
+console.log(
+	'Open / for Today, or /plants for the list. The care log was reset; the Pilea has a history that suggests a longer interval.'
+);

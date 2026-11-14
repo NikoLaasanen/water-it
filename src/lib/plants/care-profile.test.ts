@@ -5,7 +5,8 @@ import {
 	diffOverrides,
 	presetCare,
 	readOverrides,
-	resolveCare
+	resolveCare,
+	withIntervals
 } from './care-profile.js';
 
 const pilea = presetById('pilea-peperomioides')!;
@@ -158,6 +159,30 @@ describe('readOverrides and null', () => {
 		expect(readOverrides({ tempMinC: null, watchOuts: null, light: null })).toEqual({
 			tempMinC: null,
 			watchOuts: null
+		});
+	});
+});
+
+describe('withIntervals', () => {
+	it('sets the intervals and keeps the other overrides', () => {
+		expect(withIntervals({ dryDownTest: 'Skewer' }, pilea, { growing: 7, resting: 18 })).toEqual({
+			dryDownTest: 'Skewer',
+			checkIntervalDays: { growing: 7, resting: 18 }
+		});
+	});
+
+	it("removes the override when the intervals are back to the preset's", () => {
+		expect(
+			withIntervals({ checkIntervalDays: { growing: 7, resting: 18 } }, pilea, {
+				growing: 7,
+				resting: 14
+			})
+		).toEqual({});
+	});
+
+	it('always stores them for a plant with no preset', () => {
+		expect(withIntervals({}, undefined, { growing: 7, resting: 14 })).toEqual({
+			checkIntervalDays: { growing: 7, resting: 14 }
 		});
 	});
 });

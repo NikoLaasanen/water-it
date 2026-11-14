@@ -91,7 +91,7 @@ Rules:
 - Interval comes from the care profile, with **season adjustment** (growing season vs. winter, configurable months).
 - The next check is counted **from the day the action was logged**, not from the original due date, so a late watering doesn't pull the next check too early.
 - Optional per-plant **fixed schedule** ("water every N days") for plants with predictable needs; "check soil" stays the default.
-- Adaptive tuning: if you repeatedly answer "still damp", suggest lengthening the interval; if "very dry", suggest shortening.
+- Adaptive tuning: if you repeatedly answer "still damp", suggest lengthening the interval; if "very dry", suggest shortening. Built 2026-11-14 on plant detail; "very dry" isn't an answer yet, so repeatedly watering before the check is due is the signal for shortening (screens.md "Interval suggestions").
 - Daily digest option: one notification per day listing what is due, instead of one per plant.
 - Quiet hours.
 
@@ -534,7 +534,7 @@ ones; see "Dark mode" there.
 - Check-water tasks with seasonal intervals
 - Today view ("Needs watering" list on open) with one-tap actions
 - Care log, adaptive interval suggestions
-- Calendar (.ics) export (optional)
+- ~~Calendar (.ics) export~~ — dropped (Niko, 2026-11-14)
 - Lookup by scientific name with caching and provenance; optional "identify from photo" (Pl@ntNet)
 
 **M3 — Photos**

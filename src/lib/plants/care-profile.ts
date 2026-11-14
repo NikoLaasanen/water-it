@@ -148,6 +148,27 @@ export function diffOverrides(
 	return out as CareOverrides;
 }
 
+/**
+ * The overrides after changing only the watering intervals, as accepting an
+ * interval suggestion does. The other overrides stay as they are. Same rule
+ * as diffOverrides: intervals equal to the preset's remove the override, so
+ * the plant follows its preset again. Intervals aren't text, so no locale.
+ */
+export function withIntervals(
+	overrides: CareOverrides,
+	preset: Preset | undefined,
+	intervals: CareProfile['checkIntervalDays']
+): CareOverrides {
+	const out: CareOverrides = { ...overrides };
+	const base = preset?.care.checkIntervalDays;
+	if (base && base.growing === intervals.growing && base.resting === intervals.resting) {
+		delete out.checkIntervalDays;
+	} else {
+		out.checkIntervalDays = { growing: intervals.growing, resting: intervals.resting };
+	}
+	return out;
+}
+
 // --- Reading overrides back from Firestore ----------------------------------
 
 const LIGHT_LEVELS: readonly LightLevel[] = ['low', 'medium', 'bright'];
