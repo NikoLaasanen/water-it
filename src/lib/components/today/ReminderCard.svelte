@@ -51,6 +51,7 @@
 </script>
 
 <article
+	data-focus-key="{card.kind}-{card.plant.id}"
 	class="flex items-stretch gap-3 rounded-[18px] border-2 border-transparent bg-surface p-2.5 shadow-[var(--shadow-raised)] md:py-3 md:pr-3 md:pl-3.5 md:shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
 	data-reminder={card.kind}
 	aria-label="{task}: {name}"
@@ -91,6 +92,7 @@
 					<button
 						type="button"
 						onclick={ondone}
+						data-refocus
 						aria-label={m.reminder_done_aria({ task, name })}
 						class="ml-auto hidden min-h-12 flex-none items-center gap-2 rounded-xl pr-5 pl-4 text-[15px] font-bold md:inline-flex"
 						style="background: var(--rm-fill); color: var(--on-rm)"
@@ -113,6 +115,7 @@
 						<button
 							type="button"
 							onclick={onundo}
+							data-refocus
 							aria-label={m.check_undo_aria({ status: logKindLabel(card.entry.kind), name })}
 							class="min-h-11 px-1 font-bold text-ink underline underline-offset-2 md:ml-auto md:px-2"
 						>
@@ -128,6 +131,7 @@
 		<button
 			type="button"
 			onclick={ondone}
+			data-refocus
 			aria-label={m.reminder_done_aria({ task, name })}
 			class="flex min-h-[84px] w-[84px] flex-none flex-col items-center justify-center gap-1 rounded-[18px] text-xs font-bold md:hidden"
 			style="background: var(--rm-fill); color: var(--on-rm)"

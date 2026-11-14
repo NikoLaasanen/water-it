@@ -66,7 +66,7 @@
 		<div class="flex flex-none items-center gap-3">
 			{#if plants.length > 0}
 				<label
-					class="hidden min-h-12 w-[280px] items-center gap-2 rounded-[14px] border-[1.5px] border-field-border bg-field px-3.5 text-muted md:flex"
+					class="hidden min-h-12 w-[280px] items-center gap-2 rounded-[14px] border-[1.5px] border-field-border bg-field px-3.5 text-muted focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary md:flex"
 				>
 					<Search size={20} strokeWidth={2} aria-hidden="true" />
 					<span class="sr-only">{m.plants_search_label()}</span>

@@ -89,6 +89,10 @@ Form and control tokens (from the Add/Edit mockups; `layout.css` has both themes
 - Icon-only buttons have `aria-label`s.
 - Text contrast ≥ 4.5:1 (the tokens above pass on their backgrounds).
 - All UI text goes through i18n (English + Finnish).
+- Every input shows a focus ring, even where the ring is drawn on its wrapper (search fields: `focus-within` outline).
+- When a tap replaces the button under the finger (Watered → badge + Undo, Done, Undo → Watered), focus moves to the card's new main button rather than falling back to the top of the page: `keepFocus` (`src/lib/keep-focus.ts`) on the Today lists and the next-check card, with `data-refocus` on the button that should get it and `data-focus-key` on each Today card.
+
+Accessibility pass (2026-11-14): code review plus a contrast check of every text/background token pair in light, dark and the scene variants (one miss, the dark-day scene eyebrow over the hills, fixed). Fixes: the focus behaviour above, plant-detail tabs 40 → 44 px, search focus rings. Already in place and checked: labels on every icon-only button, decorative art `aria-hidden`, real tablist on plant detail, form errors tied to fields with focus moved to the first, live regions for loading and summaries, `lang` set by Paraglide, pinch zoom allowed, opening animation shortened under Reduce Motion. Not done: an automated axe-core run, and iOS Larger Text (Dynamic Type), which a web app only follows if its type is built on `-apple-system-body`.
 
 ## Navigation
 

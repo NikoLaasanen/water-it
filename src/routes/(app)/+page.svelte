@@ -51,6 +51,7 @@
 	import { careOf, greetingLine } from '#lib/plants/labels.js';
 	import { partOfDay } from '#lib/plants/part-of-day.js';
 	import { hideSplash } from '#lib/splash.js';
+	import { keepFocus } from '#lib/keep-focus.js';
 	import {
 		LATER_DAYS,
 		reminderCards,
@@ -227,6 +228,7 @@
 
 				{#if cards.length > 0}
 					<ul
+						{@attach keepFocus}
 						class="flex flex-col gap-2.5 md:grid md:grid-cols-2 md:items-start md:gap-3"
 						aria-label={m.today_cards_label()}
 					>
@@ -244,6 +246,7 @@
 
 				{#if reminders.length > 0}
 					<ul
+						{@attach keepFocus}
 						class="flex flex-col gap-2.5 md:grid md:grid-cols-2 md:items-start md:gap-3"
 						aria-label={m.reminders_label()}
 					>

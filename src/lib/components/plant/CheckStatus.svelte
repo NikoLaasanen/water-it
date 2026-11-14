@@ -52,6 +52,7 @@
 			<button
 				type="button"
 				onclick={onundo}
+				data-refocus
 				aria-label={m.check_undo_aria({ status, name })}
 				class="min-h-11 px-1 font-bold text-ink underline underline-offset-2 md:ml-auto md:px-2"
 			>

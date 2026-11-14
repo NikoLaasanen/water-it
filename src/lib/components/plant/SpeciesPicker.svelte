@@ -64,7 +64,7 @@
 {/snippet}
 
 <label
-	class="flex min-h-[52px] items-center gap-2.5 rounded-[14px] border-[1.5px] border-field-border bg-field px-3.5 text-muted"
+	class="flex min-h-[52px] items-center gap-2.5 rounded-[14px] border-[1.5px] border-field-border bg-field px-3.5 text-muted focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary"
 >
 	<Search size={20} strokeWidth={2} aria-hidden="true" />
 	<span class="sr-only">{m.plants_search_label()}</span>

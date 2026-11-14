@@ -305,7 +305,7 @@
 						tabindex={tab === item.id ? 0 : -1}
 						onclick={() => openTab(item.id)}
 						class={[
-							'min-h-10 rounded-[10px] text-sm',
+							'min-h-11 rounded-[10px] text-sm',
 							tab === item.id
 								? 'bg-segment-selected font-bold text-ink'
 								: 'font-semibold text-muted'
@@ -320,7 +320,7 @@
 					aria-selected="false"
 					disabled
 					title={m.plant_tab_soon()}
-					class="min-h-10 rounded-[10px] text-sm font-semibold text-muted disabled:opacity-60"
+					class="min-h-11 rounded-[10px] text-sm font-semibold text-muted disabled:opacity-60"
 				>
 					{m.plant_tab_photos()}
 				</button>

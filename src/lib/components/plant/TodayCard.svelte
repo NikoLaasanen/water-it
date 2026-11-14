@@ -46,6 +46,7 @@
 </script>
 
 <article
+	data-focus-key="check-{card.plant.id}"
 	class="flex items-stretch gap-3 rounded-[18px] border-2 bg-surface p-2.5 shadow-[var(--shadow-raised)] md:py-3 md:pr-3 md:pl-3.5 md:shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
 	style:border-color={overdue ? 'var(--danger-border)' : 'transparent'}
 	aria-label={name}
@@ -104,6 +105,7 @@
 					<button
 						type="button"
 						onclick={() => onanswer('watered')}
+						data-refocus
 						aria-label={m.check_watered_aria({ name })}
 						class="ml-auto hidden min-h-12 flex-none items-center gap-2 rounded-xl bg-water pr-5 pl-4 text-[15px] font-bold text-on-water md:inline-flex"
 					>
@@ -126,6 +128,7 @@
 		<button
 			type="button"
 			onclick={() => onanswer('watered')}
+			data-refocus
 			aria-label={m.check_watered_aria({ name })}
 			class="flex min-h-[84px] w-[84px] flex-none flex-col items-center justify-center gap-1 rounded-[18px] bg-water text-xs font-bold text-on-water md:hidden"
 		>

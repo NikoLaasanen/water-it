@@ -24,6 +24,7 @@
 	import { currentIntervalDays, currentSeason, type CheckAction } from '#lib/plants/schedule.js';
 	import { canUndo, latestAnswerFor } from '#lib/plants/today.js';
 	import type { Plant, Task } from '#lib/types/plant.js';
+	import { keepFocus } from '#lib/keep-focus.js';
 
 	let {
 		plant,
@@ -72,6 +73,7 @@
 </script>
 
 <div
+	{@attach keepFocus}
 	class="flex flex-col gap-3 rounded-[18px] bg-surface p-4 shadow-[0_1px_2px_rgba(20,40,30,0.06)]"
 >
 	<p
@@ -94,6 +96,7 @@
 			<button
 				type="button"
 				onclick={() => answerWith('watered')}
+				data-refocus
 				aria-label={m.check_watered_aria({ name: plant.name })}
 				class="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-water px-3 text-[15px] font-bold text-on-water"
 			>
